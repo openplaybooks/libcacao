@@ -10,7 +10,7 @@
 // behavior or actions based on their values.
 package statement
 
-import "github.com/jordan2175/libcacao/objects/markings"
+import "github.com/openplaybooks/libcacao/objects/markings"
 
 // ----------------------------------------------------------------------
 // Define Object Model

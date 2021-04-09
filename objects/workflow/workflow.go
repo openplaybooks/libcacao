@@ -22,7 +22,7 @@
 // define a playbook.
 package workflow
 
-import "github.com/jordan2175/libcacao/objects"
+import "github.com/openplaybooks/libcacao/objects"
 
 // ----------------------------------------------------------------------
 // Define Object Model

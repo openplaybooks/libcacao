@@ -11,7 +11,7 @@
 // this type.
 package ifcondition
 
-import "github.com/jordan2175/libcacao/objects/workflow"
+import "github.com/openplaybooks/libcacao/objects/workflow"
 
 // ----------------------------------------------------------------------
 // Define Object Model

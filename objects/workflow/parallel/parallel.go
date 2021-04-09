@@ -26,8 +26,8 @@
 package parallel
 
 import (
-	"github.com/jordan2175/libcacao/objects"
-	"github.com/jordan2175/libcacao/objects/workflow"
+	"github.com/openplaybooks/libcacao/objects"
+	"github.com/openplaybooks/libcacao/objects/workflow"
 )
 
 // ----------------------------------------------------------------------

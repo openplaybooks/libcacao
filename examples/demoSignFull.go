@@ -16,7 +16,7 @@ import (
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gowebpki/jcs"
-	"github.com/jordan2175/libcacao/objects/playbook"
+	"github.com/openplaybooks/libcacao/objects/playbook"
 )
 
 func main() {

@@ -11,7 +11,7 @@
 // playbook terminates it MUST call an End Step.
 package end
 
-import "github.com/jordan2175/libcacao/objects/workflow"
+import "github.com/openplaybooks/libcacao/objects/workflow"
 
 // ----------------------------------------------------------------------
 // Define Object Model
@@ -49,6 +49,6 @@ func (w *WorkflowEndStep) Init() {
 // ----------------------------------------------------------------------
 
 // GetCommon - This method returns the common step properties
-func (w *WorkflowStartStep) GetCommon() workflow.CommonProperties {
+func (w *WorkflowEndStep) GetCommon() workflow.CommonProperties {
 	return w.CommonProperties
 }

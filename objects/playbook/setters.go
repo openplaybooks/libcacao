@@ -6,9 +6,9 @@
 package playbook
 
 import (
-	"github.com/jordan2175/libcacao/objects"
-	"github.com/jordan2175/libcacao/objects/markings"
-	"github.com/jordan2175/libcacao/objects/workflow"
+	"github.com/openplaybooks/libcacao/objects"
+	"github.com/openplaybooks/libcacao/objects/markings"
+	"github.com/openplaybooks/libcacao/objects/workflow"
 )
 
 // SetNewID - This method takes in a string value representing an object type and

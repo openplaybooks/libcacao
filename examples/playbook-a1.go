@@ -8,13 +8,13 @@ package main
 import (
 	"fmt"
 
-	"github.com/jordan2175/libcacao/objects/markings/statement"
-	"github.com/jordan2175/libcacao/objects/markings/tlp"
-	"github.com/jordan2175/libcacao/objects/playbook"
-	"github.com/jordan2175/libcacao/objects/workflow/end"
-	"github.com/jordan2175/libcacao/objects/workflow/parallel"
-	"github.com/jordan2175/libcacao/objects/workflow/single"
-	"github.com/jordan2175/libcacao/objects/workflow/start"
+	"github.com/openplaybooks/libcacao/objects/markings/statement"
+	"github.com/openplaybooks/libcacao/objects/markings/tlp"
+	"github.com/openplaybooks/libcacao/objects/playbook"
+	"github.com/openplaybooks/libcacao/objects/workflow/end"
+	"github.com/openplaybooks/libcacao/objects/workflow/parallel"
+	"github.com/openplaybooks/libcacao/objects/workflow/single"
+	"github.com/openplaybooks/libcacao/objects/workflow/start"
 )
 
 func main() {

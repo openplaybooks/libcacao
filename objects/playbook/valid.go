@@ -8,7 +8,7 @@ package playbook
 import (
 	"time"
 
-	"github.com/jordan2175/libcacao/objects"
+	"github.com/openplaybooks/libcacao/objects"
 )
 
 // ----------------------------------------------------------------------

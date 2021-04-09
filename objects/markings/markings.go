@@ -22,7 +22,7 @@
 // a statement saying, "Terms of use are ..." and both statements apply.
 package markings
 
-import "github.com/jordan2175/libcacao/objects"
+import "github.com/openplaybooks/libcacao/objects"
 
 // ----------------------------------------------------------------------
 // Define Object Model

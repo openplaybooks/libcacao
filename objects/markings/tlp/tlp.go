@@ -9,7 +9,7 @@
 // external_refernces property of this object.
 package tlp
 
-import "github.com/jordan2175/libcacao/objects/markings"
+import "github.com/openplaybooks/libcacao/objects/markings"
 
 // ----------------------------------------------------------------------
 // Define Object Model
