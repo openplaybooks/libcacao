@@ -134,6 +134,10 @@ func (p *Playbook) AddWorkflowStep(v workflow.StepObject) error {
 		p.Features.ParallelProcessing = true
 	case "if-condition":
 		p.Features.IfLogic = true
+	case "switch-condition":
+		p.Features.SwitchLogic = true
+	case "while-condition":
+		p.Features.WhileLogic = true
 	}
 
 	return nil

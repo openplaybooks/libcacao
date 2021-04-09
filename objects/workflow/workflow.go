@@ -46,6 +46,7 @@ type CommonProperties struct {
 	Timeout            int                          `json:"timeout,omitempty"`
 	StepVariables      map[string]objects.Variables `json:"playbook_variables,omitempty"`
 	Owner              string                       `json:"owner,omitempty"`
+	OnCompletion       string                       `json:"on_completion,omitempty"`
 	OnSuccess          string                       `json:"on_success,omitempty"`
 	OnFailure          string                       `json:"on_failure,omitempty"`
 }

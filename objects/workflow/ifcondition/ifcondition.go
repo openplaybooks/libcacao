@@ -11,7 +11,10 @@
 // this type.
 package ifcondition
 
-import "github.com/openplaybooks/libcacao/objects/workflow"
+import (
+	"github.com/openplaybooks/libcacao/objects"
+	"github.com/openplaybooks/libcacao/objects/workflow"
+)
 
 // ----------------------------------------------------------------------
 // Define Object Model
@@ -45,4 +48,29 @@ func New() *WorkflowIfStep {
 func (w *WorkflowIfStep) Init() {
 	w.ObjectType = "if-condition"
 	w.SetNewID(w.ObjectType)
+}
+
+// ----------------------------------------------------------------------
+// Define Functions and Methods
+// ----------------------------------------------------------------------
+
+// GetCommon - This method returns the common step properties
+func (w *WorkflowIfStep) GetCommon() workflow.CommonProperties {
+	return w.CommonProperties
+}
+
+// AddOnTrue - This method takes in a string value, a comma separated list of
+// string values, or a slice of string values and add them to the on_true
+// property. Each entry represents one or more identifiers to be processed if
+// the condition returns "true".
+func (w *WorkflowIfStep) AddOnTrue(values interface{}) error {
+	return objects.AddValuesToList(&w.OnTrue, values)
+}
+
+// AddOnFalse - This method takes in a string value, a comma separated list of
+// string values, or a slice of string values and add them to the on_false
+// property. Each entry represents one or more identifiers to be processed if
+// the condition returns "false".
+func (w *WorkflowIfStep) AddOnFalse(values interface{}) error {
+	return objects.AddValuesToList(&w.OnTrue, values)
 }
