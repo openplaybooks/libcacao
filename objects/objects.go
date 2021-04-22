@@ -27,7 +27,7 @@ func CreateID(s string) (string, error) {
 // GetCurrentSpecVersion - This function returns the current specification version
 // that this library is using.
 func GetCurrentSpecVersion() string {
-	return "cacao-" + defs.CurrectVersion
+	return defs.CurrectVersion
 }
 
 // GetCurrentTime - This function takes in a value of either milli or micro and

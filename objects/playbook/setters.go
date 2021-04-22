@@ -42,8 +42,8 @@ func (p *Playbook) SetModified(t interface{}) error {
 	return nil
 }
 
-// AddPlaybookTypes - This method takes in a string value, a comma separated list of
-// string values, or a slice of string values that all representing a
+// AddPlaybookTypes - This method takes in a string value, a comma separated
+// list of string values, or a slice of string values that all represent a
 // playbook type and adds it to the playbook_types property.
 func (p *Playbook) AddPlaybookTypes(values interface{}) error {
 	return objects.AddValuesToList(&p.PlaybookTypes, values)
@@ -140,5 +140,15 @@ func (p *Playbook) AddWorkflowStep(v workflow.StepObject) error {
 		p.Features.WhileLogic = true
 	}
 
+	return nil
+}
+
+// ClearWorkflowStepIDs - This method will zero out all of the IDs that are in
+// the workflow step objects since the specification only has the IDs at the
+// dictionary level.
+func (p *Playbook) ClearWorkflowStepIDs() error {
+	for id := range p.Workflow {
+		p.Workflow[id].ClearID()
+	}
 	return nil
 }

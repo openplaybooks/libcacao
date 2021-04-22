@@ -31,6 +31,7 @@ import "github.com/openplaybooks/libcacao/objects"
 // StepObject - This interface defines a workflow step object
 type StepObject interface {
 	GetCommon() CommonProperties
+	ClearID()
 }
 
 // CommonProperties - Each workflow step contains some base properties that are
@@ -67,4 +68,9 @@ func (w *CommonProperties) SetNewID(s string) error {
 // GetID - This method returns the ID of the step object
 func (w *CommonProperties) GetID() string {
 	return w.ID
+}
+
+// ClearID - This method will clear the ID from the object
+func (w *CommonProperties) ClearID() {
+	w.ID = ""
 }
