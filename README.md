@@ -1,7 +1,7 @@
 # OpenPlaybooks/libcacao
 
 libcacao is an API for generating JSON based cyber security playbooks
-(CACAO playbooks) wiht the Go (Golang) programming language. Please see the
+(CACAO playbooks) with the Go (Golang) programming language. Please see the
 examples directory. This API is built to support CACAO 1.0. 
 
 ## Version 
