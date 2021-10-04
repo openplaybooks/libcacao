@@ -6,6 +6,7 @@
 package playbook
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/openplaybooks/libcacao/objects"
@@ -28,6 +29,11 @@ func (p *Playbook) Valid() (bool, int, []string) {
 		resultDetails = append(resultDetails, "-- the type property is required but missing")
 	}
 	resultDetails = append(resultDetails, "++ the type property is required and is present")
+	if p.ObjectType != "playbook" && p.ObjectType != "playbook-template" {
+		problemsFound++
+		resultDetails = append(resultDetails, "-- the type property does not contain a value of playbook or playbook-template")
+	}
+	resultDetails = append(resultDetails, "++ the type property does contain a value of playbook or playbook-template")
 
 	// Spec Version
 	if p.SpecVersion == "" {
@@ -42,6 +48,7 @@ func (p *Playbook) Valid() (bool, int, []string) {
 		resultDetails = append(resultDetails, "-- the id property is required but missing")
 	}
 	resultDetails = append(resultDetails, "++ the id property is required and is present")
+	// TODO maybe check to see if this is a correctly formated UUID per the spec
 
 	// Name
 	if p.Name == "" {
@@ -54,10 +61,32 @@ func (p *Playbook) Valid() (bool, int, []string) {
 	// No requirements
 
 	// Playbook Types
-	// No requirements
+	if len(p.PlaybookTypes) == 0 {
+		problemsFound++
+		resultDetails = append(resultDetails, "-- the playbook_types property is required but missing")
+	}
+	resultDetails = append(resultDetails, "++ the playbook_types property is required and is present")
+	ptvocab := p.GetPlaybookTypesVocab()
+	if len(p.PlaybookTypes) != 0 {
+		for i := 0; i < len(p.PlaybookTypes); i++ {
+			value := p.PlaybookTypes[i]
+			if _, found := ptvocab[value]; found {
+				str := fmt.Sprintf("++ the playbook_types value %s property is in the vocabulary", value)
+				resultDetails = append(resultDetails, str)
+			} else {
+				problemsFound++
+				str := fmt.Sprintf("-- the playbook_types value %s property is not in the vocabulary", value)
+				resultDetails = append(resultDetails, str)
+			}
+		}
+	}
 
 	// Created By
-	// No requirements
+	if p.CreatedBy == "" {
+		problemsFound++
+		resultDetails = append(resultDetails, "-- the created_by property is required but missing")
+	}
+	resultDetails = append(resultDetails, "++ the created_by property is required and is present")
 
 	// Created
 	if p.Created == "" {
@@ -65,6 +94,13 @@ func (p *Playbook) Valid() (bool, int, []string) {
 		resultDetails = append(resultDetails, "-- the created property is required but missing")
 	}
 	resultDetails = append(resultDetails, "++ the created property is required and is present")
+	if p.Created != "" {
+		if valid := objects.IsTimestampValid(p.Created); valid == false {
+			problemsFound++
+			resultDetails = append(resultDetails, "-- the created property does not contain a valid timestamp")
+		}
+		resultDetails = append(resultDetails, "++ the created property contains a valid timestamp")
+	}
 
 	// Modified
 	if p.Modified == "" {
@@ -72,6 +108,13 @@ func (p *Playbook) Valid() (bool, int, []string) {
 		resultDetails = append(resultDetails, "-- the modified property is required but missing")
 	}
 	resultDetails = append(resultDetails, "++ the modified property is required and is present")
+	if p.Modified != "" {
+		if valid := objects.IsTimestampValid(p.Modified); valid == false {
+			problemsFound++
+			resultDetails = append(resultDetails, "-- the modified property does not contain a valid timestamp")
+		}
+		resultDetails = append(resultDetails, "++ the modified property contains a valid timestamp")
+	}
 
 	// Revoked
 	// No requirements
