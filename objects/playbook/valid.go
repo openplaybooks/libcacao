@@ -71,11 +71,11 @@ func (p *Playbook) Valid() (bool, int, []string) {
 		for i := 0; i < len(p.PlaybookTypes); i++ {
 			value := p.PlaybookTypes[i]
 			if _, found := ptvocab[value]; found {
-				str := fmt.Sprintf("++ the playbook_types value %s property is in the vocabulary", value)
+				str := fmt.Sprintf("++ the playbook_types property contains a value of \"%s\" that is in the vocabulary", value)
 				resultDetails = append(resultDetails, str)
 			} else {
 				problemsFound++
-				str := fmt.Sprintf("-- the playbook_types value %s property is not in the vocabulary", value)
+				str := fmt.Sprintf("-- the playbook_types property contains a value of \"%s\" that is not in the vocabulary", value)
 				resultDetails = append(resultDetails, str)
 			}
 		}
@@ -190,7 +190,7 @@ func (p *Playbook) Valid() (bool, int, []string) {
 
 	// External References
 	if len(p.ExternalReferences) > 0 {
-		for i, _ := range p.ExternalReferences {
+		for i := range p.ExternalReferences {
 			if p.ExternalReferences[i].Name == "" {
 				problemsFound++
 				resultDetails = append(resultDetails, "-- the name property in an external reference is required but missing")
