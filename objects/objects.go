@@ -85,6 +85,53 @@ func IsTimestampValid(t string) bool {
 	return false
 }
 
+// IsIDValid - This function will take in an CACAO ID and check to see if it is
+// a valid identifier per the specification.
+func IsIDValid(id string) bool {
+	idparts := strings.Split(id, "--")
+
+	if idparts == nil {
+		return false
+	}
+
+	// First check to see if the object type is valid, if not return false.
+	if valid := IsValidType(idparts[0]); valid == false {
+		// Short circuit if the object type part is wrong
+		return false
+	}
+
+	// If the type is valid, then check to see if the ID is a UUID, if not return
+	// false.
+	valid := IsValidUUID(idparts[1])
+
+	return valid
+}
+
+// IsValidUUID - This function will take in a string and return true if the
+// string represents an actual UUID v4 or v5 value.
+func IsValidUUID(uuid string) bool {
+	r := regexp.MustCompile(`^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[4-5][a-fA-F0-9]{3}-[8|9|aA|bB][a-fA-F0-9]{3}-[a-fA-F0-9]{12}$`)
+	return r.MatchString(uuid)
+}
+
+// IsValidType - This function will take in a string representing an object type
+// and return true or false if it is an officially support object.
+func IsValidType(s string) bool {
+	objectTypes := map[string]bool{
+		"playbook":             true,
+		"playbook-template":    true,
+		"step":                 true,
+		"target":               true,
+		"extension-definition": true,
+		"marking-definition":   true,
+	}
+
+	if _, found := objectTypes[s]; found == true {
+		return true
+	}
+	return false
+}
+
 // AddValuesToList - This function will add a single value, a comma separated
 // list of values, or a slice of values to an slice.
 func AddValuesToList(list *[]string, values interface{}) error {

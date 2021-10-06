@@ -27,35 +27,45 @@ func (p *Playbook) Valid() (bool, int, []string) {
 	if p.ObjectType == "" {
 		problemsFound++
 		resultDetails = append(resultDetails, "-- the type property is required but missing")
+	} else {
+		resultDetails = append(resultDetails, "++ the type property is required and is present")
+		if p.ObjectType != "playbook" && p.ObjectType != "playbook-template" {
+			problemsFound++
+			resultDetails = append(resultDetails, "-- the type property does not contain a value of playbook or playbook-template")
+		} else {
+			resultDetails = append(resultDetails, "++ the type property does contain a value of playbook or playbook-template")
+		}
 	}
-	resultDetails = append(resultDetails, "++ the type property is required and is present")
-	if p.ObjectType != "playbook" && p.ObjectType != "playbook-template" {
-		problemsFound++
-		resultDetails = append(resultDetails, "-- the type property does not contain a value of playbook or playbook-template")
-	}
-	resultDetails = append(resultDetails, "++ the type property does contain a value of playbook or playbook-template")
 
 	// Spec Version
 	if p.SpecVersion == "" {
 		problemsFound++
 		resultDetails = append(resultDetails, "-- the spec_version property is required but missing")
+	} else {
+		resultDetails = append(resultDetails, "++ the spec_version property is required and is present")
 	}
-	resultDetails = append(resultDetails, "++ the spec_version property is required and is present")
 
 	// ID
 	if p.ID == "" {
 		problemsFound++
 		resultDetails = append(resultDetails, "-- the id property is required but missing")
+	} else {
+		resultDetails = append(resultDetails, "++ the id property is required and is present")
+		if valid := objects.IsIDValid(p.ID); valid == false {
+			problemsFound++
+			resultDetails = append(resultDetails, "-- the id property is not a valid timestamp")
+		} else {
+			resultDetails = append(resultDetails, "++ the id property is a valid timestamp")
+		}
 	}
-	resultDetails = append(resultDetails, "++ the id property is required and is present")
-	// TODO maybe check to see if this is a correctly formated UUID per the spec
 
 	// Name
 	if p.Name == "" {
 		problemsFound++
 		resultDetails = append(resultDetails, "-- the name property is required but missing")
+	} else {
+		resultDetails = append(resultDetails, "++ the name property is required and is present")
 	}
-	resultDetails = append(resultDetails, "++ the name property is required and is present")
 
 	// Description
 	// No requirements
@@ -64,10 +74,10 @@ func (p *Playbook) Valid() (bool, int, []string) {
 	if len(p.PlaybookTypes) == 0 {
 		problemsFound++
 		resultDetails = append(resultDetails, "-- the playbook_types property is required but missing")
-	}
-	resultDetails = append(resultDetails, "++ the playbook_types property is required and is present")
-	ptvocab := p.GetPlaybookTypesVocab()
-	if len(p.PlaybookTypes) != 0 {
+	} else {
+		resultDetails = append(resultDetails, "++ the playbook_types property is required and is present")
+
+		ptvocab := p.GetPlaybookTypesVocab()
 		for i := 0; i < len(p.PlaybookTypes); i++ {
 			value := p.PlaybookTypes[i]
 			if _, found := ptvocab[value]; found {
@@ -85,35 +95,36 @@ func (p *Playbook) Valid() (bool, int, []string) {
 	if p.CreatedBy == "" {
 		problemsFound++
 		resultDetails = append(resultDetails, "-- the created_by property is required but missing")
+	} else {
+		resultDetails = append(resultDetails, "++ the created_by property is required and is present")
 	}
-	resultDetails = append(resultDetails, "++ the created_by property is required and is present")
 
 	// Created
 	if p.Created == "" {
 		problemsFound++
 		resultDetails = append(resultDetails, "-- the created property is required but missing")
-	}
-	resultDetails = append(resultDetails, "++ the created property is required and is present")
-	if p.Created != "" {
+	} else {
+		resultDetails = append(resultDetails, "++ the created property is required and is present")
 		if valid := objects.IsTimestampValid(p.Created); valid == false {
 			problemsFound++
 			resultDetails = append(resultDetails, "-- the created property does not contain a valid timestamp")
+		} else {
+			resultDetails = append(resultDetails, "++ the created property contains a valid timestamp")
 		}
-		resultDetails = append(resultDetails, "++ the created property contains a valid timestamp")
 	}
 
 	// Modified
 	if p.Modified == "" {
 		problemsFound++
 		resultDetails = append(resultDetails, "-- the modified property is required but missing")
-	}
-	resultDetails = append(resultDetails, "++ the modified property is required and is present")
-	if p.Modified != "" {
+	} else {
+		resultDetails = append(resultDetails, "++ the modified property is required and is present")
 		if valid := objects.IsTimestampValid(p.Modified); valid == false {
 			problemsFound++
 			resultDetails = append(resultDetails, "-- the modified property does not contain a valid timestamp")
+		} else {
+			resultDetails = append(resultDetails, "++ the modified property contains a valid timestamp")
 		}
-		resultDetails = append(resultDetails, "++ the modified property contains a valid timestamp")
 	}
 
 	// Revoked
@@ -124,8 +135,9 @@ func (p *Playbook) Valid() (bool, int, []string) {
 		if valid := objects.IsTimestampValid(p.ValidFrom); valid == false {
 			problemsFound++
 			resultDetails = append(resultDetails, "-- the valid_from property does not contain a valid timestamp")
+		} else {
+			resultDetails = append(resultDetails, "++ the valid_from property contains a valid timestamp")
 		}
-		resultDetails = append(resultDetails, "++ the valid_from property contains a valid timestamp")
 	}
 
 	// Valid Until
@@ -133,8 +145,9 @@ func (p *Playbook) Valid() (bool, int, []string) {
 		if valid := objects.IsTimestampValid(p.ValidUntil); valid == false {
 			problemsFound++
 			resultDetails = append(resultDetails, "-- the valid_until property does not contain a valid timestamp")
+		} else {
+			resultDetails = append(resultDetails, "++ the valid_until property contains a valid timestamp")
 		}
-		resultDetails = append(resultDetails, "++ the valid_until property contains a valid timestamp")
 
 		// If there is a valid_until timestamp, then lets check to see if there is also a valid_from and if so
 		// is the valid_until later than the valid_from
@@ -144,8 +157,9 @@ func (p *Playbook) Valid() (bool, int, []string) {
 			if yes := validUntil.After(validFrom); yes != true {
 				problemsFound++
 				resultDetails = append(resultDetails, "-- the valid_until timestamp is not later than the valid_from timestamp")
+			} else {
+				resultDetails = append(resultDetails, "++ the valid_until timestamp is later than the valid_from timestamp")
 			}
-			resultDetails = append(resultDetails, "++ the valid_until timestamp is later than the valid_from timestamp")
 		}
 	}
 
@@ -194,8 +208,9 @@ func (p *Playbook) Valid() (bool, int, []string) {
 			if p.ExternalReferences[i].Name == "" {
 				problemsFound++
 				resultDetails = append(resultDetails, "-- the name property in an external reference is required but missing")
+			} else {
+				resultDetails = append(resultDetails, "++ the name property in an external reference is required and is present")
 			}
-			resultDetails = append(resultDetails, "++ the name property in an external reference is required and is present")
 		}
 	}
 

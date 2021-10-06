@@ -35,7 +35,7 @@ func main() {
 	fmt.Println(data)
 
 	fmt.Println("Object valid: ", valid)
-	fmt.Println("Error Cound: ", count)
+	fmt.Println("Error Count: ", count)
 
 	for _, result := range details {
 		fmt.Println(result)

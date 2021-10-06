@@ -58,7 +58,7 @@ func main() {
 
 	valid, count, details := p.Valid()
 	fmt.Println("Object valid: ", valid)
-	fmt.Println("Error Cound: ", count)
+	fmt.Println("Error Count: ", count)
 
 	// If the debug flag is set then print out detail about what is good and bad
 	// otherwise just print out what is wrong.
