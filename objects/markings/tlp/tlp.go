@@ -6,7 +6,7 @@
 // Package tlp implements the CACAO 1.0 tlp marking object. The TLP marking
 // object defines the representation of a FIRST TLP marking statement. If the
 // TLP marking is externally defined, producers SHOULD use the
-// external_refernces property of this object.
+// external_references property of this object.
 package tlp
 
 import "github.com/openplaybooks/libcacao/objects/markings"

@@ -66,7 +66,7 @@ type Features struct {
 // Signature - This type captures the actual digital signature of an object
 type Signature struct {
 	//Header    SignatureHeader `json:"header,omitempty"`
-	//Excluded  []string `json:"exculded,omitempty"`
+	//Excluded  []string `json:"excluded,omitempty"`
 	ObjectType     string   `json:"type,omitempty"`
 	SpecVersion    string   `json:"spec_version,omitempty"`
 	ID             string   `json:"id,omitempty"`

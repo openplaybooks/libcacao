@@ -22,7 +22,7 @@ type ExternalReference struct {
 	ReferenceID string `json:"reference_id,omitempty"`
 }
 
-// Variables - This type defines all of the properties assocaited with the
+// Variables - This type defines all of the properties associated with the
 // Variables data type.  The variable data type captures variable information
 // and uses the JSON object type [RFC8259] for serialization. Variables can be
 // defined and used as the playbook is executed and are stored in a dictionary
