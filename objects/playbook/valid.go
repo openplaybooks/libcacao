@@ -61,16 +61,26 @@ func (p *Playbook) Valid() (bool, int, []string) {
 // Private Methods
 // ----------------------------------------------------------------------
 
+func requiredButMissing(propertyName string, r *results) {
+	r.problemsFound++
+	str := fmt.Sprintf("-- the %s property is required but missing", propertyName)
+	r.resultDetails = append(r.resultDetails, str)
+}
+
+func requiredAndFound(propertyName string, r *results) {
+	str := fmt.Sprintf("++ the %s property is required and is found", propertyName)
+	r.resultDetails = append(r.resultDetails, str)
+}
+
 // Each of these methods will check a specific property. It is done this way
 // to reduce the complexity of the main valid() function. This way all of the
 // checks for each property are self contained in their own function.
 
 func (p *Playbook) checkObjectType(r *results) {
 	if p.ObjectType == "" {
-		r.problemsFound++
-		r.resultDetails = append(r.resultDetails, "-- the type property is required but missing")
+		requiredButMissing("type", r)
 	} else {
-		r.resultDetails = append(r.resultDetails, "++ the type property is required and is present")
+		requiredAndFound("type", r)
 		if p.ObjectType != "playbook" && p.ObjectType != "playbook-template" {
 			r.problemsFound++
 			r.resultDetails = append(r.resultDetails, "-- the type property does not contain a value of playbook or playbook-template")
@@ -82,19 +92,17 @@ func (p *Playbook) checkObjectType(r *results) {
 
 func (p *Playbook) checkSpecVersion(r *results) {
 	if p.SpecVersion == "" {
-		r.problemsFound++
-		r.resultDetails = append(r.resultDetails, "-- the spec_version property is required but missing")
+		requiredButMissing("spec_version", r)
 	} else {
-		r.resultDetails = append(r.resultDetails, "++ the spec_version property is required and is present")
+		requiredAndFound("spec_version", r)
 	}
 }
 
 func (p *Playbook) checkID(r *results) {
 	if p.ID == "" {
-		r.problemsFound++
-		r.resultDetails = append(r.resultDetails, "-- the id property is required but missing")
+		requiredButMissing("id", r)
 	} else {
-		r.resultDetails = append(r.resultDetails, "++ the id property is required and is present")
+		requiredAndFound("id", r)
 		if valid := objects.IsIDValid(p.ID); valid == false {
 			r.problemsFound++
 			r.resultDetails = append(r.resultDetails, "-- the id property is not a valid timestamp")
@@ -106,17 +114,15 @@ func (p *Playbook) checkID(r *results) {
 
 func (p *Playbook) checkName(r *results) {
 	if p.Name == "" {
-		r.problemsFound++
-		r.resultDetails = append(r.resultDetails, "-- the name property is required but missing")
+		requiredButMissing("name", r)
 	} else {
-		r.resultDetails = append(r.resultDetails, "++ the name property is required and is present")
+		requiredAndFound("name", r)
 	}
 }
 
 func (p *Playbook) checkPlaybookTypes(r *results) {
 	if len(p.PlaybookTypes) == 0 {
-		r.problemsFound++
-		r.resultDetails = append(r.resultDetails, "-- the playbook_types property is required but missing")
+		requiredButMissing("playbook_types", r)
 	} else {
 		r.resultDetails = append(r.resultDetails, "++ the playbook_types property is required and is present")
 
@@ -137,19 +143,17 @@ func (p *Playbook) checkPlaybookTypes(r *results) {
 
 func (p *Playbook) checkCreatedBy(r *results) {
 	if p.CreatedBy == "" {
-		r.problemsFound++
-		r.resultDetails = append(r.resultDetails, "-- the created_by property is required but missing")
+		requiredButMissing("created_by", r)
 	} else {
-		r.resultDetails = append(r.resultDetails, "++ the created_by property is required and is present")
+		requiredAndFound("created_by", r)
 	}
 }
 
 func (p *Playbook) checkCreated(r *results) {
 	if p.Created == "" {
-		r.problemsFound++
-		r.resultDetails = append(r.resultDetails, "-- the created property is required but missing")
+		requiredButMissing("created", r)
 	} else {
-		r.resultDetails = append(r.resultDetails, "++ the created property is required and is present")
+		requiredAndFound("created", r)
 		if valid := objects.IsTimestampValid(p.Created); valid == false {
 			r.problemsFound++
 			r.resultDetails = append(r.resultDetails, "-- the created property does not contain a valid timestamp")
@@ -161,10 +165,9 @@ func (p *Playbook) checkCreated(r *results) {
 
 func (p *Playbook) checkModified(r *results) {
 	if p.Modified == "" {
-		r.problemsFound++
-		r.resultDetails = append(r.resultDetails, "-- the modified property is required but missing")
+		requiredButMissing("modified", r)
 	} else {
-		r.resultDetails = append(r.resultDetails, "++ the modified property is required and is present")
+		requiredAndFound("modified", r)
 		if valid := objects.IsTimestampValid(p.Modified); valid == false {
 			r.problemsFound++
 			r.resultDetails = append(r.resultDetails, "-- the modified property does not contain a valid timestamp")
