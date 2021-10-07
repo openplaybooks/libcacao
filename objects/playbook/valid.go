@@ -12,6 +12,11 @@ import (
 	"github.com/openplaybooks/libcacao/objects"
 )
 
+type results struct {
+	problemsFound int
+	resultDetails []string
+}
+
 // ----------------------------------------------------------------------
 // Public Methods
 // ----------------------------------------------------------------------
@@ -20,133 +25,173 @@ import (
 // boolean, an integer that tracks the number of problems found, and a slice of
 // strings that contain the detailed results, whether good or bad.
 func (p *Playbook) Valid() (bool, int, []string) {
-	problemsFound := 0
-	resultDetails := make([]string, 0)
+	var r *results = new(results)
 
-	// Type
+	// Check each property in the model
+	p.checkObjectType(r)
+	p.checkSpecVersion(r)
+	p.checkID(r)
+	p.checkName(r)
+	// Description - No requirements
+	p.checkPlaybookTypes(r)
+	p.checkCreatedBy(r)
+	p.checkCreated(r)
+	p.checkModified(r)
+	// Revoked - No requirements
+	p.checkValidFrom(r)
+	p.checkValidUntil(r)
+	// Derived From - No requirements
+	p.checkPriority(r)
+	p.checkSeverity(r)
+	p.checkImpact(r)
+	// Labels - No requirements
+	p.checkExternalReferences(r)
+	// Features - No requirements
+
+	// Finished Checks
+
+	// Return real values not pointers
+	if r.problemsFound > 0 {
+		return false, r.problemsFound, r.resultDetails
+	}
+	return true, r.problemsFound, r.resultDetails
+}
+
+// ----------------------------------------------------------------------
+// Private Methods
+// ----------------------------------------------------------------------
+
+// Each of these methods will check a specific property. It is done this way
+// to reduce the complexity of the main valid() function. This way all of the
+// checks for each property are self contained in their own function.
+
+func (p *Playbook) checkObjectType(r *results) {
 	if p.ObjectType == "" {
-		problemsFound++
-		resultDetails = append(resultDetails, "-- the type property is required but missing")
+		r.problemsFound++
+		r.resultDetails = append(r.resultDetails, "-- the type property is required but missing")
 	} else {
-		resultDetails = append(resultDetails, "++ the type property is required and is present")
+		r.resultDetails = append(r.resultDetails, "++ the type property is required and is present")
 		if p.ObjectType != "playbook" && p.ObjectType != "playbook-template" {
-			problemsFound++
-			resultDetails = append(resultDetails, "-- the type property does not contain a value of playbook or playbook-template")
+			r.problemsFound++
+			r.resultDetails = append(r.resultDetails, "-- the type property does not contain a value of playbook or playbook-template")
 		} else {
-			resultDetails = append(resultDetails, "++ the type property does contain a value of playbook or playbook-template")
+			r.resultDetails = append(r.resultDetails, "++ the type property does contain a value of playbook or playbook-template")
 		}
 	}
+}
 
-	// Spec Version
+func (p *Playbook) checkSpecVersion(r *results) {
 	if p.SpecVersion == "" {
-		problemsFound++
-		resultDetails = append(resultDetails, "-- the spec_version property is required but missing")
+		r.problemsFound++
+		r.resultDetails = append(r.resultDetails, "-- the spec_version property is required but missing")
 	} else {
-		resultDetails = append(resultDetails, "++ the spec_version property is required and is present")
+		r.resultDetails = append(r.resultDetails, "++ the spec_version property is required and is present")
 	}
+}
 
-	// ID
+func (p *Playbook) checkID(r *results) {
 	if p.ID == "" {
-		problemsFound++
-		resultDetails = append(resultDetails, "-- the id property is required but missing")
+		r.problemsFound++
+		r.resultDetails = append(r.resultDetails, "-- the id property is required but missing")
 	} else {
-		resultDetails = append(resultDetails, "++ the id property is required and is present")
+		r.resultDetails = append(r.resultDetails, "++ the id property is required and is present")
 		if valid := objects.IsIDValid(p.ID); valid == false {
-			problemsFound++
-			resultDetails = append(resultDetails, "-- the id property is not a valid timestamp")
+			r.problemsFound++
+			r.resultDetails = append(r.resultDetails, "-- the id property is not a valid timestamp")
 		} else {
-			resultDetails = append(resultDetails, "++ the id property is a valid timestamp")
+			r.resultDetails = append(r.resultDetails, "++ the id property is a valid timestamp")
 		}
 	}
+}
 
-	// Name
+func (p *Playbook) checkName(r *results) {
 	if p.Name == "" {
-		problemsFound++
-		resultDetails = append(resultDetails, "-- the name property is required but missing")
+		r.problemsFound++
+		r.resultDetails = append(r.resultDetails, "-- the name property is required but missing")
 	} else {
-		resultDetails = append(resultDetails, "++ the name property is required and is present")
+		r.resultDetails = append(r.resultDetails, "++ the name property is required and is present")
 	}
+}
 
-	// Description
-	// No requirements
-
-	// Playbook Types
+func (p *Playbook) checkPlaybookTypes(r *results) {
 	if len(p.PlaybookTypes) == 0 {
-		problemsFound++
-		resultDetails = append(resultDetails, "-- the playbook_types property is required but missing")
+		r.problemsFound++
+		r.resultDetails = append(r.resultDetails, "-- the playbook_types property is required but missing")
 	} else {
-		resultDetails = append(resultDetails, "++ the playbook_types property is required and is present")
+		r.resultDetails = append(r.resultDetails, "++ the playbook_types property is required and is present")
 
 		ptvocab := p.GetPlaybookTypesVocab()
 		for i := 0; i < len(p.PlaybookTypes); i++ {
 			value := p.PlaybookTypes[i]
 			if _, found := ptvocab[value]; found {
 				str := fmt.Sprintf("++ the playbook_types property contains a value of \"%s\" that is in the vocabulary", value)
-				resultDetails = append(resultDetails, str)
+				r.resultDetails = append(r.resultDetails, str)
 			} else {
-				problemsFound++
+				r.problemsFound++
 				str := fmt.Sprintf("-- the playbook_types property contains a value of \"%s\" that is not in the vocabulary", value)
-				resultDetails = append(resultDetails, str)
+				r.resultDetails = append(r.resultDetails, str)
 			}
 		}
 	}
+}
 
-	// Created By
+func (p *Playbook) checkCreatedBy(r *results) {
 	if p.CreatedBy == "" {
-		problemsFound++
-		resultDetails = append(resultDetails, "-- the created_by property is required but missing")
+		r.problemsFound++
+		r.resultDetails = append(r.resultDetails, "-- the created_by property is required but missing")
 	} else {
-		resultDetails = append(resultDetails, "++ the created_by property is required and is present")
+		r.resultDetails = append(r.resultDetails, "++ the created_by property is required and is present")
 	}
+}
 
-	// Created
+func (p *Playbook) checkCreated(r *results) {
 	if p.Created == "" {
-		problemsFound++
-		resultDetails = append(resultDetails, "-- the created property is required but missing")
+		r.problemsFound++
+		r.resultDetails = append(r.resultDetails, "-- the created property is required but missing")
 	} else {
-		resultDetails = append(resultDetails, "++ the created property is required and is present")
+		r.resultDetails = append(r.resultDetails, "++ the created property is required and is present")
 		if valid := objects.IsTimestampValid(p.Created); valid == false {
-			problemsFound++
-			resultDetails = append(resultDetails, "-- the created property does not contain a valid timestamp")
+			r.problemsFound++
+			r.resultDetails = append(r.resultDetails, "-- the created property does not contain a valid timestamp")
 		} else {
-			resultDetails = append(resultDetails, "++ the created property contains a valid timestamp")
+			r.resultDetails = append(r.resultDetails, "++ the created property contains a valid timestamp")
 		}
 	}
+}
 
-	// Modified
+func (p *Playbook) checkModified(r *results) {
 	if p.Modified == "" {
-		problemsFound++
-		resultDetails = append(resultDetails, "-- the modified property is required but missing")
+		r.problemsFound++
+		r.resultDetails = append(r.resultDetails, "-- the modified property is required but missing")
 	} else {
-		resultDetails = append(resultDetails, "++ the modified property is required and is present")
+		r.resultDetails = append(r.resultDetails, "++ the modified property is required and is present")
 		if valid := objects.IsTimestampValid(p.Modified); valid == false {
-			problemsFound++
-			resultDetails = append(resultDetails, "-- the modified property does not contain a valid timestamp")
+			r.problemsFound++
+			r.resultDetails = append(r.resultDetails, "-- the modified property does not contain a valid timestamp")
 		} else {
-			resultDetails = append(resultDetails, "++ the modified property contains a valid timestamp")
+			r.resultDetails = append(r.resultDetails, "++ the modified property contains a valid timestamp")
 		}
 	}
+}
 
-	// Revoked
-	// No requirements
-
-	// Valid From
+func (p *Playbook) checkValidFrom(r *results) {
 	if p.ValidFrom != "" {
 		if valid := objects.IsTimestampValid(p.ValidFrom); valid == false {
-			problemsFound++
-			resultDetails = append(resultDetails, "-- the valid_from property does not contain a valid timestamp")
+			r.problemsFound++
+			r.resultDetails = append(r.resultDetails, "-- the valid_from property does not contain a valid timestamp")
 		} else {
-			resultDetails = append(resultDetails, "++ the valid_from property contains a valid timestamp")
+			r.resultDetails = append(r.resultDetails, "++ the valid_from property contains a valid timestamp")
 		}
 	}
+}
 
-	// Valid Until
+func (p *Playbook) checkValidUntil(r *results) {
 	if p.ValidUntil != "" {
 		if valid := objects.IsTimestampValid(p.ValidUntil); valid == false {
-			problemsFound++
-			resultDetails = append(resultDetails, "-- the valid_until property does not contain a valid timestamp")
+			r.problemsFound++
+			r.resultDetails = append(r.resultDetails, "-- the valid_until property does not contain a valid timestamp")
 		} else {
-			resultDetails = append(resultDetails, "++ the valid_until property contains a valid timestamp")
+			r.resultDetails = append(r.resultDetails, "++ the valid_until property contains a valid timestamp")
 		}
 
 		// If there is a valid_until timestamp, then lets check to see if there is also a valid_from and if so
@@ -155,72 +200,60 @@ func (p *Playbook) Valid() (bool, int, []string) {
 			validFrom, _ := time.Parse(time.RFC3339, p.ValidFrom)
 			validUntil, _ := time.Parse(time.RFC3339, p.ValidUntil)
 			if yes := validUntil.After(validFrom); yes != true {
-				problemsFound++
-				resultDetails = append(resultDetails, "-- the valid_until timestamp is not later than the valid_from timestamp")
+				r.problemsFound++
+				r.resultDetails = append(r.resultDetails, "-- the valid_until timestamp is not later than the valid_from timestamp")
 			} else {
-				resultDetails = append(resultDetails, "++ the valid_until timestamp is later than the valid_from timestamp")
+				r.resultDetails = append(r.resultDetails, "++ the valid_until timestamp is later than the valid_from timestamp")
 			}
 		}
 	}
+}
 
-	// Derived From
-	// No requirements
-
-	// Priority
+func (p *Playbook) checkPriority(r *results) {
 	if p.Priority < 0 {
-		problemsFound++
-		resultDetails = append(resultDetails, "-- the priority property does not contain a valid value, it is less than zero")
+		r.problemsFound++
+		r.resultDetails = append(r.resultDetails, "-- the priority property does not contain a valid value, it is less than zero")
 	} else if p.Priority > 100 {
-		problemsFound++
-		resultDetails = append(resultDetails, "-- the priority property does not contain a valid value, it is greater than 100")
+		r.problemsFound++
+		r.resultDetails = append(r.resultDetails, "-- the priority property does not contain a valid value, it is greater than 100")
 	} else if p.Priority >= 0 && p.Priority <= 100 {
-		resultDetails = append(resultDetails, "++ the priority property contains a valid timestamp")
+		r.resultDetails = append(r.resultDetails, "++ the priority property contains a valid timestamp")
 	}
+}
 
-	// Severity
+func (p *Playbook) checkSeverity(r *results) {
 	if p.Severity < 0 {
-		problemsFound++
-		resultDetails = append(resultDetails, "-- the severity property does not contain a valid value, it is less than zero")
+		r.problemsFound++
+		r.resultDetails = append(r.resultDetails, "-- the severity property does not contain a valid value, it is less than zero")
 	} else if p.Severity > 100 {
-		problemsFound++
-		resultDetails = append(resultDetails, "-- the severity property does not contain a valid value, it is greater than 100")
+		r.problemsFound++
+		r.resultDetails = append(r.resultDetails, "-- the severity property does not contain a valid value, it is greater than 100")
 	} else if p.Severity >= 0 && p.Severity <= 100 {
-		resultDetails = append(resultDetails, "++ the severity property contains a valid timestamp")
+		r.resultDetails = append(r.resultDetails, "++ the severity property contains a valid timestamp")
 	}
+}
 
-	// Impact
+func (p *Playbook) checkImpact(r *results) {
 	if p.Impact < 0 {
-		problemsFound++
-		resultDetails = append(resultDetails, "-- the impact property does not contain a valid value, it is less than zero")
+		r.problemsFound++
+		r.resultDetails = append(r.resultDetails, "-- the impact property does not contain a valid value, it is less than zero")
 	} else if p.Impact > 100 {
-		problemsFound++
-		resultDetails = append(resultDetails, "-- the impact property does not contain a valid value, it is greater than 100")
+		r.problemsFound++
+		r.resultDetails = append(r.resultDetails, "-- the impact property does not contain a valid value, it is greater than 100")
 	} else if p.Impact >= 0 && p.Impact <= 100 {
-		resultDetails = append(resultDetails, "++ the impact property contains a valid timestamp")
+		r.resultDetails = append(r.resultDetails, "++ the impact property contains a valid timestamp")
 	}
+}
 
-	// Labels
-	// No requirements
-
-	// External References
+func (p *Playbook) checkExternalReferences(r *results) {
 	if len(p.ExternalReferences) > 0 {
 		for i := range p.ExternalReferences {
 			if p.ExternalReferences[i].Name == "" {
-				problemsFound++
-				resultDetails = append(resultDetails, "-- the name property in an external reference is required but missing")
+				r.problemsFound++
+				r.resultDetails = append(r.resultDetails, "-- the name property in an external reference is required but missing")
 			} else {
-				resultDetails = append(resultDetails, "++ the name property in an external reference is required and is present")
+				r.resultDetails = append(r.resultDetails, "++ the name property in an external reference is required and is present")
 			}
 		}
 	}
-
-	// Features
-	// No requirements
-
-	// Finished Checks
-
-	if problemsFound > 0 {
-		return false, problemsFound, resultDetails
-	}
-	return true, problemsFound, resultDetails
 }
