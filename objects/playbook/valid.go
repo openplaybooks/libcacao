@@ -13,6 +13,7 @@ import (
 )
 
 type results struct {
+	debug         bool
 	problemsFound int
 	resultDetails []string
 }
@@ -24,8 +25,9 @@ type results struct {
 // Valid - This method will verify that the object is correct. It will return a
 // boolean, an integer that tracks the number of problems found, and a slice of
 // strings that contain the detailed results, whether good or bad.
-func (p *Playbook) Valid() (bool, int, []string) {
+func (p *Playbook) Valid(debug bool) (bool, int, []string) {
 	var r *results = new(results)
+	r.debug = debug
 
 	// Check each property in the model
 	p.checkObjectType(r)
@@ -61,15 +63,25 @@ func (p *Playbook) Valid() (bool, int, []string) {
 // Private Methods
 // ----------------------------------------------------------------------
 
-func requiredButMissing(propertyName string, r *results) {
-	r.problemsFound++
+func requiredButMissing(r *results, propertyName string) {
 	str := fmt.Sprintf("-- the %s property is required but missing", propertyName)
-	r.resultDetails = append(r.resultDetails, str)
+	logProblem(r, str)
 }
 
-func requiredAndFound(propertyName string, r *results) {
+func requiredAndFound(r *results, propertyName string) {
 	str := fmt.Sprintf("++ the %s property is required and is found", propertyName)
-	r.resultDetails = append(r.resultDetails, str)
+	logValid(r, str)
+}
+
+func logProblem(r *results, msg string) {
+	r.problemsFound++
+	r.resultDetails = append(r.resultDetails, msg)
+}
+
+func logValid(r *results, msg string) {
+	if r.debug {
+		r.resultDetails = append(r.resultDetails, msg)
+	}
 }
 
 // Each of these methods will check a specific property. It is done this way
@@ -78,64 +90,72 @@ func requiredAndFound(propertyName string, r *results) {
 
 func (p *Playbook) checkObjectType(r *results) {
 	if p.ObjectType == "" {
-		requiredButMissing("type", r)
+		requiredButMissing(r, "type")
 	} else {
-		requiredAndFound("type", r)
+		requiredAndFound(r, "type")
+
 		if p.ObjectType != "playbook" && p.ObjectType != "playbook-template" {
-			r.problemsFound++
-			r.resultDetails = append(r.resultDetails, "-- the type property does not contain a value of playbook or playbook-template")
+			logProblem(r, "-- the type property does not contain a value of playbook or playbook-template")
 		} else {
-			r.resultDetails = append(r.resultDetails, "++ the type property does contain a value of playbook or playbook-template")
+			str := fmt.Sprintf("++ the type property contains a valid type value of \"%s\"", p.ObjectType)
+			logValid(r, str)
 		}
 	}
 }
 
 func (p *Playbook) checkSpecVersion(r *results) {
 	if p.SpecVersion == "" {
-		requiredButMissing("spec_version", r)
+		requiredButMissing(r, "spec_version")
 	} else {
-		requiredAndFound("spec_version", r)
+		requiredAndFound(r, "spec_version")
+
+		if p.SpecVersion != "1.0" {
+			logProblem(r, "-- the spec_version property does not contain a value of 1.0")
+		} else {
+			str := fmt.Sprintf("++ the spec_version property contains a valid spec_version value of \"%s\"", p.SpecVersion)
+			logValid(r, str)
+		}
 	}
 }
 
 func (p *Playbook) checkID(r *results) {
 	if p.ID == "" {
-		requiredButMissing("id", r)
+		requiredButMissing(r, "id")
 	} else {
-		requiredAndFound("id", r)
+		requiredAndFound(r, "id")
+
 		if valid := objects.IsIDValid(p.ID); valid == false {
-			r.problemsFound++
-			r.resultDetails = append(r.resultDetails, "-- the id property is not a valid timestamp")
+			logProblem(r, "-- the id property is not a valid timestamp")
 		} else {
-			r.resultDetails = append(r.resultDetails, "++ the id property is a valid timestamp")
+			str := fmt.Sprintf("++ the id property contains a valid id value of \"%s\"", p.ID)
+			logValid(r, str)
 		}
 	}
 }
 
 func (p *Playbook) checkName(r *results) {
 	if p.Name == "" {
-		requiredButMissing("name", r)
+		requiredButMissing(r, "name")
 	} else {
-		requiredAndFound("name", r)
+		requiredAndFound(r, "name")
 	}
 }
 
 func (p *Playbook) checkPlaybookTypes(r *results) {
 	if len(p.PlaybookTypes) == 0 {
-		requiredButMissing("playbook_types", r)
+		requiredButMissing(r, "playbook_types")
 	} else {
-		r.resultDetails = append(r.resultDetails, "++ the playbook_types property is required and is present")
+		requiredAndFound(r, "playbook_types")
 
 		ptvocab := p.GetPlaybookTypesVocab()
 		for i := 0; i < len(p.PlaybookTypes); i++ {
 			value := p.PlaybookTypes[i]
 			if _, found := ptvocab[value]; found {
-				str := fmt.Sprintf("++ the playbook_types property contains a value of \"%s\" that is in the vocabulary", value)
-				r.resultDetails = append(r.resultDetails, str)
+				str := fmt.Sprintf("++ the playbook_types property contains a valid playbook_types value of \"%s\"", value)
+				logValid(r, str)
 			} else {
-				r.problemsFound++
 				str := fmt.Sprintf("-- the playbook_types property contains a value of \"%s\" that is not in the vocabulary", value)
-				r.resultDetails = append(r.resultDetails, str)
+				logProblem(r, str)
 			}
 		}
 	}
@@ -143,36 +163,36 @@ func (p *Playbook) checkPlaybookTypes(r *results) {
 
 func (p *Playbook) checkCreatedBy(r *results) {
 	if p.CreatedBy == "" {
-		requiredButMissing("created_by", r)
+		requiredButMissing(r, "created_by")
 	} else {
-		requiredAndFound("created_by", r)
+		requiredAndFound(r, "created_by")
 	}
 }
 
 func (p *Playbook) checkCreated(r *results) {
 	if p.Created == "" {
-		requiredButMissing("created", r)
+		requiredButMissing(r, "created")
 	} else {
-		requiredAndFound("created", r)
+		requiredAndFound(r, "created")
+
 		if valid := objects.IsTimestampValid(p.Created); valid == false {
-			r.problemsFound++
-			r.resultDetails = append(r.resultDetails, "-- the created property does not contain a valid timestamp")
+			logProblem(r, "-- the created property does not contain a valid timestamp")
 		} else {
-			r.resultDetails = append(r.resultDetails, "++ the created property contains a valid timestamp")
+			logValid(r, "++ the created property contains a valid timestamp")
 		}
 	}
 }
 
 func (p *Playbook) checkModified(r *results) {
 	if p.Modified == "" {
-		requiredButMissing("modified", r)
+		requiredButMissing(r, "modified")
 	} else {
-		requiredAndFound("modified", r)
+		requiredAndFound(r, "modified")
+
 		if valid := objects.IsTimestampValid(p.Modified); valid == false {
-			r.problemsFound++
-			r.resultDetails = append(r.resultDetails, "-- the modified property does not contain a valid timestamp")
+			logProblem(r, "-- the modified property does not contain a valid timestamp")
 		} else {
-			r.resultDetails = append(r.resultDetails, "++ the modified property contains a valid timestamp")
+			logValid(r, "++ the modified property contains a valid timestamp")
 		}
 	}
 }
@@ -180,10 +200,9 @@ func (p *Playbook) checkModified(r *results) {
 func (p *Playbook) checkValidFrom(r *results) {
 	if p.ValidFrom != "" {
 		if valid := objects.IsTimestampValid(p.ValidFrom); valid == false {
-			r.problemsFound++
-			r.resultDetails = append(r.resultDetails, "-- the valid_from property does not contain a valid timestamp")
+			logProblem(r, "-- the valid_from property does not contain a valid timestamp")
 		} else {
-			r.resultDetails = append(r.resultDetails, "++ the valid_from property contains a valid timestamp")
+			logValid(r, "++ the valid_from property contains a valid timestamp")
 		}
 	}
 }
@@ -191,10 +210,9 @@ func (p *Playbook) checkValidFrom(r *results) {
 func (p *Playbook) checkValidUntil(r *results) {
 	if p.ValidUntil != "" {
 		if valid := objects.IsTimestampValid(p.ValidUntil); valid == false {
-			r.problemsFound++
-			r.resultDetails = append(r.resultDetails, "-- the valid_until property does not contain a valid timestamp")
+			logProblem(r, "-- the valid_until property does not contain a valid timestamp")
 		} else {
-			r.resultDetails = append(r.resultDetails, "++ the valid_until property contains a valid timestamp")
+			logValid(r, "++ the valid_until property contains a valid timestamp")
 		}
 
 		// If there is a valid_until timestamp, then lets check to see if there is also a valid_from and if so
@@ -203,10 +221,9 @@ func (p *Playbook) checkValidUntil(r *results) {
 			validFrom, _ := time.Parse(time.RFC3339, p.ValidFrom)
 			validUntil, _ := time.Parse(time.RFC3339, p.ValidUntil)
 			if yes := validUntil.After(validFrom); yes != true {
-				r.problemsFound++
-				r.resultDetails = append(r.resultDetails, "-- the valid_until timestamp is not later than the valid_from timestamp")
+				logProblem(r, "-- the valid_until timestamp is not later than the valid_from timestamp")
 			} else {
-				r.resultDetails = append(r.resultDetails, "++ the valid_until timestamp is later than the valid_from timestamp")
+				logValid(r, "++ the valid_until timestamp is later than the valid_from timestamp")
 			}
 		}
 	}
@@ -214,37 +231,31 @@ func (p *Playbook) checkValidUntil(r *results) {
 
 func (p *Playbook) checkPriority(r *results) {
 	if p.Priority < 0 {
-		r.problemsFound++
-		r.resultDetails = append(r.resultDetails, "-- the priority property does not contain a valid value, it is less than zero")
+		logProblem(r, "-- the priority property does not contain a valid value, it is less than zero")
 	} else if p.Priority > 100 {
-		r.problemsFound++
-		r.resultDetails = append(r.resultDetails, "-- the priority property does not contain a valid value, it is greater than 100")
+		logProblem(r, "-- the priority property does not contain a valid value, it is greater than 100")
 	} else if p.Priority >= 0 && p.Priority <= 100 {
-		r.resultDetails = append(r.resultDetails, "++ the priority property contains a valid timestamp")
+		logValid(r, "++ the priority property contains a valid timestamp")
 	}
 }
 
 func (p *Playbook) checkSeverity(r *results) {
 	if p.Severity < 0 {
-		r.problemsFound++
-		r.resultDetails = append(r.resultDetails, "-- the severity property does not contain a valid value, it is less than zero")
+		logProblem(r, "-- the severity property does not contain a valid value, it is less than zero")
 	} else if p.Severity > 100 {
-		r.problemsFound++
-		r.resultDetails = append(r.resultDetails, "-- the severity property does not contain a valid value, it is greater than 100")
+		logProblem(r, "-- the severity property does not contain a valid value, it is greater than 100")
 	} else if p.Severity >= 0 && p.Severity <= 100 {
-		r.resultDetails = append(r.resultDetails, "++ the severity property contains a valid timestamp")
+		logValid(r, "++ the severity property contains a valid timestamp")
 	}
 }
 
 func (p *Playbook) checkImpact(r *results) {
 	if p.Impact < 0 {
-		r.problemsFound++
-		r.resultDetails = append(r.resultDetails, "-- the impact property does not contain a valid value, it is less than zero")
+		logProblem(r, "-- the impact property does not contain a valid value, it is less than zero")
 	} else if p.Impact > 100 {
-		r.problemsFound++
-		r.resultDetails = append(r.resultDetails, "-- the impact property does not contain a valid value, it is greater than 100")
+		logProblem(r, "-- the impact property does not contain a valid value, it is greater than 100")
 	} else if p.Impact >= 0 && p.Impact <= 100 {
-		r.resultDetails = append(r.resultDetails, "++ the impact property contains a valid timestamp")
+		logValid(r, "++ the impact property contains a valid timestamp")
 	}
 }
 
@@ -252,10 +263,9 @@ func (p *Playbook) checkExternalReferences(r *results) {
 	if len(p.ExternalReferences) > 0 {
 		for i := range p.ExternalReferences {
 			if p.ExternalReferences[i].Name == "" {
-				r.problemsFound++
-				r.resultDetails = append(r.resultDetails, "-- the name property in an external reference is required but missing")
+				logProblem(r, "-- the name property in an external reference is required but missing")
 			} else {
-				r.resultDetails = append(r.resultDetails, "++ the name property in an external reference is required and is present")
+				logValid(r, "++ the name property in an external reference is required and is present")
 			}
 		}
 	}

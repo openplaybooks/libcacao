@@ -56,7 +56,7 @@ func main() {
 
 	p, _ := playbook.Decode(output)
 
-	valid, count, details := p.Valid()
+	valid, count, details := p.Valid(*bOptDebug)
 	fmt.Println("Object valid: ", valid)
 	fmt.Println("Error Count: ", count)
 
