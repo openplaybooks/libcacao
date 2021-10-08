@@ -23,24 +23,24 @@ func TestCheckObjectType(t *testing.T) {
 	// Check when property is missing
 	setup(r)
 	p.checkObjectType(r)
-	if r.problemsFound != 1 && r.resultDetails[0][0:2] != "--" {
-		t.Errorf("1.1 checkObjectType returned incorrect values when object missing")
+	if r.problemsFound != 1 || r.resultDetails[0][0:2] != "--" {
+		t.Errorf("1.1 checkObjectType returned errors %d and results %s which is invalid", r.problemsFound, r.resultDetails)
 	}
 
 	// Check invalid value
 	setup(r)
-	p.checkObjectType(r)
 	p.ObjectType = "foo"
-	if r.problemsFound != 1 && r.resultDetails[0][0:2] != "--" {
-		t.Errorf("1.2 checkObjectType returned incorrect values when value is invalid")
+	p.checkObjectType(r)
+	if r.problemsFound != 1 || r.resultDetails[1][0:2] != "--" {
+		t.Errorf("1.2 checkObjectType returned errors %d and results %s which is invalid", r.problemsFound, r.resultDetails)
 	}
 
 	// Check correct value
 	setup(r)
-	p.checkObjectType(r)
 	p.ObjectType = "playbook"
-	if r.problemsFound != 0 && r.resultDetails[0][0:2] != "++" {
-		t.Errorf("1.3 checkObjectType returned incorrect values when value is valid")
+	p.checkObjectType(r)
+	if r.problemsFound != 0 || r.resultDetails[1][0:2] != "++" {
+		t.Errorf("1.3 checkObjectType returned errors %d and results %s which is invalid", r.problemsFound, r.resultDetails)
 	}
 }
 
@@ -53,23 +53,75 @@ func TestCheckSpecVersion(t *testing.T) {
 	// Check when property is missing
 	setup(r)
 	p.checkSpecVersion(r)
-	if r.problemsFound != 1 && r.resultDetails[0][0:2] != "--" {
-		t.Errorf("2.1 checkSpecVersion returned incorrect values when object missing")
+	if r.problemsFound != 1 || r.resultDetails[0][0:2] != "--" {
+		t.Errorf("2.1 checkSpecVersion returned errors %d and results %s which is invalid", r.problemsFound, r.resultDetails)
 	}
 
 	// Check invalid value
 	setup(r)
-	p.checkSpecVersion(r)
 	p.SpecVersion = "0.9"
-	if r.problemsFound != 1 && r.resultDetails[0][0:2] != "--" {
-		t.Errorf("2.2 checkSpecVersion returned incorrect values when value is invalid")
+	p.checkSpecVersion(r)
+	if r.problemsFound != 1 || r.resultDetails[1][0:2] != "--" {
+		t.Errorf("2.2 checkSpecVersion returned errors %d and results %s which is invalid", r.problemsFound, r.resultDetails)
 	}
 
 	// Check correct value
 	setup(r)
-	p.checkSpecVersion(r)
 	p.SpecVersion = "1.0"
-	if r.problemsFound != 0 && r.resultDetails[0][0:2] != "++" {
-		t.Errorf("2.3 checkSpecVersion returned incorrect values when value is valid")
+	p.checkSpecVersion(r)
+	if r.problemsFound != 0 || r.resultDetails[1][0:2] != "++" {
+		t.Errorf("2.3 checkSpecVersion returned errors %d and results %s which is invalid", r.problemsFound, r.resultDetails)
+	}
+}
+
+// TestCheckID - This will check the id
+func TestCheckID(t *testing.T) {
+	p := new(Playbook)
+	r := new(results)
+	r.debug = true
+
+	// Check when property is missing
+	setup(r)
+	p.checkID(r)
+	if r.problemsFound != 1 || r.resultDetails[0][0:2] != "--" {
+		t.Errorf("3.1 checkID returned errors %d and results %s which is invalid", r.problemsFound, r.resultDetails)
+	}
+
+	// Check invalid value
+	setup(r)
+	p.ID = "playbook--uuid1"
+	p.checkID(r)
+	if r.problemsFound != 1 || r.resultDetails[1][0:2] != "--" {
+		t.Errorf("3.2 checkID returned errors %d and results %s which is invalid", r.problemsFound, r.resultDetails)
+	}
+
+	// Check invalid value
+	setup(r)
+	p.ID = "foo--60cfe320-f6b4-4523-8558-14a042223797"
+	p.checkID(r)
+	if r.problemsFound != 1 || r.resultDetails[1][0:2] != "--" {
+		t.Errorf("3.3 checkID returned errors %d and results %s which is invalid", r.problemsFound, r.resultDetails)
+	}
+
+	// Check correct value
+	setup(r)
+	p.ID = "playbook--60cfe320-f6b4-4523-8558-14a042223797"
+	p.checkID(r)
+	if r.problemsFound != 0 || r.resultDetails[1][0:2] != "++" {
+		t.Errorf("3.4 checkID returned errors %d and results %s which is invalid", r.problemsFound, r.resultDetails)
+	}
+}
+
+// TestCheckName - This will check the id
+func TestCheckName(t *testing.T) {
+	p := new(Playbook)
+	r := new(results)
+	r.debug = true
+
+	// Check when property is missing
+	setup(r)
+	p.checkName(r)
+	if r.problemsFound != 1 || r.resultDetails[0][0:2] != "--" {
+		t.Errorf("4.1 checkName returned errors %d and results %s which is invalid", r.problemsFound, r.resultDetails)
 	}
 }
