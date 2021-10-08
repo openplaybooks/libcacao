@@ -124,6 +124,7 @@ func IsValidType(s string) bool {
 		"target":               true,
 		"extension-definition": true,
 		"marking-definition":   true,
+		"identity":             true,
 	}
 
 	if _, found := objectTypes[s]; found == true {

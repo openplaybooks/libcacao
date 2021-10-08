@@ -7,6 +7,7 @@ package playbook
 
 import (
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/openplaybooks/libcacao/objects"
@@ -36,13 +37,23 @@ func (p *Playbook) Valid(debug bool) (bool, int, []string) {
 	// Revoked - No requirements
 	p.checkValidFrom(r)
 	p.checkValidUntil(r)
-	// Derived From - No requirements
+	p.checkDerivedFrom(r)
 	p.checkPriority(r)
 	p.checkSeverity(r)
 	p.checkImpact(r)
+	// Industry Sectors
 	// Labels - No requirements
 	p.checkExternalReferences(r)
 	// Features - No requirements
+	// Markings
+	// Playbook Variables
+	// Workflow Start
+	// Workflow Exception
+	// Workflow
+	// Targets
+	// Extension Definitions
+	// Data Marking Definitions
+	// Signatures
 
 	// Finished Checks
 
@@ -135,6 +146,8 @@ func (p *Playbook) checkName(r *results) {
 	}
 }
 
+// Nothing to do for Description
+
 func (p *Playbook) checkPlaybookTypes(r *results) {
 	if len(p.PlaybookTypes) == 0 {
 		requiredButMissing(r, "playbook_types")
@@ -166,6 +179,16 @@ func (p *Playbook) checkCreatedBy(r *results) {
 		} else {
 			str := fmt.Sprintf("++ the created_by property contains a valid identifier value of \"%s\"", p.CreatedBy)
 			logValid(r, str)
+
+			// Make sure the ID is a valid identity ID
+			idparts := strings.Split(p.CreatedBy, "--")
+			if idparts[0] != "identity" {
+				logProblem(r, "-- the derived_from property does not contain a valid identity identifier")
+			} else {
+				str := fmt.Sprintf("++ the derived_from property contains a valid identity identifier value of \"%s\"", p.CreatedBy)
+				logValid(r, str)
+			}
+
 		}
 	}
 }
@@ -211,6 +234,8 @@ func (p *Playbook) checkModified(r *results) {
 	}
 }
 
+// Nothing to do for Revoked
+
 func (p *Playbook) checkValidFrom(r *results) {
 	if p.ValidFrom != "" {
 		if valid := objects.IsTimestampValid(p.ValidFrom); valid == false {
@@ -244,15 +269,24 @@ func (p *Playbook) checkValidUntil(r *results) {
 }
 
 func (p *Playbook) checkDerivedFrom(r *results) {
-	if len(p.DerivedFrom) != 0 {
+	if len(p.DerivedFrom) == 0 {
+		return
+	}
+	for i := 0; i < len(p.DerivedFrom); i++ {
+		value := p.DerivedFrom[i]
 
-		for i := 0; i < len(p.DerivedFrom); i++ {
-			value := p.DerivedFrom[i]
+		if valid := objects.IsIDValid(value); valid == false {
+			logProblem(r, "-- the derived_from property does not contain a valid identifier")
+		} else {
+			str := fmt.Sprintf("++ the derived_from property contains a valid identifier value of \"%s\"", value)
+			logValid(r, str)
 
-			if valid := objects.IsIDValid(value); valid == false {
-				logProblem(r, "-- the derived_from property does not contain a valid identifier")
+			// Make sure the ID is a valid playbook ID
+			idparts := strings.Split(value, "--")
+			if idparts[0] != "playbook" && idparts[0] != "playbook-template" {
+				logProblem(r, "-- the derived_from property does not contain a valid playbook identifier")
 			} else {
-				str := fmt.Sprintf("++ the derived_from property contains a valid identifier value of \"%s\"", value)
+				str := fmt.Sprintf("++ the derived_from property contains a valid playbook identifier value of \"%s\"", value)
 				logValid(r, str)
 			}
 		}
@@ -265,7 +299,7 @@ func (p *Playbook) checkPriority(r *results) {
 	} else if p.Priority > 100 {
 		logProblem(r, "-- the priority property does not contain a valid value, it is greater than 100")
 	} else if p.Priority >= 0 && p.Priority <= 100 {
-		logValid(r, "++ the priority property contains a valid timestamp")
+		logValid(r, "++ the priority property contains a valid value")
 	}
 }
 
@@ -275,7 +309,7 @@ func (p *Playbook) checkSeverity(r *results) {
 	} else if p.Severity > 100 {
 		logProblem(r, "-- the severity property does not contain a valid value, it is greater than 100")
 	} else if p.Severity >= 0 && p.Severity <= 100 {
-		logValid(r, "++ the severity property contains a valid timestamp")
+		logValid(r, "++ the severity property contains a valid value")
 	}
 }
 
@@ -285,9 +319,12 @@ func (p *Playbook) checkImpact(r *results) {
 	} else if p.Impact > 100 {
 		logProblem(r, "-- the impact property does not contain a valid value, it is greater than 100")
 	} else if p.Impact >= 0 && p.Impact <= 100 {
-		logValid(r, "++ the impact property contains a valid timestamp")
+		logValid(r, "++ the impact property contains a valid value")
 	}
 }
+
+// Industry Sectors
+// Nothing to do for Labels
 
 func (p *Playbook) checkExternalReferences(r *results) {
 	if len(p.ExternalReferences) > 0 {
@@ -300,3 +337,14 @@ func (p *Playbook) checkExternalReferences(r *results) {
 		}
 	}
 }
+
+// Features
+// Markings
+// Playbook Variables
+// Workflow Start
+// Workflow Exception
+// Workflow
+// Targets
+// Extension definitions
+// Data Marking Definitions
+// Signatures
