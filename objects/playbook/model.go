@@ -85,6 +85,13 @@ type Signature struct {
 	Value          string   `json:"value,omitempty"`
 }
 
+// This type is used to capture results from the Valid() and Compare() functions
+type results struct {
+	debug         bool
+	problemsFound int
+	resultDetails []string
+}
+
 // Valid - Implement the Claims class needed for JWT
 func (s Signature) Valid() error {
 	return nil
@@ -98,9 +105,9 @@ func (s Signature) Valid() error {
 // pointer. It will also initialize the object by setting all of the basic
 // properties.
 func New() *Playbook {
-	var p Playbook
+	p := new(Playbook)
 	p.Init()
-	return &p
+	return p
 }
 
 // Init - This method will initialize a new playbook object with the correct
@@ -119,7 +126,7 @@ func (p *Playbook) Init() {
 // ----------------------------------------------------------------------
 
 // GetPlaybookTypesVocab - This function will return a list of the playbook types
-func (p Playbook) GetPlaybookTypesVocab() map[string]bool {
+func (p *Playbook) GetPlaybookTypesVocab() map[string]bool {
 	PlaybookTypesVocab := map[string]bool{
 		"notification":  true,
 		"detection":     true,

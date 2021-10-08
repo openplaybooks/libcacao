@@ -26,13 +26,7 @@ func main() {
 	p.Impact = 5
 	p.AddLabels("malware,fuzzypanda,apt")
 
-	valid, count, details := p.Valid(false)
-
-	data, err := p.EncodeToString()
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(data)
+	valid, count, details := p.Valid(true)
 
 	fmt.Println("Object valid: ", valid)
 	fmt.Println("Error Count: ", count)

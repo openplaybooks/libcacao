@@ -12,12 +12,6 @@ import (
 	"github.com/openplaybooks/libcacao/objects"
 )
 
-type results struct {
-	debug         bool
-	problemsFound int
-	resultDetails []string
-}
-
 // ----------------------------------------------------------------------
 // Public Methods
 // ----------------------------------------------------------------------
@@ -26,7 +20,7 @@ type results struct {
 // boolean, an integer that tracks the number of problems found, and a slice of
 // strings that contain the detailed results, whether good or bad.
 func (p *Playbook) Valid(debug bool) (bool, int, []string) {
-	var r *results = new(results)
+	r := new(results)
 	r.debug = debug
 
 	// Check each property in the model
@@ -125,9 +119,9 @@ func (p *Playbook) checkID(r *results) {
 		requiredAndFound(r, "id")
 
 		if valid := objects.IsIDValid(p.ID); valid == false {
-			logProblem(r, "-- the id property is not a valid timestamp")
+			logProblem(r, "-- the id property does not contain a valid identifier")
 		} else {
-			str := fmt.Sprintf("++ the id property contains a valid id value of \"%s\"", p.ID)
+			str := fmt.Sprintf("++ the id property contains a valid identifier value of \"%s\"", p.ID)
 			logValid(r, str)
 		}
 	}
@@ -166,6 +160,13 @@ func (p *Playbook) checkCreatedBy(r *results) {
 		requiredButMissing(r, "created_by")
 	} else {
 		requiredAndFound(r, "created_by")
+
+		if valid := objects.IsIDValid(p.CreatedBy); valid == false {
+			logProblem(r, "-- the created_by property does not contain a valid identifier")
+		} else {
+			str := fmt.Sprintf("++ the created_by property contains a valid identifier value of \"%s\"", p.CreatedBy)
+			logValid(r, str)
+		}
 	}
 }
 
@@ -178,7 +179,8 @@ func (p *Playbook) checkCreated(r *results) {
 		if valid := objects.IsTimestampValid(p.Created); valid == false {
 			logProblem(r, "-- the created property does not contain a valid timestamp")
 		} else {
-			logValid(r, "++ the created property contains a valid timestamp")
+			str := fmt.Sprintf("++ the created property contains a valid timestamp value of \"%s\"", p.Created)
+			logValid(r, str)
 		}
 	}
 }
@@ -192,7 +194,19 @@ func (p *Playbook) checkModified(r *results) {
 		if valid := objects.IsTimestampValid(p.Modified); valid == false {
 			logProblem(r, "-- the modified property does not contain a valid timestamp")
 		} else {
-			logValid(r, "++ the modified property contains a valid timestamp")
+			str := fmt.Sprintf("++ the modified property contains a valid timestamp value of \"%s\"", p.Modified)
+			logValid(r, str)
+		}
+
+		// Make sure the modified timestampe is equal to or greater than created
+		if p.Created != "" {
+			created, _ := time.Parse(time.RFC3339, p.Created)
+			modified, _ := time.Parse(time.RFC3339, p.Modified)
+			if modified.After(created) || modified.Equal(created) {
+				logValid(r, "++ the modified timestamp is later than or equal to the created timestamp")
+			} else {
+				logProblem(r, "-- the modified timestamp is not later than or eqaul to the created timestamp")
+			}
 		}
 	}
 }
@@ -220,10 +234,26 @@ func (p *Playbook) checkValidUntil(r *results) {
 		if p.ValidFrom != "" {
 			validFrom, _ := time.Parse(time.RFC3339, p.ValidFrom)
 			validUntil, _ := time.Parse(time.RFC3339, p.ValidUntil)
-			if yes := validUntil.After(validFrom); yes != true {
-				logProblem(r, "-- the valid_until timestamp is not later than the valid_from timestamp")
-			} else {
+			if validUntil.After(validFrom) {
 				logValid(r, "++ the valid_until timestamp is later than the valid_from timestamp")
+			} else {
+				logProblem(r, "-- the valid_until timestamp is not later than the valid_from timestamp")
+			}
+		}
+	}
+}
+
+func (p *Playbook) checkDerivedFrom(r *results) {
+	if len(p.DerivedFrom) != 0 {
+
+		for i := 0; i < len(p.DerivedFrom); i++ {
+			value := p.DerivedFrom[i]
+
+			if valid := objects.IsIDValid(value); valid == false {
+				logProblem(r, "-- the derived_from property does not contain a valid identifier")
+			} else {
+				str := fmt.Sprintf("++ the derived_from property contains a valid identifier value of \"%s\"", value)
+				logValid(r, str)
 			}
 		}
 	}
