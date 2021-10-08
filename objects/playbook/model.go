@@ -120,21 +120,3 @@ func (p *Playbook) Init() {
 	p.Modified = p.Created
 	p.Revoked = false
 }
-
-// ----------------------------------------------------------------------
-// Vocabulary Methods
-// ----------------------------------------------------------------------
-
-// GetPlaybookTypesVocab - This function will return a list of the playbook types
-func (p *Playbook) GetPlaybookTypesVocab() map[string]bool {
-	PlaybookTypesVocab := map[string]bool{
-		"notification":  true,
-		"detection":     true,
-		"investigation": true,
-		"prevention":    true,
-		"mitigation":    true,
-		"remediation":   true,
-		"attack":        true,
-	}
-	return PlaybookTypesVocab
-}

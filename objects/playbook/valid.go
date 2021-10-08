@@ -154,10 +154,9 @@ func (p *Playbook) checkPlaybookTypes(r *results) {
 	} else {
 		requiredAndFound(r, "playbook_types")
 
-		ptvocab := p.GetPlaybookTypesVocab()
 		for i := 0; i < len(p.PlaybookTypes); i++ {
 			value := p.PlaybookTypes[i]
-			if _, found := ptvocab[value]; found {
+			if objects.IsPlaybookTypeValid(value) {
 				str := fmt.Sprintf("++ the playbook_types property contains a valid playbook_types value of \"%s\"", value)
 				logValid(r, str)
 			} else {
@@ -323,7 +322,21 @@ func (p *Playbook) checkImpact(r *results) {
 	}
 }
 
-// Industry Sectors
+func (p *Playbook) checkIndustrySectors(r *results) {
+	if len(p.IndustrySectors) > 0 {
+		for i := 0; i < len(p.IndustrySectors); i++ {
+			value := p.IndustrySectors[i]
+			if objects.IsIndustrySectorValid(value) {
+				str := fmt.Sprintf("++ the industry_sectors property contains a valid industry_sectors value of \"%s\"", value)
+				logValid(r, str)
+			} else {
+				str := fmt.Sprintf("-- the industry_sectors property contains a value of \"%s\" that is not in the vocabulary", value)
+				logProblem(r, str)
+			}
+		}
+	}
+}
+
 // Nothing to do for Labels
 
 func (p *Playbook) checkExternalReferences(r *results) {

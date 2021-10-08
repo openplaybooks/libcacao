@@ -646,3 +646,28 @@ func TestCheckImpact(t *testing.T) {
 		t.Errorf("16.5 checkImpact returned errors %d and results %s which is invalid", r.problemsFound, r.resultDetails)
 	}
 }
+
+// TestCheckIndustrySectors - This will check the industry_sectors property
+func TestCheckIndustrySectors(t *testing.T) {
+	p := new(Playbook)
+	r := new(results)
+	r.debug = true
+
+	// Check invalid value
+	setup(r)
+	p.IndustrySectors = nil
+	p.IndustrySectors = append(p.IndustrySectors, "test")
+	p.checkIndustrySectors(r)
+	if r.problemsFound != 1 || r.resultDetails[0][0:2] != "--" {
+		t.Errorf("17.2 checkIndustrySectors returned errors %d and results %s which is invalid", r.problemsFound, r.resultDetails)
+	}
+
+	// Check correct value
+	setup(r)
+	p.IndustrySectors = nil
+	p.IndustrySectors = append(p.IndustrySectors, "energy")
+	p.checkIndustrySectors(r)
+	if r.problemsFound != 0 || r.resultDetails[0][0:2] != "++" {
+		t.Errorf("17.4 checkIndustrySectors returned errors %d and results %s which is invalid", r.problemsFound, r.resultDetails)
+	}
+}
