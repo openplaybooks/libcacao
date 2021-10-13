@@ -41,7 +41,7 @@ func (p *Playbook) Valid(debug bool) (bool, int, []string) {
 	p.checkPriority(r)
 	p.checkSeverity(r)
 	p.checkImpact(r)
-	// Industry Sectors
+	p.checkIndustrySectors(r)
 	// Labels - No requirements
 	p.checkExternalReferences(r)
 	// Features - No requirements

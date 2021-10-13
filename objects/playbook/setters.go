@@ -6,17 +6,27 @@
 package playbook
 
 import (
+	"errors"
+
 	"github.com/openplaybooks/libcacao/objects"
 	"github.com/openplaybooks/libcacao/objects/markings"
 	"github.com/openplaybooks/libcacao/objects/workflow"
 )
 
+// ----------------------------------------------------------------------
+// Playbook Type
+// ----------------------------------------------------------------------
+
 // SetNewID - This method takes in a string value representing an object type and
 // creates a new ID based on the specification format and update the id property
 // for the object.
-func (p *Playbook) SetNewID(s string) error {
-	// TODO Add check to validate input value
-	p.ID, _ = objects.CreateID(s)
+func (p *Playbook) SetNewID(objType string) error {
+
+	if valid := objects.IsTypeValid(objType); valid == false {
+		return errors.New("the object type is not valid for a CACAO id")
+	}
+
+	p.ID, _ = objects.CreateID(objType)
 	return nil
 }
 

@@ -57,24 +57,3 @@ func (p *Playbook) EncodeToString() (string, error) {
 	}
 	return string(data), nil
 }
-
-// Encode - This method is a simple wrapper for encoding an object into JSON
-func (s *Signature) Encode() ([]byte, error) {
-	data, err := json.MarshalIndent(s, "", "  ")
-	if err != nil {
-		return nil, err
-	}
-
-	// Any needed preprocessing would be done here
-	return data, nil
-}
-
-// EncodeToString - This method is a simple wrapper for encoding an object into
-// JSON
-func (s *Signature) EncodeToString() (string, error) {
-	data, err := s.Encode()
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
-}

@@ -15,7 +15,7 @@ import (
 	"encoding/base64"
 	"fmt"
 
-	"github.com/dgrijalva/jwt-go"
+	"github.com/golang-jwt/jwt"
 	"github.com/gowebpki/jcs"
 	"github.com/openplaybooks/libcacao/objects/playbook"
 )

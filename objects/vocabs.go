@@ -14,6 +14,7 @@ func GetObjectTypes() map[string]bool {
 	objectTypes := map[string]bool{
 		"playbook":             true,
 		"playbook-template":    true,
+		"signature":            true,
 		"step":                 true,
 		"target":               true,
 		"extension-definition": true,

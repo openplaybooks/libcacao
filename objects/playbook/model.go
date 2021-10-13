@@ -8,6 +8,7 @@ package playbook
 import (
 	"github.com/openplaybooks/libcacao/objects"
 	"github.com/openplaybooks/libcacao/objects/markings"
+	"github.com/openplaybooks/libcacao/objects/signature"
 	"github.com/openplaybooks/libcacao/objects/workflow"
 )
 
@@ -49,7 +50,7 @@ type Playbook struct {
 	//Targets              map[string]XXXXX `json:"targets,omitempty"`
 	//ExtensionDefinitions map[string]XXXXX `json:extension_definitions,omitempty"`
 	DataMarkingDefinitions map[string]markings.DataMarkingObject `json:"data_marking_definitions,omitempty"`
-	Signatures             []Signature                           `json:"signatures,omitempty"`
+	Signatures             []signature.Signature                 `json:"signatures,omitempty"`
 }
 
 // Features - This type defines a list of playbook features
@@ -63,38 +64,11 @@ type Features struct {
 	Extensions         bool `json:"extensions,omitempty"`
 }
 
-// Signature - This type captures the actual digital signature of an object
-type Signature struct {
-	//Header    SignatureHeader `json:"header,omitempty"`
-	//Excluded  []string `json:"excluded,omitempty"`
-	ObjectType     string   `json:"type,omitempty"`
-	SpecVersion    string   `json:"spec_version,omitempty"`
-	ID             string   `json:"id,omitempty"`
-	CreatedBy      string   `json:"created_by,omitempty"`
-	Created        string   `json:"created,omitempty"`
-	Modified       string   `json:"modified,omitempty"`
-	Revoked        bool     `json:"revoked,omitempty"`
-	Signee         string   `json:"signee,omitempty"`
-	ValidFrom      string   `json:"valid_from,omitempty"`
-	ValidUntil     string   `json:"valid_until,omitempty"`
-	RelatedTo      string   `json:"related_to,omitempty"`
-	RelatedVersion string   `json:"related_version,omitempty"`
-	SHA256         string   `json:"sha256,omitempty"`
-	Algorithm      string   `json:"algorithm,omitempty"`
-	PublicKeys     []string `json:"public_keys,omitempty"`
-	Value          string   `json:"value,omitempty"`
-}
-
 // This type is used to capture results from the Valid() and Compare() functions
 type results struct {
 	debug         bool
 	problemsFound int
 	resultDetails []string
-}
-
-// Valid - Implement the Claims class needed for JWT
-func (s Signature) Valid() error {
-	return nil
 }
 
 // ----------------------------------------------------------------------

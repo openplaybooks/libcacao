@@ -14,9 +14,10 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/dgrijalva/jwt-go"
+	"github.com/golang-jwt/jwt"
 	"github.com/gowebpki/jcs"
 	"github.com/openplaybooks/libcacao/objects/playbook"
+	"github.com/openplaybooks/libcacao/objects/signature"
 )
 
 func main() {
@@ -116,7 +117,7 @@ fD1JKiHl7MECYEMyBz31PsRCuw==
 	p.Name = "Playbook 1"
 
 	// Create dummy signature so we can show that you need to remove it
-	var sigExisting playbook.Signature
+	var sigExisting signature.Signature
 	sigExisting.ObjectType = "signature"
 	sigExisting.SpecVersion = "1.0"
 	sigExisting.ID = "signature--uuid1"
@@ -128,6 +129,7 @@ fD1JKiHl7MECYEMyBz31PsRCuw==
 	sigExisting.ValidUntil = "2022-01-01T12:12:12.123456Z"
 	sigExisting.RelatedTo = p.ID
 	sigExisting.RelatedVersion = p.Modified
+	// This should be the same as the next signature object, because the playbook has not changed
 	sigExisting.SHA256 = "hHuhBwKscfqvLC3y2FfZtHi3DNkzE0o8kE8eE6x50pM"
 	sigExisting.Algorithm = "RS256"
 	sigExisting.PublicKeys = append(sigExisting.PublicKeys, "some public key")
@@ -137,7 +139,7 @@ fD1JKiHl7MECYEMyBz31PsRCuw==
 	// ---------------------------------------------------------------------
 	// Demo new signature object used in step 2.0
 	// ---------------------------------------------------------------------
-	var s playbook.Signature
+	var s signature.Signature
 	s.ObjectType = "signature"
 	s.SpecVersion = "1.0"
 	s.ID = "signature--af892292-c4b4-47eb-9be6-4897ff4b9388"
