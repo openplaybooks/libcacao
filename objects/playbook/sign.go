@@ -6,19 +6,24 @@
 package playbook
 
 import (
-	"crypto/rsa"
 	"crypto/sha256"
 	"encoding/base64"
 	"errors"
 
 	"github.com/golang-jwt/jwt"
 	"github.com/gowebpki/jcs"
+	"github.com/openplaybooks/libcacao/objects"
 	"github.com/openplaybooks/libcacao/objects/signature"
 )
 
-// Sign - This method will sign a playbook object
-func (p *Playbook) Sign(method string, key *rsa.PrivateKey, sig *signature.Signature) error {
+// Sign - This method will sign a playbook object.
+// It takes in a signing method like "RS256", a key, and a CACAO signature object.
+func (p *Playbook) Sign(method string, key interface{}, sig *signature.Signature) error {
 	var err error
+
+	if !objects.IsSigningMethodValid(method) {
+		return errors.New("incorrect signing method passed in to the sign method")
+	}
 
 	// Save any existing signatures and then zero out the property for signing
 	savedSignatures := p.Signatures
@@ -62,9 +67,19 @@ func (p *Playbook) Sign(method string, key *rsa.PrivateKey, sig *signature.Signa
 	b64Sig := base64.RawURLEncoding.EncodeToString([]byte(jcsSig))
 
 	var signingMethod jwt.SigningMethod
+	// If value is an RSA method the signingMethod will be *jwt.SigningMethodRSA
 	if method == "RS256" {
-		// This will set the signingMethod to *jwt.SigningMethodRSA
 		signingMethod = jwt.SigningMethodRS256
+	} else if method == "RS384" {
+		signingMethod = jwt.SigningMethodRS384
+	} else if method == "RS512" {
+		signingMethod = jwt.SigningMethodRS512
+	} else if method == "ES256" {
+		signingMethod = jwt.SigningMethodES256
+	} else if method == "ES384" {
+		signingMethod = jwt.SigningMethodES384
+	} else if method == "ES512" {
+		signingMethod = jwt.SigningMethodES512
 	} else {
 		return errors.New("no valid signing method was given")
 	}

@@ -7,7 +7,7 @@ package defs
 
 // These are the CACAO constants
 const (
-	CurrectVersion   = "1.0"
+	CurrectVersion   = "1.1"
 	TimeRFC3339      = "2006-01-02T15:04:05Z07:00"
 	TimeRFC3339Milli = "2006-01-02T15:04:05.999Z07:00"
 	TimeRFC3339Micro = "2006-01-02T15:04:05.999999Z07:00"

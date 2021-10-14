@@ -127,3 +127,27 @@ func IsIndustrySectorValid(s string) bool {
 	}
 	return false
 }
+
+// GetSigningMethod - This function will return a map of the valid signing methods
+func GetSigningMethod() map[string]bool {
+	signingMethodsVocab := map[string]bool{
+		"RS256": true,
+		"RS384": true,
+		"RS512": true,
+		"ES256": true,
+		"ES384": true,
+		"ES512": true,
+	}
+	return signingMethodsVocab
+}
+
+// IsSigningMethodValid - This function will take in a string representing a
+// signing method and return true or false if it is an officially supported type.
+func IsSigningMethodValid(s string) bool {
+	signingMethods := GetSigningMethod()
+
+	if _, found := signingMethods[s]; found == true {
+		return true
+	}
+	return false
+}

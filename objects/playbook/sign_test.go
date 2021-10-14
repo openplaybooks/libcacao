@@ -70,6 +70,7 @@ fD1JKiHl7MECYEMyBz31PsRCuw==
 	p := New()
 	// Manually overwrite the values so I get consistent results each time
 	p.ID = "playbook--a0777575-5c4c-4710-9f01-15776103837f"
+	p.SpecVersion = "1.0"
 	p.Created = "2021-01-25T20:31:31.319Z"
 	p.Modified = p.Created
 	p.Name = "Playbook 1"
@@ -111,7 +112,10 @@ fD1JKiHl7MECYEMyBz31PsRCuw==
 	s.Algorithm = "RS256"
 	s.PublicKeys = append(s.PublicKeys, base64.RawStdEncoding.EncodeToString(publicKeyDer))
 
-	p.Sign("RS256", privateKey, &s)
+	err = p.Sign("RS256", privateKey, &s)
+	if err != nil {
+		panic(err)
+	}
 
 	if p.Signatures[0].SHA256 != "hHuhBwKscfqvLC3y2FfZtHi3DNkzE0o8kE8eE6x50pM" {
 		t.Errorf("1.0 sha256 value in signature is not correct")
@@ -121,8 +125,11 @@ fD1JKiHl7MECYEMyBz31PsRCuw==
 		t.Errorf("1.1 signature was not produced correctly")
 	}
 
-	if p.Signatures[1].Value != "lfmqOpMlNcUb4coQ9n6RhFqKCLCocqTEdyb9S4t5F4INN9Q4pXPAUpd28hnVS-D3BgmPACq6dQgNY1nXnU-QqcChlVDGeliRTu5OLULrBCkQTZ8OcAhyUprXYP4vhzN81w-eSmQz9urEGe98o2RbhLbZCrEuBUqgvmPdsu5cUnJr9wdkMHwoToS-rbc_xuWHQAFzqi0YarCAfbPop0jDQxO8KNDFIoy98mjbL2FXv0Y4GQOSZaJNgZpxdSmgqpQfF5vxOEzQpwirvoUkjGydroJsim7XhAsQwiQwEuegl0GzawhIODVMVz2ZIW0jByUnCH2G21oa1mlA2sX5nciGKw" {
+	correctSigValue := "lfmqOpMlNcUb4coQ9n6RhFqKCLCocqTEdyb9S4t5F4INN9Q4pXPAUpd28hnVS-D3BgmPACq6dQgNY1nXnU-QqcChlVDGeliRTu5OLULrBCkQTZ8OcAhyUprXYP4vhzN81w-eSmQz9urEGe98o2RbhLbZCrEuBUqgvmPdsu5cUnJr9wdkMHwoToS-rbc_xuWHQAFzqi0YarCAfbPop0jDQxO8KNDFIoy98mjbL2FXv0Y4GQOSZaJNgZpxdSmgqpQfF5vxOEzQpwirvoUkjGydroJsim7XhAsQwiQwEuegl0GzawhIODVMVz2ZIW0jByUnCH2G21oa1mlA2sX5nciGKw"
+	if p.Signatures[1].Value != correctSigValue {
 		t.Errorf("1.2 signature was not produced correctly")
+		t.Errorf("Expected: %s", correctSigValue)
+		t.Errorf("Have: %s", p.Signatures[1].Value)
 	}
 
 	if p.Signatures[1].PublicKeys[0] != "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAptKZyFPStvmOlb0WihOBhlHUr6wFDHC+tW7hJAudfTQ5mHZQpB8PoMz07udZA+dG8dhUIPkmXlp1TgREeYTHdhxhuf0y/GhbpZv5JPYHx3watO+HWO2qYkjRMEcrWhPMdaVkS/Xe/liaMcow4jYoWaFm8VobeYsyVD2bWWdyl4joTEETm1Z47RnnfR15kVhVudVrDzEFmM4nXV/6dmIg184RJE4httwBFxR8qZCQCwTiJmsoyJxfUR0Gs4ePKc5sB0NTkmFZc5klQSitd67RJn2ldhbqE7EpDl4XlIt+UyLJm1guCBltia8Agke7dXuhpB7hQ6LJwY4EjzthkJ8IPwIDAQAB" {

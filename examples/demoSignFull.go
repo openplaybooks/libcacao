@@ -111,6 +111,7 @@ fD1JKiHl7MECYEMyBz31PsRCuw==
 	// ---------------------------------------------------------------------
 	p := playbook.New()
 	// Manually overwrite the values so I get consistent results each time
+	p.SpecVersion = "1.0"
 	p.ID = "playbook--a0777575-5c4c-4710-9f01-15776103837f"
 	p.Created = "2021-01-25T20:31:31.319Z"
 	p.Modified = p.Created
