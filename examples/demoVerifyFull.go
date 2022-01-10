@@ -65,7 +65,7 @@ func main() {
 	rawPlaybookData := []byte(`
 {
   "type": "playbook",
-  "spec_version": "1.0",
+  "spec_version": "1.1",
   "id": "playbook--a0777575-5c4c-4710-9f01-15776103837f",
   "name": "Playbook 1",
   "created": "2021-01-25T20:31:31.319Z",
@@ -73,9 +73,9 @@ func main() {
   "signatures": [
     {
       "type": "signature",
-      "spec_version": "1.0",
+      "spec_version": "1.1",
       "id": "signature--af892292-c4b4-47eb-9be6-4897ff4b9388",
-      "created_by": "identity--uuid2",
+      "created_by": "identity--6639020f-9054-413f-b95e-d5d9577bc251",
       "created": "2021-01-25T20:31:31.319516Z",
       "modified": "2021-01-25T20:31:31.319516Z",
       "signee": "ACME Cyber Company",
@@ -83,15 +83,16 @@ func main() {
       "valid_until": "2022-01-01T12:12:12.123456Z",
       "related_to": "playbook--a0777575-5c4c-4710-9f01-15776103837f",
       "related_version": "2021-01-25T20:31:31.319Z",
-      "sha256": "hHuhBwKscfqvLC3y2FfZtHi3DNkzE0o8kE8eE6x50pM",
+      "sha256": "Xka9SN3MkeRUbro1-D5ch3kdLk-awlgSh5ImtTifPoM",
       "algorithm": "RS256",
       "public_keys": [
         "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAptKZyFPStvmOlb0WihOBhlHUr6wFDHC+tW7hJAudfTQ5mHZQpB8PoMz07udZA+dG8dhUIPkmXlp1TgREeYTHdhxhuf0y/GhbpZv5JPYHx3watO+HWO2qYkjRMEcrWhPMdaVkS/Xe/liaMcow4jYoWaFm8VobeYsyVD2bWWdyl4joTEETm1Z47RnnfR15kVhVudVrDzEFmM4nXV/6dmIg184RJE4httwBFxR8qZCQCwTiJmsoyJxfUR0Gs4ePKc5sB0NTkmFZc5klQSitd67RJn2ldhbqE7EpDl4XlIt+UyLJm1guCBltia8Agke7dXuhpB7hQ6LJwY4EjzthkJ8IPwIDAQAB"
       ],
-      "value": "lfmqOpMlNcUb4coQ9n6RhFqKCLCocqTEdyb9S4t5F4INN9Q4pXPAUpd28hnVS-D3BgmPACq6dQgNY1nXnU-QqcChlVDGeliRTu5OLULrBCkQTZ8OcAhyUprXYP4vhzN81w-eSmQz9urEGe98o2RbhLbZCrEuBUqgvmPdsu5cUnJr9wdkMHwoToS-rbc_xuWHQAFzqi0YarCAfbPop0jDQxO8KNDFIoy98mjbL2FXv0Y4GQOSZaJNgZpxdSmgqpQfF5vxOEzQpwirvoUkjGydroJsim7XhAsQwiQwEuegl0GzawhIODVMVz2ZIW0jByUnCH2G21oa1mlA2sX5nciGKw"
+      "value": "U-AaG_bvV8nwqVgXjKVZeO0Uz4gNssEAnTB8Y8v3iI4MEByZKNOXlDI7uU-xx7APpaboNA8vr02KnW4lsAYi4jlu1hlRRbZGfqSCOnx19dVefmbMsH4AP7ycuAJJmCc38x9FDMU9p03Fzi1cKv3sc3bQWctKvV3wrB440BMAWNooa8J99h0oTwWMECFM4lz_u06p3KjdMuERRIWhF8b0_5Jl2_YPui23A28jkAdUgLofaEm_GsA_Le3Aj6HN0xdevDFyw6hS_8JRNNRN0N4sP0NgZc1mjj2-rVbyu8zlGnW496I6ZcDbejHEZoNXvSWB4N3ujaU6sPKUad-2OIlw7w"
     }
   ]
 }
+
 `)
 
 	// ---------------------------------------------------------------------

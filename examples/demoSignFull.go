@@ -73,8 +73,8 @@ fD1JKiHl7MECYEMyBz31PsRCuw==
 	//         {
 	//             "type": "signature",
 	//             "spec_version": "1.0",
-	//             "id": "signature--uuid1",
-	//             "created_by": "identity--uuid2",
+	//             "id": "signature--af4b4bf3-677a-411d-887a-1f6fa5090c05",
+	//             "created_by": "identity--be59c641-b2d5-4930-94fc-6fd583524fc6",
 	//             "created": "2021-01-25T20:31:31.319516Z",
 	//             "modified": "2021-01-25T20:31:31.319516Z",
 	//             "signee": "Example Company",
@@ -111,7 +111,7 @@ fD1JKiHl7MECYEMyBz31PsRCuw==
 	// ---------------------------------------------------------------------
 	p := playbook.New()
 	// Manually overwrite the values so I get consistent results each time
-	p.SpecVersion = "1.0"
+	p.SpecVersion = "1.1"
 	p.ID = "playbook--a0777575-5c4c-4710-9f01-15776103837f"
 	p.Created = "2021-01-25T20:31:31.319Z"
 	p.Modified = p.Created
@@ -120,9 +120,9 @@ fD1JKiHl7MECYEMyBz31PsRCuw==
 	// Create dummy signature so we can show that you need to remove it
 	var sigExisting signature.Signature
 	sigExisting.ObjectType = "signature"
-	sigExisting.SpecVersion = "1.0"
-	sigExisting.ID = "signature--uuid1"
-	sigExisting.CreatedBy = "identity--uuid2"
+	sigExisting.SpecVersion = "1.1"
+	sigExisting.ID = "signature--af4b4bf3-677a-411d-887a-1f6fa5090c05"
+	sigExisting.CreatedBy = "identity--be59c641-b2d5-4930-94fc-6fd583524fc6"
 	sigExisting.Created = "2021-01-25T20:31:31.319516Z"
 	sigExisting.Modified = sigExisting.Created
 	sigExisting.Signee = "Existing Example Company"
@@ -142,9 +142,9 @@ fD1JKiHl7MECYEMyBz31PsRCuw==
 	// ---------------------------------------------------------------------
 	var s signature.Signature
 	s.ObjectType = "signature"
-	s.SpecVersion = "1.0"
+	s.SpecVersion = "1.1"
 	s.ID = "signature--af892292-c4b4-47eb-9be6-4897ff4b9388"
-	s.CreatedBy = "identity--uuid2"
+	s.CreatedBy = "identity--6639020f-9054-413f-b95e-d5d9577bc251"
 	s.Created = "2021-01-25T20:31:31.319516Z"
 	s.Modified = s.Created
 	s.Signee = "ACME Cyber Company"
