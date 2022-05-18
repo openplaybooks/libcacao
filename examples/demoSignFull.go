@@ -10,6 +10,7 @@ import (
 	"crypto/sha256"
 	"crypto/x509"
 	"encoding/base64"
+	"encoding/hex"
 	"encoding/pem"
 	"fmt"
 	"log"
@@ -82,7 +83,7 @@ fD1JKiHl7MECYEMyBz31PsRCuw==
 	//             "valid_until": "2022-01-01T12:12:12.123456",
 	//             "related_to": "playbook--a0777575-5c4c-4710-9f01-15776103837f",
 	//             "related_version": "2021-01-25T20:31:31.319Z",
-	//             "sha256": "hHuhBwKscfqvLC3y2FfZtHi3DNkzE0o8kE8eE6x50pM",
+	//             "sha256": "eb36c9b68dbe22a6270b300a24326d76cd51add57cde3fdbc50a55d47534760e",
 	//             "value": "some signature"
 	//         }
 	//     ]
@@ -113,7 +114,7 @@ fD1JKiHl7MECYEMyBz31PsRCuw==
 	// Manually overwrite the values so I get consistent results each time
 	p.SpecVersion = "1.1"
 	p.ID = "playbook--a0777575-5c4c-4710-9f01-15776103837f"
-	p.Created = "2021-01-25T20:31:31.319Z"
+	p.Created = "2022-05-18T11:31:31.319Z"
 	p.Modified = p.Created
 	p.Name = "Playbook 1"
 
@@ -123,15 +124,15 @@ fD1JKiHl7MECYEMyBz31PsRCuw==
 	sigExisting.SpecVersion = "1.1"
 	sigExisting.ID = "signature--af4b4bf3-677a-411d-887a-1f6fa5090c05"
 	sigExisting.CreatedBy = "identity--be59c641-b2d5-4930-94fc-6fd583524fc6"
-	sigExisting.Created = "2021-01-25T20:31:31.319516Z"
+	sigExisting.Created = "2022-05-18T11:31:31.319Z"
 	sigExisting.Modified = sigExisting.Created
 	sigExisting.Signee = "Existing Example Company"
 	sigExisting.ValidFrom = sigExisting.Created
-	sigExisting.ValidUntil = "2022-01-01T12:12:12.123456Z"
+	sigExisting.ValidUntil = "2022-06-18T11:31:31.319Z"
 	sigExisting.RelatedTo = p.ID
 	sigExisting.RelatedVersion = p.Modified
 	// This should be the same as the next signature object, because the playbook has not changed
-	sigExisting.SHA256 = "hHuhBwKscfqvLC3y2FfZtHi3DNkzE0o8kE8eE6x50pM"
+	sigExisting.SHA256 = "eb36c9b68dbe22a6270b300a24326d76cd51add57cde3fdbc50a55d47534760e"
 	sigExisting.Algorithm = "RS256"
 	sigExisting.PublicKeys = append(sigExisting.PublicKeys, "some public key")
 	sigExisting.Value = "some signature"
@@ -145,11 +146,11 @@ fD1JKiHl7MECYEMyBz31PsRCuw==
 	s.SpecVersion = "1.1"
 	s.ID = "signature--af892292-c4b4-47eb-9be6-4897ff4b9388"
 	s.CreatedBy = "identity--6639020f-9054-413f-b95e-d5d9577bc251"
-	s.Created = "2021-01-25T20:31:31.319516Z"
+	s.Created = "2022-05-18T11:31:31.319Z"
 	s.Modified = s.Created
 	s.Signee = "ACME Cyber Company"
 	s.ValidFrom = s.Created
-	s.ValidUntil = "2022-01-01T12:12:12.123456Z"
+	s.ValidUntil = "2022-06-18T11:31:31.319Z"
 	s.RelatedTo = p.ID
 	s.RelatedVersion = p.Modified
 	s.Algorithm = "RS256"
@@ -190,18 +191,20 @@ fD1JKiHl7MECYEMyBz31PsRCuw==
 	fmt.Println("\n------------------------------------------------------------------------------------------------------------")
 	fmt.Println("Step 1.3: Create SHA256 (in hex) of canonical version of playbook from step 1.2")
 	fmt.Println("------------------------------------------------------------------------------------------------------------")
-	hashjcsPlaybookData := sha256.Sum256(jcsPlayBookData)
-	fmt.Println(fmt.Sprintf("%x", hashjcsPlaybookData[:]))
+	hashhexjcsPlaybookData := sha256.Sum256(jcsPlayBookData)
+	// fmt.Println(fmt.Sprintf("%x", hashjcsPlaybookData[:]))
+	hashjcsPlaybookData := hex.EncodeToString(hashhexjcsPlaybookData[:])
+	fmt.Println(hashjcsPlaybookData)
 
-	// ---------------------------------------------------------------------
-	// Step 1.4
-	// ---------------------------------------------------------------------
-	fmt.Println("\n------------------------------------------------------------------------------------------------------------")
-	fmt.Println("Step 1.4: Create base64URL.encoded version of the SHA256 hash from step 1.3 and remove any padding")
-	fmt.Println("------------------------------------------------------------------------------------------------------------")
-	// Remove base64 padding characters "=" per RFC 7515 section 2 - Base64url Encoding
-	b64hashjcsPlaybookData := base64.RawURLEncoding.EncodeToString(hashjcsPlaybookData[:])
-	fmt.Println(b64hashjcsPlaybookData)
+	// // ---------------------------------------------------------------------
+	// // Step 1.4
+	// // ---------------------------------------------------------------------
+	// fmt.Println("\n------------------------------------------------------------------------------------------------------------")
+	// fmt.Println("Step 1.4: Create base64URL.encoded version of the SHA256 hash from step 1.3 and remove any padding")
+	// fmt.Println("------------------------------------------------------------------------------------------------------------")
+	// // Remove base64 padding characters "=" per RFC 7515 section 2 - Base64url Encoding
+	// b64hashjcsPlaybookData := base64.RawURLEncoding.EncodeToString(hashjcsPlaybookData[:])
+	// fmt.Println(b64hashjcsPlaybookData)
 
 	// ---------------------------------------------------------------------
 	// Step 2.0
@@ -210,7 +213,7 @@ fD1JKiHl7MECYEMyBz31PsRCuw==
 	fmt.Println("Step 2.0: Create a signature object and set the SHA256 string property to the string value of the b64 hash of the playbook from step 1.4")
 	fmt.Println("------------------------------------------------------------------------------------------------------------")
 	// Signature was created up above
-	s.SHA256 = b64hashjcsPlaybookData
+	s.SHA256 = hashjcsPlaybookData
 	jsonSigData, _ := s.Encode()
 	fmt.Println(string(jsonSigData))
 
@@ -223,23 +226,23 @@ fD1JKiHl7MECYEMyBz31PsRCuw==
 	jcsSigData, _ := jcs.Transform(jsonSigData)
 	fmt.Println(string(jcsSigData))
 
-	// ---------------------------------------------------------------------
-	// Step 2.2
-	// ---------------------------------------------------------------------
-	fmt.Println("\n------------------------------------------------------------------------------------------------------------")
-	fmt.Println("Step 2.2: Create base64URL.encoded version of the JCS signature from step 2.1")
-	fmt.Println("------------------------------------------------------------------------------------------------------------")
-	b64jcsSigData := base64.RawURLEncoding.EncodeToString([]byte(jcsSigData))
-	fmt.Println(b64jcsSigData)
+	// // ---------------------------------------------------------------------
+	// // Step 2.2
+	// // ---------------------------------------------------------------------
+	// fmt.Println("\n------------------------------------------------------------------------------------------------------------")
+	// fmt.Println("Step 2.2: Create base64URL.encoded version of the JCS signature from step 2.1")
+	// fmt.Println("------------------------------------------------------------------------------------------------------------")
+	// b64jcsSigData := base64.RawURLEncoding.EncodeToString([]byte(jcsSigData))
+	// fmt.Println(b64jcsSigData)
 
 	// ---------------------------------------------------------------------
 	// Step 3.0
 	// ---------------------------------------------------------------------
 	fmt.Println("\n------------------------------------------------------------------------------------------------------------")
-	fmt.Println("Step 3.0: Sign the data from step 2.2 using the algorithm defined in the signature object and base64URL.encode it (RS256)")
+	fmt.Println("Step 3.0: Sign the data from step 2.1 using the algorithm defined in the signature object and base64URL.encode it (RS256)")
 	fmt.Println("------------------------------------------------------------------------------------------------------------")
 	method := jwt.SigningMethodRS256
-	sigData, err := method.Sign(b64jcsSigData, privateKey)
+	sigData, err := method.Sign(string(jcsSigData), privateKey)
 	if err != nil {
 		panic(err)
 	}

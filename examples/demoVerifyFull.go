@@ -13,6 +13,7 @@ import (
 	"crypto/sha256"
 	"crypto/x509"
 	"encoding/base64"
+	"encoding/hex"
 	"fmt"
 
 	"github.com/golang-jwt/jwt"
@@ -68,30 +69,31 @@ func main() {
   "spec_version": "1.1",
   "id": "playbook--a0777575-5c4c-4710-9f01-15776103837f",
   "name": "Playbook 1",
-  "created": "2021-01-25T20:31:31.319Z",
-  "modified": "2021-01-25T20:31:31.319Z",
+  "created": "2022-05-18T11:31:31.319Z",
+  "modified": "2022-05-18T11:31:31.319Z",
   "signatures": [
     {
       "type": "signature",
       "spec_version": "1.1",
       "id": "signature--af892292-c4b4-47eb-9be6-4897ff4b9388",
       "created_by": "identity--6639020f-9054-413f-b95e-d5d9577bc251",
-      "created": "2021-01-25T20:31:31.319516Z",
-      "modified": "2021-01-25T20:31:31.319516Z",
+      "created": "2022-05-18T11:31:31.319Z",
+      "modified": "2022-05-18T11:31:31.319Z",
       "signee": "ACME Cyber Company",
-      "valid_from": "2021-01-25T20:31:31.319516Z",
-      "valid_until": "2022-01-01T12:12:12.123456Z",
+      "valid_from": "2022-05-18T11:31:31.319Z",
+      "valid_until": "2022-06-18T11:31:31.319Z",
       "related_to": "playbook--a0777575-5c4c-4710-9f01-15776103837f",
-      "related_version": "2021-01-25T20:31:31.319Z",
-      "sha256": "Xka9SN3MkeRUbro1-D5ch3kdLk-awlgSh5ImtTifPoM",
+      "related_version": "2022-05-18T11:31:31.319Z",
+      "sha256": "9fce384a3c8e2eb172604aa174824fdd9c5a9e997c41f1f2b8e5f1d18adbf67e",
       "algorithm": "RS256",
       "public_keys": [
         "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAptKZyFPStvmOlb0WihOBhlHUr6wFDHC+tW7hJAudfTQ5mHZQpB8PoMz07udZA+dG8dhUIPkmXlp1TgREeYTHdhxhuf0y/GhbpZv5JPYHx3watO+HWO2qYkjRMEcrWhPMdaVkS/Xe/liaMcow4jYoWaFm8VobeYsyVD2bWWdyl4joTEETm1Z47RnnfR15kVhVudVrDzEFmM4nXV/6dmIg184RJE4httwBFxR8qZCQCwTiJmsoyJxfUR0Gs4ePKc5sB0NTkmFZc5klQSitd67RJn2ldhbqE7EpDl4XlIt+UyLJm1guCBltia8Agke7dXuhpB7hQ6LJwY4EjzthkJ8IPwIDAQAB"
       ],
-      "value": "U-AaG_bvV8nwqVgXjKVZeO0Uz4gNssEAnTB8Y8v3iI4MEByZKNOXlDI7uU-xx7APpaboNA8vr02KnW4lsAYi4jlu1hlRRbZGfqSCOnx19dVefmbMsH4AP7ycuAJJmCc38x9FDMU9p03Fzi1cKv3sc3bQWctKvV3wrB440BMAWNooa8J99h0oTwWMECFM4lz_u06p3KjdMuERRIWhF8b0_5Jl2_YPui23A28jkAdUgLofaEm_GsA_Le3Aj6HN0xdevDFyw6hS_8JRNNRN0N4sP0NgZc1mjj2-rVbyu8zlGnW496I6ZcDbejHEZoNXvSWB4N3ujaU6sPKUad-2OIlw7w"
+      "value": "jhNoYK7jBV0LeJUSH6giQ-teLtXi2_6ux5CqcFUwYR-sSjVQeWguybw0wz6w9O0cw9yTENm5v_9S80sfjSUQlkDK5-Y7oZQUnUe_ZhSUBSg85TGg9hOL4hMg1BLL1ED387wXXSPy1rjHWJjP731jz1-yTJkOm2QGrTgXNmS-L5jjJq_dAzEhmskBVjdI4XExXunDpz3K9OmgnKGTAHI0OD_BjXxXXgLRqXkzHvIU504p1Vzzbu_TkeEEYEnfo1cEowrJ6sOCgLHptcjeRmD00Rq3c4JeB5kfBZfH3MQB9-X9XNbS5Kx07PnVCCoN9F418puqFxMRLnJtm0QOnmlTZQ"
     }
   ]
 }
+
 
 `)
 
@@ -172,14 +174,14 @@ func main() {
 	jcsSigData, _ := jcs.Transform(jsonSigData)
 	fmt.Println(string(jcsSigData))
 
-	// ---------------------------------------------------------------------
-	// Step 1.5
-	// ---------------------------------------------------------------------
-	fmt.Println("\n------------------------------------------------------------------------------------------------------------")
-	fmt.Println("Step 1.5: Create base64URL.encoded version of the JCS signature from step 1.4")
-	fmt.Println("------------------------------------------------------------------------------------------------------------")
-	b64jcsSigData := base64.RawURLEncoding.EncodeToString([]byte(jcsSigData))
-	fmt.Println(b64jcsSigData)
+	// // ---------------------------------------------------------------------
+	// // Step 1.5
+	// // ---------------------------------------------------------------------
+	// fmt.Println("\n------------------------------------------------------------------------------------------------------------")
+	// fmt.Println("Step 1.5: Create base64URL.encoded version of the JCS signature from step 1.4")
+	// fmt.Println("------------------------------------------------------------------------------------------------------------")
+	// b64jcsSigData := base64.RawURLEncoding.EncodeToString([]byte(jcsSigData))
+	// fmt.Println(b64jcsSigData)
 
 	// ---------------------------------------------------------------------
 	// Step 2.0
@@ -188,7 +190,7 @@ func main() {
 	fmt.Println("Step 2.0: Verify the signature received in step 1.3 of the B64JCS data from step 1.5 using the public key form 1.2 and using the algorithm from the signature object RS256")
 	fmt.Println("------------------------------------------------------------------------------------------------------------")
 	method := jwt.SigningMethodRS256
-	err = method.Verify(b64jcsSigData, sigReceived, publicKey)
+	err = method.Verify(string(jcsSigData), sigReceived, publicKey)
 	if err != nil {
 		panic(err)
 	} else {
@@ -228,18 +230,20 @@ func main() {
 	fmt.Println("\n------------------------------------------------------------------------------------------------------------")
 	fmt.Println("Step 3.3: Create SHA256 (in hex) of canonical version of playbook from step 3.2")
 	fmt.Println("------------------------------------------------------------------------------------------------------------")
-	hashjcsPlaybookData := sha256.Sum256(jcsPlayBookData)
-	fmt.Println(fmt.Sprintf("%x", hashjcsPlaybookData[:]))
+	hashhexjcsPlaybookData := sha256.Sum256(jcsPlayBookData)
+	//fmt.Println(fmt.Sprintf("%x", hashjcsPlaybookData[:]))
+	hashjcsPlaybookData := hex.EncodeToString(hashhexjcsPlaybookData[:])
+	fmt.Println(hashjcsPlaybookData)
 
-	// ---------------------------------------------------------------------
-	// Step 3.4
-	// ---------------------------------------------------------------------
-	fmt.Println("\n------------------------------------------------------------------------------------------------------------")
-	fmt.Println("Step 3.4: Create base64URL.encoded version of the SHA256 hash from step 1.3 and remove any padding")
-	fmt.Println("------------------------------------------------------------------------------------------------------------")
-	// Remove base64 padding characters "=" per RFC 7515 section 2 - Base64url Encoding
-	b64hashjcsPlaybookData := base64.RawURLEncoding.EncodeToString(hashjcsPlaybookData[:])
-	fmt.Println(b64hashjcsPlaybookData)
+	// // ---------------------------------------------------------------------
+	// // Step 3.4
+	// // ---------------------------------------------------------------------
+	// fmt.Println("\n------------------------------------------------------------------------------------------------------------")
+	// fmt.Println("Step 3.4: Create base64URL.encoded version of the SHA256 hash from step 1.3 and remove any padding")
+	// fmt.Println("------------------------------------------------------------------------------------------------------------")
+	// // Remove base64 padding characters "=" per RFC 7515 section 2 - Base64url Encoding
+	// b64hashjcsPlaybookData := base64.RawURLEncoding.EncodeToString(hashjcsPlaybookData[:])
+	// fmt.Println(b64hashjcsPlaybookData)
 
 	// ---------------------------------------------------------------------
 	// Step 4.0
@@ -247,9 +251,9 @@ func main() {
 	fmt.Println("\n------------------------------------------------------------------------------------------------------------")
 	fmt.Println("Step 4.0: Compare computed hash with hash found in signed signature")
 	fmt.Println("------------------------------------------------------------------------------------------------------------")
-	fmt.Println("Computed Hash: ", b64hashjcsPlaybookData)
+	fmt.Println("Computed Hash: ", hashjcsPlaybookData)
 	fmt.Println("Signed Hash:   ", s.SHA256)
-	if b64hashjcsPlaybookData == s.SHA256 {
+	if hashjcsPlaybookData == s.SHA256 {
 		fmt.Println("Hashes match and content is valid")
 	} else {
 		fmt.Println("Hashes do not match and content is not valid")
