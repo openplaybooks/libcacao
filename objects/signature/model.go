@@ -40,17 +40,11 @@ type Signature struct {
 // properties.
 func New() *Signature {
 	s := new(Signature)
-	s.Init()
-	return s
-}
-
-// Init - This method will initialize a new signature object with the correct
-// defaults.
-func (s *Signature) Init() {
 	s.ObjectType = "signature"
 	s.SpecVersion = s.GetCurrentSpecVersion()
 	s.SetNewID(s.ObjectType)
 	s.Created = s.GetCurrentTime("milli")
 	s.Modified = s.Created
 	s.Revoked = false
+	return s
 }

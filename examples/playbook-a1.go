@@ -55,6 +55,8 @@ func main() {
 	// Create workflow steps for this playbook
 	//
 	start := start.New()
+	step1 := start.Next("single")
+
 	end := end.New()
 
 	step1 := single.New()

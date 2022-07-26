@@ -9,32 +9,6 @@ package objects
 // Vocabulary Functions
 // ----------------------------------------------------------------------
 
-// GetObjectTypes - This function will return a map of the object types.
-func GetObjectTypes() map[string]bool {
-	objectTypes := map[string]bool{
-		"playbook":             true,
-		"playbook-template":    true,
-		"signature":            true,
-		"step":                 true,
-		"target":               true,
-		"extension-definition": true,
-		"marking-definition":   true,
-		"identity":             true,
-	}
-	return objectTypes
-}
-
-// IsTypeValid - This function will take in a string representing an object type
-// and return true or false if it is an officially supported object.
-func IsTypeValid(s string) bool {
-	objectTypes := GetObjectTypes()
-
-	if _, found := objectTypes[s]; found == true {
-		return true
-	}
-	return false
-}
-
 // GetPlaybookTypesVocab - This function will return a map of the playbook types
 func GetPlaybookTypesVocab() map[string]bool {
 	playbookTypesVocab := map[string]bool{
@@ -60,8 +34,8 @@ func IsPlaybookTypeValid(s string) bool {
 	return false
 }
 
-// GetIndustrySectorVocab - This funtion will return a list of industry sectors
-func GetIndustrySectorVocab() map[string]bool {
+// GetIndustrySectorsVocab - This funtion will return a list of industry sectors
+func GetIndustrySectorsVocab() map[string]bool {
 	industrySectorVocab := map[string]bool{
 		"aerospace":                             true,
 		"aviation":                              true,
@@ -120,7 +94,7 @@ func GetIndustrySectorVocab() map[string]bool {
 // IsIndustrySectorValid - This function will take in a string representing an
 // industry sector and return true or false if it is an officially supported.
 func IsIndustrySectorValid(s string) bool {
-	industrySectors := GetIndustrySectorVocab()
+	industrySectors := GetIndustrySectorsVocab()
 
 	if _, found := industrySectors[s]; found == true {
 		return true
@@ -128,8 +102,8 @@ func IsIndustrySectorValid(s string) bool {
 	return false
 }
 
-// GetSigningMethod - This function will return a map of the valid signing methods
-func GetSigningMethod() map[string]bool {
+// GetSigningMethodsVocab - This function will return a map of the valid signing methods
+func GetSigningMethodsVocab() map[string]bool {
 	signingMethodsVocab := map[string]bool{
 		"RS256": true,
 		"RS384": true,
@@ -144,9 +118,41 @@ func GetSigningMethod() map[string]bool {
 // IsSigningMethodValid - This function will take in a string representing a
 // signing method and return true or false if it is an officially supported type.
 func IsSigningMethodValid(s string) bool {
-	signingMethods := GetSigningMethod()
+	signingMethods := GetSigningMethodsVocab()
 
 	if _, found := signingMethods[s]; found == true {
+		return true
+	}
+	return false
+}
+
+// GetVariableTypesVocab - This function will return a map of the valid variable
+// types.
+func GetVariableTypesVocab() map[string]bool {
+	variableTypesVocab := map[string]bool{
+		"bool":        true,
+		"dictionary":  true,
+		"float":       true,
+		"hexstring":   true,
+		"integer":     true,
+		"ipv4-addr":   true,
+		"ipv6-addr":   true,
+		"long":        true,
+		"mac-addr":    true,
+		"sha256-hash": true,
+		"string":      true,
+		"uri":         true,
+		"uuid":        true,
+	}
+	return variableTypesVocab
+}
+
+// IsVariableTypeValid - This function will take in a string representing a
+// variable type and return true or false if it is an officially supported type.
+func IsVariableTypeValid(s string) bool {
+	variableTypes := GetVariableTypesVocab()
+
+	if _, found := variableTypes[s]; found == true {
 		return true
 	}
 	return false

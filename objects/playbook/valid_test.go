@@ -12,13 +12,13 @@ import (
 func setup(r *results) {
 	r.problemsFound = 0
 	r.resultDetails = nil
+	r.debug = true
 }
 
 // TestCheckObjectType - This will test the object type property
 func TestCheckObjectType(t *testing.T) {
 	p := new(Playbook)
 	r := new(results)
-	r.debug = true
 
 	// Check when property is missing
 	setup(r)
@@ -54,7 +54,6 @@ func TestCheckObjectType(t *testing.T) {
 func TestCheckSpecVersion(t *testing.T) {
 	p := new(Playbook)
 	r := new(results)
-	r.debug = true
 
 	// Check when property is missing
 	setup(r)
@@ -90,7 +89,6 @@ func TestCheckSpecVersion(t *testing.T) {
 func TestCheckID(t *testing.T) {
 	p := new(Playbook)
 	r := new(results)
-	r.debug = true
 
 	// Check when property is missing
 	setup(r)
@@ -137,7 +135,6 @@ func TestCheckID(t *testing.T) {
 func TestCheckName(t *testing.T) {
 	p := new(Playbook)
 	r := new(results)
-	r.debug = true
 
 	// Check when property is missing
 	setup(r)
@@ -153,7 +150,6 @@ func TestCheckName(t *testing.T) {
 func TestCheckPlaybookTypes(t *testing.T) {
 	p := new(Playbook)
 	r := new(results)
-	r.debug = true
 
 	// Check when property is missing
 	setup(r)
@@ -191,7 +187,6 @@ func TestCheckPlaybookTypes(t *testing.T) {
 func TestCheckCreatedBy(t *testing.T) {
 	p := new(Playbook)
 	r := new(results)
-	r.debug = true
 
 	// Check when property is missing
 	setup(r)
@@ -231,11 +226,8 @@ func TestCheckCreatedBy(t *testing.T) {
 	if r.problemsFound != 1 || r.resultDetails[0][0:2] != "++" {
 		t.Errorf("7.6 checkCreatedBy returned errors %d and results %s which is invalid", r.problemsFound, r.resultDetails)
 	}
-	if r.problemsFound != 1 || r.resultDetails[1][0:2] != "++" {
+	if r.problemsFound != 1 || r.resultDetails[1][0:2] != "--" {
 		t.Errorf("7.7 checkCreatedBy returned errors %d and results %s which is invalid", r.problemsFound, r.resultDetails)
-	}
-	if r.problemsFound != 1 || r.resultDetails[2][0:2] != "--" {
-		t.Errorf("7.8 checkCreatedBy returned errors %d and results %s which is invalid", r.problemsFound, r.resultDetails)
 	}
 
 	// Check valid value
@@ -243,13 +235,10 @@ func TestCheckCreatedBy(t *testing.T) {
 	p.CreatedBy = "identity--60cfe320-f6b4-4523-8558-14a042223797"
 	p.checkCreatedBy(r)
 	if r.problemsFound != 0 || r.resultDetails[0][0:2] != "++" {
-		t.Errorf("7.9 checkCreatedBy returned errors %d and results %s which is invalid", r.problemsFound, r.resultDetails)
+		t.Errorf("7.8 checkCreatedBy returned errors %d and results %s which is invalid", r.problemsFound, r.resultDetails)
 	}
 	if r.problemsFound != 0 || r.resultDetails[1][0:2] != "++" {
-		t.Errorf("7.10 checkCreatedBy returned errors %d and results %s which is invalid", r.problemsFound, r.resultDetails)
-	}
-	if r.problemsFound != 0 || r.resultDetails[2][0:2] != "++" {
-		t.Errorf("7.10 checkCreatedBy returned errors %d and results %s which is invalid", r.problemsFound, r.resultDetails)
+		t.Errorf("7.9 checkCreatedBy returned errors %d and results %s which is invalid", r.problemsFound, r.resultDetails)
 	}
 }
 
@@ -257,7 +246,6 @@ func TestCheckCreatedBy(t *testing.T) {
 func TestCheckCreated(t *testing.T) {
 	p := new(Playbook)
 	r := new(results)
-	r.debug = true
 
 	// Check when property is missing
 	setup(r)
@@ -293,7 +281,6 @@ func TestCheckCreated(t *testing.T) {
 func TestCheckModified(t *testing.T) {
 	p := new(Playbook)
 	r := new(results)
-	r.debug = true
 
 	// Check when property is missing
 	setup(r)
@@ -376,7 +363,6 @@ func TestCheckModified(t *testing.T) {
 func TestCheckValidFrom(t *testing.T) {
 	p := new(Playbook)
 	r := new(results)
-	r.debug = true
 
 	// Check invalid value
 	setup(r)
@@ -399,7 +385,6 @@ func TestCheckValidFrom(t *testing.T) {
 func TestCheckValidUntil(t *testing.T) {
 	p := new(Playbook)
 	r := new(results)
-	r.debug = true
 
 	// Check invalid value
 	setup(r)
@@ -459,7 +444,6 @@ func TestCheckValidUntil(t *testing.T) {
 func TestCheckDerivedFrom(t *testing.T) {
 	p := new(Playbook)
 	r := new(results)
-	r.debug = true
 
 	// Check invalid value
 	setup(r)
@@ -486,10 +470,7 @@ func TestCheckDerivedFrom(t *testing.T) {
 	p.DerivedFrom = nil
 	p.DerivedFrom = append(p.DerivedFrom, "step--60cfe320-f6b4-4523-8558-14a042223797")
 	p.checkDerivedFrom(r)
-	if r.problemsFound != 1 || r.resultDetails[0][0:2] != "++" {
-		t.Errorf("13.3 checkID returned errors %d and results %s which is invalid", r.problemsFound, r.resultDetails)
-	}
-	if r.problemsFound != 1 || r.resultDetails[1][0:2] != "--" {
+	if r.problemsFound != 1 || r.resultDetails[0][0:2] != "--" {
 		t.Errorf("13.4 checkID returned errors %d and results %s which is invalid", r.problemsFound, r.resultDetails)
 	}
 
@@ -501,16 +482,12 @@ func TestCheckDerivedFrom(t *testing.T) {
 	if r.problemsFound != 0 || r.resultDetails[0][0:2] != "++" {
 		t.Errorf("13.5 checkID returned errors %d and results %s which is invalid", r.problemsFound, r.resultDetails)
 	}
-	if r.problemsFound != 0 || r.resultDetails[1][0:2] != "++" {
-		t.Errorf("13.6 checkID returned errors %d and results %s which is invalid", r.problemsFound, r.resultDetails)
-	}
 }
 
 // TestCheckPriority - This will check the priority property
 func TestCheckPriority(t *testing.T) {
 	p := new(Playbook)
 	r := new(results)
-	r.debug = true
 
 	// Check when property is invalid
 	setup(r)
@@ -557,7 +534,6 @@ func TestCheckPriority(t *testing.T) {
 func TestCheckSeverity(t *testing.T) {
 	p := new(Playbook)
 	r := new(results)
-	r.debug = true
 
 	// Check when property is invalid
 	setup(r)
@@ -604,7 +580,6 @@ func TestCheckSeverity(t *testing.T) {
 func TestCheckImpact(t *testing.T) {
 	p := new(Playbook)
 	r := new(results)
-	r.debug = true
 
 	// Check when property is invalid
 	setup(r)
@@ -651,7 +626,6 @@ func TestCheckImpact(t *testing.T) {
 func TestCheckIndustrySectors(t *testing.T) {
 	p := new(Playbook)
 	r := new(results)
-	r.debug = true
 
 	// Check invalid value
 	setup(r)

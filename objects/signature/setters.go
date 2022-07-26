@@ -7,21 +7,39 @@ package signature
 
 import (
 	"errors"
+	"time"
 
 	"github.com/openplaybooks/libcacao/objects"
 )
 
 // ----------------------------------------------------------------------
-// Signature Type
+// Private Signature Type Functions
 // ----------------------------------------------------------------------
 
-// SetNewID - This method takes in a string value representing an object type and
-// creates a new ID based on the specification format and update the id property
-// for the object.
+// isObjectTypeValid - This function will take in a string representing an object
+// type and return true or false if it is an officially supported object.
+func isObjectTypeValid(s string) bool {
+	objectTypes := map[string]bool{
+		"signature": true,
+	}
+
+	if _, found := objectTypes[s]; found == true {
+		return true
+	}
+	return false
+}
+
+// ----------------------------------------------------------------------
+// Public Signature Type Methods
+// ----------------------------------------------------------------------
+
+// SetNewID - This method takes in a string value representing an object type
+// and creates a new ID based on the specification format and updates the id
+// property for the object.
 func (s *Signature) SetNewID(objType string) error {
 
-	if valid := objects.IsTypeValid(objType); valid == false {
-		return errors.New("the object type is not valid for a CACAO id")
+	if valid := isObjectTypeValid(objType); valid == false {
+		return errors.New("the object type is not valid for a CACAO signature id")
 	}
 
 	s.ID, _ = objects.CreateID(objType)
@@ -40,12 +58,35 @@ func (s *Signature) GetCurrentTime(precision string) string {
 	return objects.GetCurrentTime(precision)
 }
 
+// SetCreated - This method takes in a timestamp in either time.Time or string
+// format and updates the created property with it. The value is stored as a
+// string, so if the value is in time.Time format, it will be converted to the
+// correct timestamp format.
+func (s *Signature) SetCreated(t interface{}) error {
+	ts, _ := objects.TimeToString(t, "milli")
+
+	s.Created = ts
+	return nil
+}
+
 // SetModified - This method takes in a timestamp in either time.Time or string
 // format and updates the modified property with it. The value is stored as a
 // string, so if the value is in time.Time format, it will be converted to the
 // correct timestamp format.
 func (s *Signature) SetModified(t interface{}) error {
 	ts, _ := objects.TimeToString(t, "milli")
+
+	// Make sure the modified timestampe is equal to or greater than created
+	if s.Created == "" {
+		return errors.New("the created property is null, but must be populated")
+	}
+
+	created, _ := time.Parse(time.RFC3339, s.Created)
+	modified, _ := time.Parse(time.RFC3339, ts)
+	if modified.Before(created) {
+		return errors.New("the modified timestamp is invalid, it is before the created timestamp")
+	}
+
 	s.Modified = ts
 	return nil
 }

@@ -19,9 +19,13 @@ import (
 
 // Valid - This method will verify that the object is correct. It will return a
 // boolean, an integer that tracks the number of problems found, and a slice of
-// strings that contain the detailed results, whether good or bad.
+// strings that contain the detailed results, whether good or bad. If debug is
+// enabled, then resultDetails will contain entries for successful checks not
+// just failures.
 func (p *Playbook) Valid(debug bool) (bool, int, []string) {
 	r := new(results)
+
+	// If debug is enabled record successful checks in addition to failures
 	r.debug = debug
 
 	// Check each property in the model
@@ -65,8 +69,10 @@ func (p *Playbook) Valid(debug bool) (bool, int, []string) {
 }
 
 // ----------------------------------------------------------------------
-// Private Methods
+// Private Common Functions
 // ----------------------------------------------------------------------
+
+// These functions will handle common logging tasks for the various checks.
 
 func requiredButMissing(r *results, propertyName string) {
 	str := fmt.Sprintf("-- the %s property is required but missing", propertyName)
@@ -89,6 +95,73 @@ func logValid(r *results, msg string) {
 	}
 }
 
+// ----------------------------------------------------------------------
+// Private Functions
+// ----------------------------------------------------------------------
+
+// isObjectTypeValid - This function will take in a string representing an
+// object type and return true or false if it is an officially supported
+// object.
+func isObjectTypeValid(s string) bool {
+	objectTypes := map[string]bool{
+		"playbook":          true,
+		"playbook-template": true,
+	}
+
+	if _, found := objectTypes[s]; found == true {
+		return true
+	}
+	return false
+}
+
+// isIDValid - This function will take in an CACAO ID and check to see if it is
+// a valid identifier per the specification for a playbook object.
+func isIDValid(id string) bool {
+	idparts := strings.Split(id, "--")
+
+	if idparts == nil {
+		return false
+	}
+
+	// First check to see if the object type is valid, if not return false.
+	if valid := isObjectTypeValid(idparts[0]); valid == false {
+		// Short circuit if the object type part is wrong
+		return false
+	}
+
+	// If the type is valid, then check to see if the ID is a UUID, if not return
+	// false.
+	valid := objects.IsUUIDValid(idparts[1])
+
+	return valid
+}
+
+// IsCreatedByIDValid - This function will take in an CACAO ID and check to see
+// if it is a valid identifier per the specification for an identity object.
+func isCreatedByIDValid(id string) bool {
+	idparts := strings.Split(id, "--")
+
+	if idparts == nil {
+		return false
+	}
+
+	// First check to see if the object type is valid, if not return false.
+	if idparts[0] != "identity" {
+		// Short circuit if the object type part is wrong
+		return false
+	}
+
+	// If the type is valid, then check to see if the ID is a UUID, if not return
+	// false.
+	valid := objects.IsUUIDValid(idparts[1])
+
+	return valid
+}
+
+// ----------------------------------------------------------------------
+// Private Methods
+// ----------------------------------------------------------------------
+
 // Each of these methods will check a specific property. It is done this way
 // to reduce the complexity of the main valid() function. This way all of the
 // checks for each property are self contained in their own function.
@@ -99,7 +172,7 @@ func (p *Playbook) checkObjectType(r *results) {
 	} else {
 		requiredAndFound(r, "type")
 
-		if p.ObjectType != "playbook" && p.ObjectType != "playbook-template" {
+		if valid := isObjectTypeValid(p.ObjectType); valid == false {
 			logProblem(r, "-- the type property does not contain a value of playbook or playbook-template")
 		} else {
 			str := fmt.Sprintf("++ the type property contains a valid type value of \"%s\"", p.ObjectType)
@@ -114,8 +187,8 @@ func (p *Playbook) checkSpecVersion(r *results) {
 	} else {
 		requiredAndFound(r, "spec_version")
 
-		if p.SpecVersion != "1.0" {
-			logProblem(r, "-- the spec_version property does not contain a value of 1.0")
+		if p.SpecVersion != "1.1" {
+			logProblem(r, "-- the spec_version property does not contain a value of 1.1")
 		} else {
 			str := fmt.Sprintf("++ the spec_version property contains a valid spec_version value of \"%s\"", p.SpecVersion)
 			logValid(r, str)
@@ -129,7 +202,7 @@ func (p *Playbook) checkID(r *results) {
 	} else {
 		requiredAndFound(r, "id")
 
-		if valid := objects.IsIDValid(p.ID); valid == false {
+		if valid := isIDValid(p.ID); valid == false {
 			logProblem(r, "-- the id property does not contain a valid identifier")
 		} else {
 			str := fmt.Sprintf("++ the id property contains a valid identifier value of \"%s\"", p.ID)
@@ -173,21 +246,11 @@ func (p *Playbook) checkCreatedBy(r *results) {
 	} else {
 		requiredAndFound(r, "created_by")
 
-		if valid := objects.IsIDValid(p.CreatedBy); valid == false {
+		if valid := isCreatedByIDValid(p.CreatedBy); valid == false {
 			logProblem(r, "-- the created_by property does not contain a valid identifier")
 		} else {
 			str := fmt.Sprintf("++ the created_by property contains a valid identifier value of \"%s\"", p.CreatedBy)
 			logValid(r, str)
-
-			// Make sure the ID is a valid identity ID
-			idparts := strings.Split(p.CreatedBy, "--")
-			if idparts[0] != "identity" {
-				logProblem(r, "-- the derived_from property does not contain a valid identity identifier")
-			} else {
-				str := fmt.Sprintf("++ the derived_from property contains a valid identity identifier value of \"%s\"", p.CreatedBy)
-				logValid(r, str)
-			}
-
 		}
 	}
 }
@@ -274,20 +337,11 @@ func (p *Playbook) checkDerivedFrom(r *results) {
 	for i := 0; i < len(p.DerivedFrom); i++ {
 		value := p.DerivedFrom[i]
 
-		if valid := objects.IsIDValid(value); valid == false {
+		if valid := isIDValid(value); valid == false {
 			logProblem(r, "-- the derived_from property does not contain a valid identifier")
 		} else {
 			str := fmt.Sprintf("++ the derived_from property contains a valid identifier value of \"%s\"", value)
 			logValid(r, str)
-
-			// Make sure the ID is a valid playbook ID
-			idparts := strings.Split(value, "--")
-			if idparts[0] != "playbook" && idparts[0] != "playbook-template" {
-				logProblem(r, "-- the derived_from property does not contain a valid playbook identifier")
-			} else {
-				str := fmt.Sprintf("++ the derived_from property contains a valid playbook identifier value of \"%s\"", value)
-				logValid(r, str)
-			}
 		}
 	}
 }

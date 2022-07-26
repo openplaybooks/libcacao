@@ -12,9 +12,6 @@ import (
 	"github.com/openplaybooks/libcacao/objects/workflow"
 )
 
-// TODO
-// finish adding targets and extensionDefinitions for the playbook object
-
 // ----------------------------------------------------------------------
 // Define Object Model
 // ----------------------------------------------------------------------
@@ -80,17 +77,11 @@ type results struct {
 // properties.
 func New() *Playbook {
 	p := new(Playbook)
-	p.Init()
-	return p
-}
-
-// Init - This method will initialize a new playbook object with the correct
-// defaults.
-func (p *Playbook) Init() {
 	p.ObjectType = "playbook"
 	p.SpecVersion = p.GetCurrentSpecVersion()
 	p.SetNewID(p.ObjectType)
 	p.Created = p.GetCurrentTime("milli")
 	p.Modified = p.Created
 	p.Revoked = false
+	return p
 }

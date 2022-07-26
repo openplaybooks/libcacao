@@ -23,7 +23,7 @@ type ExternalReference struct {
 }
 
 // Variables - This type defines all of the properties associated with the
-// Variables data type.  The variable data type captures variable information
+// Variables data type. The variable data type captures variable information
 // and uses the JSON object type [RFC8259] for serialization. Variables can be
 // defined and used as the playbook is executed and are stored in a dictionary
 // where the key is the name of the variable and the value is a variable data
@@ -32,8 +32,15 @@ type ExternalReference struct {
 // are mutable unless identified as a constant.
 type Variables struct {
 	ObjectType  string `json:"type,omitempty"`
+	Name        string `json:"name,omitempty"`
 	Description string `json:"description,omitempty"`
 	Value       string `json:"value,omitempty"`
 	Constant    bool   `json:"constant,omitempty"`
 	External    bool   `json:"external,omitempty"`
+}
+
+// NewVariable -
+func NewVariable() *Variables {
+	var v Variables
+	return &v
 }
