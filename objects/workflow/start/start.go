@@ -43,6 +43,22 @@ func (w *WorkflowStartStep) Init() {
 	w.SetNewID(w.ObjectType)
 }
 
+// Next -
+func (w *WorkflowStartStep) Next(t string) workflow.StepObject {
+	switch t {
+	case "action":
+		return (action.New())
+	case "parallel":
+		//
+	case "if-condition":
+		//
+	case "switch-condition":
+		//
+	case "while-condition":
+		//
+	}
+}
+
 // ----------------------------------------------------------------------
 // Define Functions and Methods
 // ----------------------------------------------------------------------
