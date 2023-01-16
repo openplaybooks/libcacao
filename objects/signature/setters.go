@@ -46,11 +46,11 @@ func (s *Signature) SetNewID(objType string) error {
 	return nil
 }
 
-// GetCurrentSpecVersion - This method returns the current specification version
-// that this library is using.
-func (s *Signature) GetCurrentSpecVersion() string {
-	return objects.GetCurrentSpecVersion()
-}
+// // GetCurrentSpecVersion - This method returns the current specification version
+// // that this library is using.
+// func (s *Signature) GetCurrentSpecVersion() string {
+// 	return objects.GetCurrentSpecVersion()
+// }
 
 // GetCurrentTime - This method takes in a value of either milli or micro and
 // returns the current time in RFC 3339 format

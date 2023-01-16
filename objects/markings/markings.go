@@ -38,7 +38,6 @@ type DataMarkingObject interface {
 // in the following type.
 type CommonProperties struct {
 	ObjectType         string                      `json:"type,omitempty"`
-	SpecVersion        string                      `json:"spec_version,omitempty"`
 	ID                 string                      `json:"id,omitempty"`
 	Name               string                      `json:"name,omitempty"`
 	Description        string                      `json:"description,omitempty"`
@@ -68,12 +67,6 @@ func (m *CommonProperties) SetNewID(s string) error {
 // GetID - This method returns the ID of the marking object
 func (m *CommonProperties) GetID() string {
 	return m.ID
-}
-
-// GetCurrentSpecVersion - This method returns the current specification version
-// that this library is using.
-func (m *CommonProperties) GetCurrentSpecVersion() string {
-	return objects.GetCurrentSpecVersion()
 }
 
 // GetCurrentTime - This method takes in a value of either milli or micro and

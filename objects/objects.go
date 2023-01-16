@@ -16,6 +16,29 @@ import (
 	"github.com/openplaybooks/libcacao/defs"
 )
 
+// IsTypeValid - This function will take in a string representing an object type
+// and return true or false if it is an officially supported object.
+// func IsTypeValid(s string) bool {
+// 	objectTypes := map[string]bool{
+// 		"step":                 true,
+// 		"target":               true,
+// 		"extension-definition": true,
+// 		"marking-definition":   true,
+// 	}
+
+// 	if _, found := objectTypes[s]; found == true {
+// 		return true
+// 	}
+// 	return false
+// }
+
+// IsUUIDValid - This function will take in a string and return true if the
+// string represents an actual UUID v4 or v5 value.
+func IsUUIDValid(uuid string) bool {
+	r := regexp.MustCompile(`^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[4-5][a-fA-F0-9]{3}-[8|9|aA|bB][a-fA-F0-9]{3}-[a-fA-F0-9]{12}$`)
+	return r.MatchString(uuid)
+}
+
 // CreateID - This method takes in a string value representing an object type
 // and creates and returns a new UUIDv4 ID based on the specification format.
 func CreateID(s string) (string, error) {
@@ -27,7 +50,7 @@ func CreateID(s string) (string, error) {
 // GetCurrentSpecVersion - This function returns the current specification version
 // that this library is using.
 func GetCurrentSpecVersion() string {
-	return defs.CurrectVersion
+	return defs.CurrentVersion
 }
 
 // GetCurrentTime - This function takes in a value of either milli or micro and
@@ -45,8 +68,7 @@ func GetCurrentTime(precision string) string {
 // format and returns a string version of the timestamp.
 func TimeToString(t interface{}, precision string) (string, error) {
 	// TODO: One potential problem is if the time is created with the time package
-	// at a precision less than micro and we set it to micro in things like
-	// indicator, observed_data, first_seen, and last_seen for example
+	// at a precision less than micro and we set it to micro for some object.
 
 	var format string
 	if precision == "milli" {
@@ -83,35 +105,6 @@ func IsTimestampValid(t string) bool {
 	//	return true
 	//}
 	return false
-}
-
-// IsIDValid - This function will take in an CACAO ID and check to see if it is
-// a valid identifier per the specification.
-func IsIDValid(id string) bool {
-	idparts := strings.Split(id, "--")
-
-	if idparts == nil {
-		return false
-	}
-
-	// First check to see if the object type is valid, if not return false.
-	if valid := IsTypeValid(idparts[0]); valid == false {
-		// Short circuit if the object type part is wrong
-		return false
-	}
-
-	// If the type is valid, then check to see if the ID is a UUID, if not return
-	// false.
-	valid := IsUUIDValid(idparts[1])
-
-	return valid
-}
-
-// IsUUIDValid - This function will take in a string and return true if the
-// string represents an actual UUID v4 or v5 value.
-func IsUUIDValid(uuid string) bool {
-	r := regexp.MustCompile(`^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[4-5][a-fA-F0-9]{3}-[8|9|aA|bB][a-fA-F0-9]{3}-[a-fA-F0-9]{12}$`)
-	return r.MatchString(uuid)
 }
 
 // AddValuesToList - This function will add a single value, a comma separated

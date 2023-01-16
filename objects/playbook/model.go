@@ -25,6 +25,8 @@ type Playbook struct {
 	Name               string                         `json:"name,omitempty"`
 	Description        string                         `json:"description,omitempty"`
 	PlaybookTypes      []string                       `json:"playbook_types,omitempty"`
+	PlaybookActivities []string                       `json:"playbook_activities,omitempty"`
+	PlaybookFeatures   *Features                      `json:"playbook_features,omitempty"`
 	CreatedBy          string                         `json:"created_by,omitempty"`
 	Created            string                         `json:"created,omitempty"`
 	Modified           string                         `json:"modified,omitempty"`
@@ -38,7 +40,6 @@ type Playbook struct {
 	IndustrySectors    []string                       `json:"industry_sectors,omitempty"`
 	Labels             []string                       `json:"labels,omitempty"`
 	ExternalReferences []objects.ExternalReference    `json:"external_references,omitempty"`
-	Features           *Features                      `json:"features,omitempty"`
 	Markings           []string                       `json:"markings,omitempty"`
 	PlaybookVariables  map[string]objects.Variables   `json:"playbook_variables,omitempty"`
 	WorkflowStart      string                         `json:"workflow_start,omitempty"`

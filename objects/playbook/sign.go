@@ -7,7 +7,7 @@ package playbook
 
 import (
 	"crypto/sha256"
-	"encoding/base64"
+	"encoding/hex"
 	"errors"
 
 	"github.com/golang-jwt/jwt"
@@ -25,47 +25,48 @@ func (p *Playbook) Sign(method string, key interface{}, sig *signature.Signature
 		return errors.New("incorrect signing method passed in to the sign method")
 	}
 
+	// Step 2
 	// Save any existing signatures and then zero out the property for signing
 	savedSignatures := p.Signatures
 	p.Signatures = nil
-
 	// Convert playbook object to a JSON byte[]
 	playbookJSON, err := p.Encode()
 	if err != nil {
 		return err
 	}
 
+	// Step 3
 	// Create JCS version of playbook
 	jcsPlaybook, err := jcs.Transform(playbookJSON)
 	if err != nil {
 		return err
 	}
 
+	// Step 4
 	// SHA256 encode JCS version. The Sum256 functions returns a [32]byte
-	hashPlaybook := sha256.Sum256(jcsPlaybook)
+	hashhex := sha256.Sum256(jcsPlaybook)
+	hash := hex.EncodeToString(hashhex[:])
 
-	// Create base64URL.encoded version and remove base64 padding characters "="
-	// per RFC 7515 section 2 - Base64url Encoding
-	// Save the b64 hash to the signature object
-	b64Playbook := base64.RawURLEncoding.EncodeToString(hashPlaybook[:])
-	sig.SHA256 = b64Playbook
+	// Step 5
+	sig.Hash = hash
 
 	// ------------------------------------------------------------
 	// Digitally sign the signature object
 	// ------------------------------------------------------------
+
+	// Step 6
+	// Convert playbook object to a JSON byte[]
 	sigJSON, err := sig.Encode()
 	if err != nil {
 		return err
 	}
-
 	// Create JCS version of signature object
 	jcsSig, err := jcs.Transform(sigJSON)
 	if err != nil {
 		return err
 	}
 
-	b64Sig := base64.RawURLEncoding.EncodeToString([]byte(jcsSig))
-
+	// Step 7
 	var signingMethod jwt.SigningMethod
 	// If value is an RSA method the signingMethod will be *jwt.SigningMethodRSA
 	if method == "RS256" {
@@ -83,12 +84,12 @@ func (p *Playbook) Sign(method string, key interface{}, sig *signature.Signature
 	} else {
 		return errors.New("no valid signing method was given")
 	}
-
-	sigData, err := signingMethod.Sign(b64Sig, key)
+	sigData, err := signingMethod.Sign(string(jcsSig), key)
 	if err != nil {
 		panic(err)
 	}
 
+	// Step 8
 	// Add signature to signature object
 	sig.Value = sigData
 	// Add original signatures back to the playbook

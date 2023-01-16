@@ -20,7 +20,7 @@ import "github.com/openplaybooks/libcacao/objects/markings"
 // properties are inherited from the markings.CommonProperties type.
 type MarkingTLP struct {
 	markings.CommonProperties
-	TLPLevel string `json:"tlp_level,omitempty"`
+	TLPv2Level string `json:"tlpv2_level,omitempty"`
 }
 
 // ----------------------------------------------------------------------
@@ -32,43 +32,72 @@ type MarkingTLP struct {
 // properties.
 func New() *MarkingTLP {
 	var m MarkingTLP
-	m.Init()
+	// m.Init()
 	return &m
 }
 
 // Init - This method will initialize a new tlp marking object with the
 // correct defaults.
-func (m *MarkingTLP) Init() {
-	m.ObjectType = "marking-tlp"
-	m.SpecVersion = m.GetCurrentSpecVersion()
-	m.SetNewID(m.ObjectType)
-	m.Created = m.GetCurrentTime("milli")
-	m.Modified = m.Created
-	m.Revoked = false
-}
+// func (m *MarkingTLP) Init() {
+// 	m.ObjectType = "marking-tlp"
+// 	m.SetNewID(m.ObjectType)
+// 	m.Created = m.GetCurrentTime("milli")
+// 	m.Modified = m.Created
+// 	m.Revoked = false
+// }
 
 // ----------------------------------------------------------------------
 // Define Functions and Methods
 // ----------------------------------------------------------------------
 
-// SetWhite - This method will set the TLP Level to TLP-WHITE
-func (m *MarkingTLP) SetWhite() {
-	m.TLPLevel = "TLP-WHITE"
+// SetClear - This method will set the TLP Level to TLP-CLEAR
+func (m *MarkingTLP) SetClear() {
+	m.ObjectType = "marking-tlp"
+	m.ID = "marking-tlp--94868c89-83c2-464b-929b-a1a8aa3c8487"
+	m.CreatedBy = "identity--5abe695c-7bd5-4c31-8824-2528696cdbf1"
+	m.Created = "2022-10-01T00:00:00.000Z"
+	m.Modified = m.Created
+	m.TLPv2Level = "TLP-CLEAR"
 }
 
 // SetGreen - This method will set the TLP Level to TLP-GREEN
 func (m *MarkingTLP) SetGreen() {
-	m.TLPLevel = "TLP-GREEN"
+	m.ObjectType = "marking-tlp"
+	m.ID = "marking-tlp--bab4a63c-aed9-4cf5-a766-dfca5abac2bb"
+	m.CreatedBy = "identity--5abe695c-7bd5-4c31-8824-2528696cdbf1"
+	m.Created = "2022-10-01T00:00:00.000Z"
+	m.Modified = m.Created
+	m.TLPv2Level = "TLP-GREEN"
 }
 
 // SetAmber - This method will set the TLP Level to TLP-AMBER
 func (m *MarkingTLP) SetAmber() {
-	m.TLPLevel = "TLP-AMBER"
+	m.ObjectType = "marking-tlp"
+	m.ID = "marking-tlp--55d920b0-5e8b-4f79-9ee9-91f868d9b421"
+	m.CreatedBy = "identity--5abe695c-7bd5-4c31-8824-2528696cdbf1"
+	m.Created = "2022-10-01T00:00:00.000Z"
+	m.Modified = m.Created
+	m.TLPv2Level = "TLP-AMBER"
+}
+
+// SetAmberStrict - This method will set the TLP Level to TLP-AMBER+STRICT
+func (m *MarkingTLP) SetAmberStrict() {
+	m.ObjectType = "marking-tlp"
+	m.ID = "marking-tlp--939a9414-2ddd-4d32-a0cd-375ea402b003"
+	m.CreatedBy = "identity--5abe695c-7bd5-4c31-8824-2528696cdbf1"
+	m.Created = "2022-10-01T00:00:00.000Z"
+	m.Modified = m.Created
+	m.TLPv2Level = "TLP-AMBER+STRICT"
 }
 
 // SetRed - This method will set the TLP Level to TLP-RED
 func (m *MarkingTLP) SetRed() {
-	m.TLPLevel = "TLP-RED"
+	m.ObjectType = "marking-tlp"
+	m.ID = "marking-tlp--e828b379-4e03-4974-9ac4-e53a884c97c1"
+	m.CreatedBy = "identity--5abe695c-7bd5-4c31-8824-2528696cdbf1"
+	m.Created = "2022-10-01T00:00:00.000Z"
+	m.Modified = m.Created
+	m.TLPv2Level = "TLP-RED"
 }
 
 // GetCommon - This method returns the common data marking properties

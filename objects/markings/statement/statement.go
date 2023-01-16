@@ -42,7 +42,6 @@ func New() *MarkingStatement {
 // correct defaults.
 func (m *MarkingStatement) Init() {
 	m.ObjectType = "marking-statement"
-	m.SpecVersion = m.GetCurrentSpecVersion()
 	m.SetNewID(m.ObjectType)
 	m.Created = m.GetCurrentTime("milli")
 	m.Modified = m.Created

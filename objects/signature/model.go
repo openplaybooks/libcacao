@@ -12,7 +12,6 @@ package signature
 // Signature - This type defines the digital signature for a playbook object
 type Signature struct {
 	ObjectType     string   `json:"type,omitempty"`
-	SpecVersion    string   `json:"spec_version,omitempty"`
 	ID             string   `json:"id,omitempty"`
 	CreatedBy      string   `json:"created_by,omitempty"`
 	Created        string   `json:"created,omitempty"`
@@ -23,7 +22,8 @@ type Signature struct {
 	ValidUntil     string   `json:"valid_until,omitempty"`
 	RelatedTo      string   `json:"related_to,omitempty"`
 	RelatedVersion string   `json:"related_version,omitempty"`
-	SHA256         string   `json:"sha256,omitempty"`
+	HashAlgorithm  string   `json:"hash_algorithm,omitempty"`
+	Hash           string   `json:"hash,omitempty"`
 	Algorithm      string   `json:"algorithm,omitempty"`
 	PublicKeys     []string `json:"public_keys,omitempty"`
 	CertURL        string   `json:"cert_url,omitempty"`
@@ -41,7 +41,6 @@ type Signature struct {
 func New() *Signature {
 	s := new(Signature)
 	s.ObjectType = "signature"
-	s.SpecVersion = s.GetCurrentSpecVersion()
 	s.SetNewID(s.ObjectType)
 	s.Created = s.GetCurrentTime("milli")
 	s.Modified = s.Created

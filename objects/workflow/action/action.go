@@ -3,13 +3,13 @@
 // Use of this source code is governed by an Apache 2.0 license that can be
 // found in the LICENSE file in the root of the source tree.
 
-// Package single implements the CACAO 1.0 workflow single action step object.
+// Package action implements the CACAO 1.0 workflow action step object.
 //
 // This workflow step contains the actual commands to be executed on one or more
 // targets. These commands are intended to be processed sequentially one at a
 // time. In addition to the inherited properties, this section defines five more
 // specific properties that are valid for this type.
-package single
+package action
 
 import (
 	"github.com/openplaybooks/libcacao/objects/workflow"
@@ -23,7 +23,7 @@ import (
 // command object (command-data) contains detailed information about the
 // commands that are to be executed or processed automatically or manually as
 // part of a workflow step (see section 4). Each command listed in a step may be
-// of a different command type, however, all commands listed in a single step
+// of a different command type, however, all commands listed in a action step
 // MUST be processed or executed by all of the targets defined in that step.
 //
 // Commands can use and refer to variables just like other parts of the
@@ -40,11 +40,10 @@ type CommandData struct {
 	Version    string `json:"version,omitempty"`
 }
 
-// WorkflowSingleActionStep - This type implmenets the CACAO 1.0 workflow single
-// action step and defines all of the properties associated with the single
-// action step. Some properties are inherited from the workflow.CommonProperties
-// type.
-type WorkflowSingleActionStep struct {
+// WorkflowActionStep - This type implmenets the CACAO 1.0 workflow action step
+// and defines all of the properties associated with the action step. Some
+// properties are inherited from the workflow.CommonProperties type.
+type WorkflowActionStep struct {
 	workflow.CommonProperties
 	Commands  []CommandData `json:"commands,omitempty"`
 	TargetIDs []string      `json:"target_ids,omitempty"`
@@ -56,19 +55,19 @@ type WorkflowSingleActionStep struct {
 // Initialization Functions
 // ----------------------------------------------------------------------
 
-// New - This function will create a new workflow single action step object and
-// return it as a pointer. It will also initialize the object by setting all of
-// the basic properties.
-func New() *WorkflowSingleActionStep {
-	var w WorkflowSingleActionStep
+// New - This function will create a new workflow action step object and return
+// it as a pointer. It will also initialize the object by setting all of the
+// basic properties.
+func New() *WorkflowActionStep {
+	var w WorkflowActionStep
 	w.Init()
 	return &w
 }
 
-// Init - This method will initialize a new workflow single action step object with the
+// Init - This method will initialize a new workflow action step object with the
 // correct defaults.
-func (w *WorkflowSingleActionStep) Init() {
-	w.ObjectType = "single"
+func (w *WorkflowActionStep) Init() {
+	w.ObjectType = "action"
 	w.SetNewID(w.ObjectType)
 }
 
@@ -107,11 +106,11 @@ func (c *CommandData) SetAttackCMD() {
 }
 
 // ----------------------------------------------------------------------
-// Define Functions and Methods - WorkflowSingleActionStep
+// Define Functions and Methods - WorkflowActionStep
 // ----------------------------------------------------------------------
 
 // GetCommon - This method returns the common step properties
-func (w *WorkflowSingleActionStep) GetCommon() workflow.CommonProperties {
+func (w *WorkflowActionStep) GetCommon() workflow.CommonProperties {
 	return w.CommonProperties
 }
 
@@ -119,7 +118,7 @@ func (w *WorkflowSingleActionStep) GetCommon() workflow.CommonProperties {
 // returns a reference to it so it can be populated. However, if one or more
 // external references are passed in they are all added and the reference that
 // is returned is for the last entry added.
-func (w *WorkflowSingleActionStep) NewCommand(r ...CommandData) (*CommandData, error) {
+func (w *WorkflowActionStep) NewCommand(r ...CommandData) (*CommandData, error) {
 	positionThatAppendWillUse := len(w.Commands)
 
 	if len(r) > 0 {

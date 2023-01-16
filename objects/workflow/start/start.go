@@ -10,7 +10,9 @@
 // does not define any additional properties.
 package start
 
-import "github.com/openplaybooks/libcacao/objects/workflow"
+import (
+	"github.com/openplaybooks/libcacao/objects/workflow"
+)
 
 // ----------------------------------------------------------------------
 // Define Object Model
@@ -41,22 +43,6 @@ func New() *WorkflowStartStep {
 func (w *WorkflowStartStep) Init() {
 	w.ObjectType = "start"
 	w.SetNewID(w.ObjectType)
-}
-
-// Next -
-func (w *WorkflowStartStep) Next(t string) workflow.StepObject {
-	switch t {
-	case "action":
-		return (action.New())
-	case "parallel":
-		//
-	case "if-condition":
-		//
-	case "switch-condition":
-		//
-	case "while-condition":
-		//
-	}
 }
 
 // ----------------------------------------------------------------------

@@ -83,6 +83,13 @@ func (p *Playbook) AddPlaybookTypes(values interface{}) error {
 	return objects.AddValuesToList(&p.PlaybookTypes, values)
 }
 
+// AddPlaybookActivities - This method takes in a string value, a comma separated
+// list of string values, or a slice of string values that all represent a
+// playbook type and adds it to the playbook_activites property.
+func (p *Playbook) AddPlaybookActivities(values interface{}) error {
+	return objects.AddValuesToList(&p.PlaybookActivities, values)
+}
+
 // AddDerivedFrom - This method takes in a string value, a comma separated list of
 // string values, or a slice of string values that all representing a
 // playbook uuid and adds it to the derived_from property.
@@ -110,11 +117,11 @@ func (p *Playbook) AddLabels(values interface{}) error {
 func (p *Playbook) AddMarkings(values interface{}) error {
 	// Since we are applying a data marking to this playbook, we need to capture
 	// that in the features property
-	if p.Features == nil {
+	if p.PlaybookFeatures == nil {
 		var f Features
-		p.Features = &f
+		p.PlaybookFeatures = &f
 	}
-	p.Features.DataMarkings = true
+	p.PlaybookFeatures.DataMarkings = true
 
 	return objects.AddValuesToList(&p.Markings, values)
 }
@@ -183,20 +190,20 @@ func (p *Playbook) AddWorkflowStep(v workflow.StepObject) error {
 	p.Workflow[k] = v
 
 	// Make sure we call you the logic features as needed
-	if p.Features == nil {
+	if p.PlaybookFeatures == nil {
 		var f Features
-		p.Features = &f
+		p.PlaybookFeatures = &f
 	}
 
 	switch v.GetCommon().ObjectType {
 	case "parallel":
-		p.Features.ParallelProcessing = true
+		p.PlaybookFeatures.ParallelProcessing = true
 	case "if-condition":
-		p.Features.IfLogic = true
+		p.PlaybookFeatures.IfLogic = true
 	case "switch-condition":
-		p.Features.SwitchLogic = true
+		p.PlaybookFeatures.SwitchLogic = true
 	case "while-condition":
-		p.Features.WhileLogic = true
+		p.PlaybookFeatures.WhileLogic = true
 	}
 
 	return nil
