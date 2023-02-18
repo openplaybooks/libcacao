@@ -1,4 +1,4 @@
-// Copyright 2021 Bret Jordan, All rights reserved.
+// Copyright 2023 Bret Jordan, All rights reserved.
 //
 // Use of this source code is governed by an Apache 2.0 license that can be
 // found in the LICENSE file in the root of the source tree.
@@ -69,70 +69,66 @@ fD1JKiHl7MECYEMyBz31PsRCuw==
 	// ---------------------------------------------------------------------
 	p := New()
 	// Manually overwrite the values so I get consistent results each time
+	p.SpecVersion = "1.1"
 	p.ID = "playbook--a0777575-5c4c-4710-9f01-15776103837f"
-	p.SpecVersion = "1.0"
-	p.Created = "2021-01-25T20:31:31.319Z"
+	p.CreatedBy = "identity--5abe695c-7bd5-4c31-8824-2528696cdbf1"
+	p.Created = "2022-05-18T11:31:31.319Z"
 	p.Modified = p.Created
 	p.Name = "Playbook 1"
 
 	// Create dummy signature so we can show that you need to remove it
 	var sigExisting signature.Signature
-	sigExisting.ObjectType = "signature"
-	sigExisting.SpecVersion = "1.0"
-	sigExisting.ID = "signature--uuid1"
-	sigExisting.CreatedBy = "identity--uuid2"
-	sigExisting.Created = "2021-01-25T20:31:31.319516Z"
+	sigExisting.ObjectType = "jss"
+	sigExisting.ID = "jss--af4b4bf3-677a-411d-887a-1f6fa5090c05"
+	sigExisting.CreatedBy = "identity--be59c641-b2d5-4930-94fc-6fd583524fc6"
+	sigExisting.Created = "2023-02-02T14:31:31.319Z"
 	sigExisting.Modified = sigExisting.Created
 	sigExisting.Signee = "Existing Example Company"
 	sigExisting.ValidFrom = sigExisting.Created
-	sigExisting.ValidUntil = "2022-01-01T12:12:12.123456Z"
+	sigExisting.ValidUntil = "2023-06-18T11:31:31.319Z"
 	sigExisting.RelatedTo = p.ID
 	sigExisting.RelatedVersion = p.Modified
-	sigExisting.SHA256 = "hHuhBwKscfqvLC3y2FfZtHi3DNkzE0o8kE8eE6x50pM"
+	sigExisting.HashAlgorithm = "sha-256"
 	sigExisting.Algorithm = "RS256"
-	sigExisting.PublicKeys = append(sigExisting.PublicKeys, "some public key")
+	sigExisting.PublicKey = "some public key"
 	sigExisting.Value = "some signature"
 	p.Signatures = append(p.Signatures, sigExisting)
 
 	// ---------------------------------------------------------------------
-	// Demo new signature object used in step 2.0
+	// Demo new signature object used in step 3
 	// ---------------------------------------------------------------------
 	var s signature.Signature
-	s.ObjectType = "signature"
-	s.SpecVersion = "1.0"
-	s.ID = "signature--af892292-c4b4-47eb-9be6-4897ff4b9388"
-	s.CreatedBy = "identity--uuid2"
-	s.Created = "2021-01-25T20:31:31.319516Z"
+	s.ObjectType = "jss"
+	s.ID = "jss--af892292-c4b4-47eb-9be6-4897ff4b9388"
+	s.CreatedBy = "identity--5abe695c-7bd5-4c31-8824-2528696cdbf1"
+	s.Created = "2023-01-10T17:39:31.319Z"
 	s.Modified = s.Created
 	s.Signee = "ACME Cyber Company"
 	s.ValidFrom = s.Created
-	s.ValidUntil = "2022-01-01T12:12:12.123456Z"
+	s.ValidUntil = "2023-06-10T17:39:31.319Z"
 	s.RelatedTo = p.ID
 	s.RelatedVersion = p.Modified
+	s.HashAlgorithm = "sha-256"
 	s.Algorithm = "RS256"
-	s.PublicKeys = append(s.PublicKeys, base64.RawStdEncoding.EncodeToString(publicKeyDer))
+	s.PublicKey = base64.RawStdEncoding.EncodeToString(publicKeyDer)
 
 	err = p.Sign("RS256", privateKey, &s)
 	if err != nil {
 		panic(err)
 	}
 
-	if p.Signatures[0].SHA256 != "hHuhBwKscfqvLC3y2FfZtHi3DNkzE0o8kE8eE6x50pM" {
-		t.Errorf("1.0 sha256 value in signature is not correct")
-	}
-
 	if p.Signatures[0].Value != "some signature" {
 		t.Errorf("1.1 signature was not produced correctly")
 	}
 
-	correctSigValue := "lfmqOpMlNcUb4coQ9n6RhFqKCLCocqTEdyb9S4t5F4INN9Q4pXPAUpd28hnVS-D3BgmPACq6dQgNY1nXnU-QqcChlVDGeliRTu5OLULrBCkQTZ8OcAhyUprXYP4vhzN81w-eSmQz9urEGe98o2RbhLbZCrEuBUqgvmPdsu5cUnJr9wdkMHwoToS-rbc_xuWHQAFzqi0YarCAfbPop0jDQxO8KNDFIoy98mjbL2FXv0Y4GQOSZaJNgZpxdSmgqpQfF5vxOEzQpwirvoUkjGydroJsim7XhAsQwiQwEuegl0GzawhIODVMVz2ZIW0jByUnCH2G21oa1mlA2sX5nciGKw"
+	correctSigValue := "QrVp0g3kJ8x6OssFnRCu8nkkK9l8gjhQZhbbvRRufAgyeHXJQymjlaZZ01lUnMIcRd22gYMPhsJ3EpsjAsFVj8DjO3BcNKzVZ_i2w4fH9O3hXKfAOSr0rX0eFlHdAPmdfCmNAOWMwubLP_J3k9duwrxWZf6EH3pn1bfi2nU6AGpfn3Ur8dn8G5qh4Hsso5FPmgf7LE8pcEHYU2IClkvRSu6fQfmZJp52jNU3uSZLR4K2PMHzzDAtGtzijzYLxm5MiHNwb-26_Rhb8Zr31aUtisY3gnYpRadsR6KjseMOtlOzJutbXpzKQF-0lMzSz79Q81lniQFmLn1xh1fuYFUskA"
 	if p.Signatures[1].Value != correctSigValue {
 		t.Errorf("1.2 signature was not produced correctly")
 		t.Errorf("Expected: %s", correctSigValue)
 		t.Errorf("Have: %s", p.Signatures[1].Value)
 	}
 
-	if p.Signatures[1].PublicKeys[0] != "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAptKZyFPStvmOlb0WihOBhlHUr6wFDHC+tW7hJAudfTQ5mHZQpB8PoMz07udZA+dG8dhUIPkmXlp1TgREeYTHdhxhuf0y/GhbpZv5JPYHx3watO+HWO2qYkjRMEcrWhPMdaVkS/Xe/liaMcow4jYoWaFm8VobeYsyVD2bWWdyl4joTEETm1Z47RnnfR15kVhVudVrDzEFmM4nXV/6dmIg184RJE4httwBFxR8qZCQCwTiJmsoyJxfUR0Gs4ePKc5sB0NTkmFZc5klQSitd67RJn2ldhbqE7EpDl4XlIt+UyLJm1guCBltia8Agke7dXuhpB7hQ6LJwY4EjzthkJ8IPwIDAQAB" {
+	if p.Signatures[1].PublicKey != "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAptKZyFPStvmOlb0WihOBhlHUr6wFDHC+tW7hJAudfTQ5mHZQpB8PoMz07udZA+dG8dhUIPkmXlp1TgREeYTHdhxhuf0y/GhbpZv5JPYHx3watO+HWO2qYkjRMEcrWhPMdaVkS/Xe/liaMcow4jYoWaFm8VobeYsyVD2bWWdyl4joTEETm1Z47RnnfR15kVhVudVrDzEFmM4nXV/6dmIg184RJE4httwBFxR8qZCQCwTiJmsoyJxfUR0Gs4ePKc5sB0NTkmFZc5klQSitd67RJn2ldhbqE7EpDl4XlIt+UyLJm1guCBltia8Agke7dXuhpB7hQ6LJwY4EjzthkJ8IPwIDAQAB" {
 		t.Errorf("1.3 public keys were not added to the signature correctly")
 	}
 }

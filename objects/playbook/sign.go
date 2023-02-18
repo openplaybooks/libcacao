@@ -1,4 +1,4 @@
-// Copyright 2021 Bret Jordan, All rights reserved.
+// Copyright 2023 Bret Jordan, All rights reserved.
 //
 // Use of this source code is governed by an Apache 2.0 license that can be
 // found in the LICENSE file in the root of the source tree.
@@ -25,48 +25,29 @@ func (p *Playbook) Sign(method string, key interface{}, sig *signature.Signature
 		return errors.New("incorrect signing method passed in to the sign method")
 	}
 
-	// Step 2
-	// Save any existing signatures and then zero out the property for signing
+	// Step 2: Save any existing signatures and then zero out the property for signing
 	savedSignatures := p.Signatures
 	p.Signatures = nil
-	// Convert playbook object to a JSON byte[]
-	playbookJSON, err := p.Encode()
+
+	// Step 3: Add new signature object
+	p.Signatures = append(p.Signatures, *sig)
+	// Convert playbook object to a JSON byte[] so we can run it through JCS
+	pbData, err := p.Encode()
 	if err != nil {
 		return err
 	}
 
-	// Step 3
-	// Create JCS version of playbook
-	jcsPlaybook, err := jcs.Transform(playbookJSON)
+	// Step 4: Create JCS version of playbook
+	jcsData, err := jcs.Transform(pbData)
 	if err != nil {
 		return err
 	}
 
-	// Step 4
-	// SHA256 encode JCS version. The Sum256 functions returns a [32]byte
-	hashhex := sha256.Sum256(jcsPlaybook)
+	// Step 5: SHA256 encode JCS version. The Sum256 functions returns a [32]byte
+	hashhex := sha256.Sum256(jcsData)
 	hash := hex.EncodeToString(hashhex[:])
 
-	// Step 5
-	sig.Hash = hash
-
-	// ------------------------------------------------------------
-	// Digitally sign the signature object
-	// ------------------------------------------------------------
-
-	// Step 6
-	// Convert playbook object to a JSON byte[]
-	sigJSON, err := sig.Encode()
-	if err != nil {
-		return err
-	}
-	// Create JCS version of signature object
-	jcsSig, err := jcs.Transform(sigJSON)
-	if err != nil {
-		return err
-	}
-
-	// Step 7
+	// Step 6: Digitally sign the hash
 	var signingMethod jwt.SigningMethod
 	// If value is an RSA method the signingMethod will be *jwt.SigningMethodRSA
 	if method == "RS256" {
@@ -84,7 +65,7 @@ func (p *Playbook) Sign(method string, key interface{}, sig *signature.Signature
 	} else {
 		return errors.New("no valid signing method was given")
 	}
-	sigData, err := signingMethod.Sign(string(jcsSig), key)
+	sigData, err := signingMethod.Sign(hash, key)
 	if err != nil {
 		panic(err)
 	}
@@ -93,6 +74,7 @@ func (p *Playbook) Sign(method string, key interface{}, sig *signature.Signature
 	// Add signature to signature object
 	sig.Value = sigData
 	// Add original signatures back to the playbook
+	p.Signatures = nil
 	p.Signatures = append(p.Signatures, savedSignatures...)
 	// Add the new signature
 	p.Signatures = append(p.Signatures, *sig)

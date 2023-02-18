@@ -1,4 +1,4 @@
-// Copyright 2021 Bret Jordan, All rights reserved.
+// Copyright 2023 Bret Jordan, All rights reserved.
 //
 // Use of this source code is governed by an Apache 2.0 license that can be
 // found in the LICENSE file in the root of the source tree.
@@ -117,11 +117,11 @@ func (p *Playbook) AddLabels(values interface{}) error {
 func (p *Playbook) AddMarkings(values interface{}) error {
 	// Since we are applying a data marking to this playbook, we need to capture
 	// that in the features property
-	if p.PlaybookFeatures == nil {
-		var f Features
-		p.PlaybookFeatures = &f
+	if p.PlaybookComplexity == nil {
+		var c Complexity
+		p.PlaybookComplexity = &c
 	}
-	p.PlaybookFeatures.DataMarkings = true
+	p.PlaybookComplexity.DataMarkings = true
 
 	return objects.AddValuesToList(&p.Markings, values)
 }
@@ -188,22 +188,24 @@ func (p *Playbook) AddWorkflowStep(v workflow.StepObject) error {
 		p.Workflow = m
 	}
 	p.Workflow[k] = v
+	// After we add it to the playbook lets clear out the embedded ID
+	v.ClearID()
 
 	// Make sure we call you the logic features as needed
-	if p.PlaybookFeatures == nil {
-		var f Features
-		p.PlaybookFeatures = &f
-	}
+	// if p.PlaybookComplexity == nil {
+	// 	var c Complexity
+	// 	p.PlaybookComplexity = &c
+	// }
 
 	switch v.GetCommon().ObjectType {
-	case "parallel":
-		p.PlaybookFeatures.ParallelProcessing = true
+	// case "parallel":
+	// 	p.PlaybookComplexity.ParallelProcessing = true
 	case "if-condition":
-		p.PlaybookFeatures.IfLogic = true
+		p.PlaybookComplexity.IfLogic = true
 	case "switch-condition":
-		p.PlaybookFeatures.SwitchLogic = true
+		p.PlaybookComplexity.SwitchLogic = true
 	case "while-condition":
-		p.PlaybookFeatures.WhileLogic = true
+		p.PlaybookComplexity.WhileLogic = true
 	}
 
 	return nil

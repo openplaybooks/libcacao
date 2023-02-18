@@ -1,8 +1,17 @@
-// Copyright 2021 Bret Jordan, All rights reserved.
+// Copyright 2023 Bret Jordan, All rights reserved.
 //
 // Use of this source code is governed by an Apache 2.0 license that can be
 // found in the LICENSE file in the root of the source tree.
 
+// Package playbook implements the CACAO 2.0 playbook object.
+//
+// CACAO playbooks are made up of five parts; playbook metadata, the workflow
+// logic, a list of agents, a list of extensions, and a list of data markings.
+// Playbooks MAY refer to other playbooks in the workflow, similar to how
+// programs refer to function calls or modules that comprise the program. The
+// definition and normative requirements for all data types listed in the
+// property table below and other property tables in this document can be found
+// in Section 9.
 package playbook
 
 import (
@@ -16,8 +25,8 @@ import (
 // Define Object Model
 // ----------------------------------------------------------------------
 
-// Playbook - This type implements the CACAO Playbook object and defines all of
-// the properties and methods needed to create and work with this object.
+// Playbook - This type implements the CACAO 2.0 Playbook object and defines all
+// of the properties and methods needed to create and work with this object.
 type Playbook struct {
 	ObjectType         string                         `json:"type,omitempty"`
 	SpecVersion        string                         `json:"spec_version,omitempty"`
@@ -26,7 +35,7 @@ type Playbook struct {
 	Description        string                         `json:"description,omitempty"`
 	PlaybookTypes      []string                       `json:"playbook_types,omitempty"`
 	PlaybookActivities []string                       `json:"playbook_activities,omitempty"`
-	PlaybookFeatures   *Features                      `json:"playbook_features,omitempty"`
+	PlaybookComplexity *Complexity                    `json:"playbook_complexity,omitempty"`
 	CreatedBy          string                         `json:"created_by,omitempty"`
 	Created            string                         `json:"created,omitempty"`
 	Modified           string                         `json:"modified,omitempty"`
@@ -45,14 +54,17 @@ type Playbook struct {
 	WorkflowStart      string                         `json:"workflow_start,omitempty"`
 	WorkflowException  string                         `json:"workflow_exception,omitempty"`
 	Workflow           map[string]workflow.StepObject `json:"workflow,omitempty"`
-	//Targets              map[string]XXXXX `json:"targets,omitempty"`
+	//Agents              map[string]XXXXX `json:"agents,omitempty"`
+	//Targets             map[string]XXXXX `json:"targets,omitempty"`
 	//ExtensionDefinitions map[string]XXXXX `json:extension_definitions,omitempty"`
 	DataMarkingDefinitions map[string]markings.DataMarkingObject `json:"data_marking_definitions,omitempty"`
 	Signatures             []signature.Signature                 `json:"signatures,omitempty"`
 }
 
-// Features - This type defines a list of playbook features
-type Features struct {
+// Complexity - This type defines a list of playbook features
+type Complexity struct {
+	ManualPlaybook     bool `json:"manual_playbook,omitempty"`
+	ExternalPlaybooks  bool `json:"external_playbooks"`
 	ParallelProcessing bool `json:"parallel_processing,omitempty"`
 	IfLogic            bool `json:"if_logic,omitempty"`
 	WhileLogic         bool `json:"while_logic,omitempty"`
