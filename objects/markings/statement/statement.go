@@ -1,10 +1,11 @@
-// Copyright 2021 Bret Jordan, All rights reserved.
+// Copyright 2023 Bret Jordan, All rights reserved.
 //
 // Use of this source code is governed by an Apache 2.0 license that can be
 // found in the LICENSE file in the root of the source tree.
 
-// Package statement implements the CACAO 1.0 statement marking object. The
-// statement marking object defines the representation of a textual marking
+// Package statement implements the CACAO 2.0 statement marking object.
+//
+// The statement marking object defines the representation of a textual marking
 // statement (e.g., copyright, terms of use, etc.). Statement markings are
 // generally not machine-readable, and this specification does not define any
 // behavior or actions based on their values.
@@ -16,7 +17,7 @@ import "github.com/openplaybooks/libcacao/objects/markings"
 // Define Object Model
 // ----------------------------------------------------------------------
 
-// MarkingStatement - This type implements the CACAO 1.0 statement marking
+// MarkingStatement - This type implements the CACAO 2.0 statement marking
 // object and defines all of the properties associated with the statement
 // marking type. Some properties are inherited from the
 // markings.CommonProperties type.

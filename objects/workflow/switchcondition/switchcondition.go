@@ -1,14 +1,14 @@
-// Copyright 2021 Bret Jordan, All rights reserved.
+// Copyright 2023 Bret Jordan, All rights reserved.
 //
 // Use of this source code is governed by an Apache 2.0 license that can be
 // found in the LICENSE file in the root of the source tree.
 
-// Package switchcondition implements the CACAO 1.0 workflow switch condition step object.
+// Package switchcondition implements the CACAO 2.0 workflow switch condition step object.
 //
-// This section defines the 'switch' condition logic that can be used within the
-// workflow of the playbook. In addition to the inherited properties, this
-// section defines two additional specific properties that are valid for this
-// type.
+// The Switch Condition Step workflow step defines the 'switch' condition logic
+// that can be used within the workflow of the playbook. In addition to the
+// inherited properties, this section defines two additional specific
+// properties that are valid for this type.
 package switchcondition
 
 import (
@@ -20,11 +20,11 @@ import (
 // Define Object Model
 // ----------------------------------------------------------------------
 
-// WorkflowSwitchStep - This type implmenets the CACAO 1.0 workflow switch
+// SwitchStep - This type implmenets the CACAO 2.0 workflow switch
 // condition step and defines all of the properties associated with the switch
 // condition step. Some properties are inherited from the
 // workflow.CommonProperties type.
-type WorkflowSwitchStep struct {
+type SwitchStep struct {
 	workflow.CommonProperties
 	Switch string              `json:"switch,omitempty"`
 	Cases  map[string][]string `json:"cases,omitempty"`
@@ -37,15 +37,15 @@ type WorkflowSwitchStep struct {
 // New - This function will create a new workflow switch condition step object
 // and return it as a pointer. It will also initialize the object by setting all
 // of the basic properties.
-func New() *WorkflowSwitchStep {
-	var w WorkflowSwitchStep
+func New() *SwitchStep {
+	var w SwitchStep
 	w.Init()
 	return &w
 }
 
 // Init - This method will initialize a new workflow switch condition step
 // object with the correct defaults.
-func (w *WorkflowSwitchStep) Init() {
+func (w *SwitchStep) Init() {
 	w.ObjectType = "switch-condition"
 	w.SetNewID(w.ObjectType)
 }
@@ -55,7 +55,7 @@ func (w *WorkflowSwitchStep) Init() {
 // ----------------------------------------------------------------------
 
 // GetCommon - This method returns the common step properties
-func (w *WorkflowSwitchStep) GetCommon() workflow.CommonProperties {
+func (w *SwitchStep) GetCommon() workflow.CommonProperties {
 	return w.CommonProperties
 }
 
@@ -63,7 +63,7 @@ func (w *WorkflowSwitchStep) GetCommon() workflow.CommonProperties {
 // representing the case of the switch statement.  The second is a string value,
 // a comma separated list of string values, or a slice of string values, each
 // representing one or more identifiers to be processed by the case condition.
-func (w *WorkflowSwitchStep) AddCase(k string, v interface{}) error {
+func (w *SwitchStep) AddCase(k string, v interface{}) error {
 	if w.Cases == nil {
 		m := make(map[string][]string, 0)
 		w.Cases = m

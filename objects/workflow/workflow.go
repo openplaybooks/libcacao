@@ -32,7 +32,9 @@ import (
 // Define Object Model
 // ----------------------------------------------------------------------
 
-// StepObject - This interface defines a workflow step object
+// StepObject - This interface defines a workflow step object. I needed to add
+// the ClearID() function to the interface to make sure I could call it on
+// an object that is defined as fullfilling this interface.
 type StepObject interface {
 	GetCommon() CommonProperties
 	ClearID()
@@ -40,7 +42,8 @@ type StepObject interface {
 
 // CommonProperties - Each workflow step contains some base properties that are
 // common across all steps. These common properties are defined in the following
-// table.
+// table. The ID property here is just to help make processing easier, it will
+// be removed when it is added to the playbook.
 type CommonProperties struct {
 	ObjectType         string                       `json:"type,omitempty"`
 	ID                 string                       `json:"id,omitempty"`
@@ -61,30 +64,12 @@ type CommonProperties struct {
 // Define Functions and Methods
 // ----------------------------------------------------------------------
 
-// isObjectTypeValid - This function will take in a string representing an
-// object type and return true or false if it is an officially supported
-// object.
-func isObjectTypeValid(s string) bool {
-
-	// TODO: This should be moved to the vocabs
-	objectTypes := map[string]bool{
-		"start":  true,
-		"action": true,
-		"end":    true,
-	}
-
-	if _, found := objectTypes[s]; found == true {
-		return true
-	}
-	return false
-}
-
 // SetNewID - This method takes in a string value representing an object type
 // and creates a new ID based on the specification format and updates the id
 // property for the object.
 func (w *CommonProperties) SetNewID(objType string) error {
 
-	if valid := isObjectTypeValid(objType); valid == false {
+	if valid := objects.IsWorkflowStepTypeValid(objType); valid == false {
 		return errors.New("the object type is not valid for a CACAO worflow step id")
 	}
 
