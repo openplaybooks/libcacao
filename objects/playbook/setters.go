@@ -192,20 +192,21 @@ func (p *Playbook) AddWorkflowStep(v workflow.StepObject) error {
 	v.ClearID()
 
 	// Make sure we call you the logic features as needed
-	// if p.PlaybookComplexity == nil {
-	// 	var c Complexity
-	// 	p.PlaybookComplexity = &c
-	// }
+	if p.PlaybookComplexity == nil {
+		var c Complexity
+		p.PlaybookComplexity = &c
+	}
 
 	switch v.GetCommon().ObjectType {
-	// case "parallel":
-	// 	p.PlaybookComplexity.ParallelProcessing = true
+	case "parallel":
+		p.PlaybookComplexity.ParallelProcessing = true
 	case "if-condition":
 		p.PlaybookComplexity.IfLogic = true
-	case "switch-condition":
-		p.PlaybookComplexity.SwitchLogic = true
 	case "while-condition":
 		p.PlaybookComplexity.WhileLogic = true
+	case "switch-condition":
+		p.PlaybookComplexity.SwitchLogic = true
+
 	}
 
 	return nil

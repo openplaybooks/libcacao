@@ -64,7 +64,7 @@ type Playbook struct {
 // Complexity - This type defines a list of playbook features
 type Complexity struct {
 	ManualPlaybook     bool `json:"manual_playbook,omitempty"`
-	ExternalPlaybooks  bool `json:"external_playbooks"`
+	ExternalPlaybooks  bool `json:"external_playbooks,omitempty"`
 	ParallelProcessing bool `json:"parallel_processing,omitempty"`
 	IfLogic            bool `json:"if_logic,omitempty"`
 	WhileLogic         bool `json:"while_logic,omitempty"`

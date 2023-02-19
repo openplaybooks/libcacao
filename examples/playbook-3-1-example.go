@@ -24,12 +24,6 @@ func main() {
 	p.Description = "This playbook will look for FuzzyPanda on the network and in a SIEM"
 	p.AddPlaybookTypes("investigation")
 	p.AddPlaybookActivities("analyze-collected-data,identify-indicators")
-	if p.PlaybookFeatures == nil {
-		var f playbook.Features
-		p.PlaybookFeatures = &f
-	}
-	p.PlaybookFeatures.IfLogic = true
-	p.PlaybookFeatures.DataMarkings = true
 	p.CreatedBy = "identity--5abe695c-7bd5-4c31-8824-2528696cdbf1"
 	p.ValidFrom = p.GetCurrentTime("milli")
 	p.ValidUntil = "2023-12-31T23:59:59.999Z"
@@ -83,6 +77,7 @@ func main() {
 	cmd1, _ := step1.NewCommand()
 	cmd1.SetManual()
 	cmd1.Command = "Look up IP __data_exfil_site__:value in SIEM"
+	cmd1.PlaybookActivity = "identify-indicators"
 
 	// Link all of the steps together
 	p.WorkflowStart = start.GetID()

@@ -11,24 +11,25 @@ package signature
 
 // Signature - This type defines the digital signature for a playbook object
 type Signature struct {
-	ObjectType     string   `json:"type,omitempty"`
-	ID             string   `json:"id,omitempty"`
-	CreatedBy      string   `json:"created_by,omitempty"`
-	Created        string   `json:"created,omitempty"`
-	Modified       string   `json:"modified,omitempty"`
-	Revoked        bool     `json:"revoked,omitempty"`
-	Signee         string   `json:"signee,omitempty"`
-	ValidFrom      string   `json:"valid_from,omitempty"`
-	ValidUntil     string   `json:"valid_until,omitempty"`
-	RelatedTo      string   `json:"related_to,omitempty"`
-	RelatedVersion string   `json:"related_version,omitempty"`
-	HashAlgorithm  string   `json:"hash_algorithm,omitempty"`
-	Hash           string   `json:"hash,omitempty"`
-	Algorithm      string   `json:"algorithm,omitempty"`
-	PublicKeys     []string `json:"public_keys,omitempty"`
-	CertURL        string   `json:"cert_url,omitempty"`
-	Thumbprint     string   `json:"thumbprint,omitempty"`
-	Value          string   `json:"value,omitempty"`
+	ObjectType      string     `json:"type,omitempty"`
+	ID              string     `json:"id,omitempty"`
+	CreatedBy       string     `json:"created_by,omitempty"`
+	Created         string     `json:"created,omitempty"`
+	Modified        string     `json:"modified,omitempty"`
+	Revoked         bool       `json:"revoked,omitempty"`
+	Signee          string     `json:"signee,omitempty"`
+	ValidFrom       string     `json:"valid_from,omitempty"`
+	ValidUntil      string     `json:"valid_until,omitempty"`
+	RelatedTo       string     `json:"related_to,omitempty"`
+	RelatedVersion  string     `json:"related_version,omitempty"`
+	HashAlgorithm   string     `json:"hash_algorithm,omitempty"`
+	Algorithm       string     `json:"algorithm,omitempty"`
+	PublicKey       string     `json:"public_key,omitempty"`
+	PublicCertChain []string   `json:"public_cert_chain,omitempty"`
+	CertURL         string     `json:"cert_url,omitempty"`
+	Thumbprint      string     `json:"thumbprint,omitempty"`
+	Value           string     `json:"value,omitempty"`
+	Signature       *Signature `json:"signature,omitempty"`
 }
 
 // ----------------------------------------------------------------------
@@ -40,7 +41,7 @@ type Signature struct {
 // properties.
 func New() *Signature {
 	s := new(Signature)
-	s.ObjectType = "signature"
+	s.ObjectType = "jss"
 	s.SetNewID(s.ObjectType)
 	s.Created = s.GetCurrentTime("milli")
 	s.Modified = s.Created
