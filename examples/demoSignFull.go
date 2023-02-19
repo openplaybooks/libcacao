@@ -11,6 +11,7 @@ import (
 	"crypto/x509"
 	"encoding/base64"
 	"encoding/hex"
+	"encoding/json"
 	"encoding/pem"
 	"fmt"
 	"log"
@@ -64,30 +65,28 @@ fD1JKiHl7MECYEMyBz31PsRCuw==
 	// This is minimal demo playbook used at the start of this example
 	// ---------------------------------------------------------------------
 	// 	playbookData := `{
-	//	 "type": "playbook",
-	//   "spec_version": "1.1",
+	//   "type": "playbook",
+	//   "spec_version": "2.0",
 	//   "id": "playbook--a0777575-5c4c-4710-9f01-15776103837f",
 	//   "name": "Playbook 1",
+	//   "created_by": "identity--5abe695c-7bd5-4c31-8824-2528696cdbf1",
 	//   "created": "2022-05-18T11:31:31.319Z",
 	//   "modified": "2022-05-18T11:31:31.319Z",
 	//   "signatures": [
 	//     {
-	//       "type": "signature",
-	//       "id": "signature--af4b4bf3-677a-411d-887a-1f6fa5090c05",
+	//       "type": "jss",
+	//       "id": "jss--af4b4bf3-677a-411d-887a-1f6fa5090c05",
 	//       "created_by": "identity--be59c641-b2d5-4930-94fc-6fd583524fc6",
-	//       "created": "2022-05-18T11:31:31.319Z",
-	//       "modified": "2022-05-18T11:31:31.319Z",
+	//       "created": "2023-02-02T14:31:31.319Z",
+	//       "modified": "2023-02-02T14:31:31.319Z",
 	//       "signee": "Existing Example Company",
-	//       "valid_from": "2022-05-18T11:31:31.319Z",
-	//       "valid_until": "2022-06-18T11:31:31.319Z",
+	//       "valid_from": "2023-02-02T14:31:31.319Z",
+	//       "valid_until": "2023-06-18T11:31:31.319Z",
 	//       "related_to": "playbook--a0777575-5c4c-4710-9f01-15776103837f",
 	//       "related_version": "2022-05-18T11:31:31.319Z",
 	//       "hash_algorithm": "sha-256",
-	//       "hash": "9fce384a3c8e2eb172604aa174824fdd9c5a9e997c41f1f2b8e5f1d18adbf67e",
 	//       "algorithm": "RS256",
-	//       "public_keys": [
-	//         "some public key"
-	//       ],
+	//       "public_key": "some public key",
 	//       "value": "some signature"
 	//     }
 	//   ]
@@ -116,7 +115,7 @@ fD1JKiHl7MECYEMyBz31PsRCuw==
 	// ---------------------------------------------------------------------
 	p := playbook.New()
 	// Manually overwrite the values so I get consistent results each time
-	p.SpecVersion = "1.1"
+	p.SpecVersion = "2.0"
 	p.ID = "playbook--a0777575-5c4c-4710-9f01-15776103837f"
 	p.CreatedBy = "identity--5abe695c-7bd5-4c31-8824-2528696cdbf1"
 	p.Created = "2022-05-18T11:31:31.319Z"
@@ -125,30 +124,28 @@ fD1JKiHl7MECYEMyBz31PsRCuw==
 
 	// Create dummy signature so we can show that you need to remove it
 	var sigExisting signature.Signature
-	sigExisting.ObjectType = "signature"
-	sigExisting.ID = "signature--af4b4bf3-677a-411d-887a-1f6fa5090c05"
+	sigExisting.ObjectType = "jss"
+	sigExisting.ID = "jss--af4b4bf3-677a-411d-887a-1f6fa5090c05"
 	sigExisting.CreatedBy = "identity--be59c641-b2d5-4930-94fc-6fd583524fc6"
-	sigExisting.Created = "2022-05-18T11:31:31.319Z"
+	sigExisting.Created = "2023-02-02T14:31:31.319Z"
 	sigExisting.Modified = sigExisting.Created
 	sigExisting.Signee = "Existing Example Company"
 	sigExisting.ValidFrom = sigExisting.Created
-	sigExisting.ValidUntil = "2022-06-18T11:31:31.319Z"
+	sigExisting.ValidUntil = "2023-06-18T11:31:31.319Z"
 	sigExisting.RelatedTo = p.ID
 	sigExisting.RelatedVersion = p.Modified
 	sigExisting.HashAlgorithm = "sha-256"
-	// This should be the same as the next signature object, because the playbook has not changed
-	sigExisting.Hash = "9fce384a3c8e2eb172604aa174824fdd9c5a9e997c41f1f2b8e5f1d18adbf67e"
 	sigExisting.Algorithm = "RS256"
-	sigExisting.PublicKeys = append(sigExisting.PublicKeys, "some public key")
+	sigExisting.PublicKey = "some public key"
 	sigExisting.Value = "some signature"
 	p.Signatures = append(p.Signatures, sigExisting)
 
 	// ---------------------------------------------------------------------
-	// Demo new signature object used in step 2
+	// Demo new signature object used in step 3
 	// ---------------------------------------------------------------------
 	var s signature.Signature
-	s.ObjectType = "signature"
-	s.ID = "signature--af892292-c4b4-47eb-9be6-4897ff4b9388"
+	s.ObjectType = "jss"
+	s.ID = "jss--af892292-c4b4-47eb-9be6-4897ff4b9388"
 	s.CreatedBy = "identity--5abe695c-7bd5-4c31-8824-2528696cdbf1"
 	s.Created = "2023-01-10T17:39:31.319Z"
 	s.Modified = s.Created
@@ -159,13 +156,13 @@ fD1JKiHl7MECYEMyBz31PsRCuw==
 	s.RelatedVersion = p.Modified
 	s.HashAlgorithm = "sha-256"
 	s.Algorithm = "RS256"
-	s.PublicKeys = append(s.PublicKeys, base64.RawStdEncoding.EncodeToString(publicKeyDer))
+	s.PublicKey = base64.RawStdEncoding.EncodeToString(publicKeyDer)
 
 	// ---------------------------------------------------------------------
 	// Step 1
 	// ---------------------------------------------------------------------
 	fmt.Println("\n------------------------------------------------------------------------------------------------------------")
-	fmt.Println("Step 1: Create or receive a JSON playbook object to sign")
+	fmt.Println("Step 1: Create or parse a JSON playbook object to sign")
 	fmt.Println("------------------------------------------------------------------------------------------------------------")
 	// Convert playbook object to a JSON byte[]
 	rawPlaybookData, _ := p.Encode()
@@ -175,7 +172,7 @@ fD1JKiHl7MECYEMyBz31PsRCuw==
 	// Step 2
 	// ---------------------------------------------------------------------
 	fmt.Println("\n------------------------------------------------------------------------------------------------------------")
-	fmt.Println("Step 2: Remove any existing signature objects contained in the playbook's signatures property before computing the hash")
+	fmt.Println("Step 2: Temporarily remove any existing signature objects contained in the playbook's signatures property")
 	fmt.Println("------------------------------------------------------------------------------------------------------------")
 	savedSignatures := p.Signatures
 	p.Signatures = nil
@@ -186,16 +183,26 @@ fD1JKiHl7MECYEMyBz31PsRCuw==
 	// Step 3
 	// ---------------------------------------------------------------------
 	fmt.Println("\n------------------------------------------------------------------------------------------------------------")
-	fmt.Println("Step 3: Create a JCS [RFC8785] canonical version of the playbook from step 2")
+	fmt.Println("Step 3: Create and add signature to playbook")
 	fmt.Println("------------------------------------------------------------------------------------------------------------")
-	jcsPlayBookData, _ := jcs.Transform(jsonPlaybookData)
-	fmt.Println(string(jcsPlayBookData))
+	p.Signatures = append(p.Signatures, s)
+	jsonWithSigData, _ := p.Encode()
+	fmt.Println(string(jsonWithSigData))
 
 	// ---------------------------------------------------------------------
 	// Step 4
 	// ---------------------------------------------------------------------
 	fmt.Println("\n------------------------------------------------------------------------------------------------------------")
-	fmt.Println("Step 4: Create a hash (SHA256 in hex) of the canonical version of playbook from step 3")
+	fmt.Println("Step 4: Create a JCS [RFC8785] canonical version of the playbook from step 3")
+	fmt.Println("------------------------------------------------------------------------------------------------------------")
+	jcsPlayBookData, _ := jcs.Transform(jsonWithSigData)
+	fmt.Println(string(jcsPlayBookData))
+
+	// ---------------------------------------------------------------------
+	// Step 5
+	// ---------------------------------------------------------------------
+	fmt.Println("\n------------------------------------------------------------------------------------------------------------")
+	fmt.Println("Step 5: Create a hash (SHA256 in hex) of the canonical version of playbook from step 4")
 	fmt.Println("------------------------------------------------------------------------------------------------------------")
 	hashhexjcsPlaybookData := sha256.Sum256(jcsPlayBookData)
 	// fmt.Println(fmt.Sprintf("%x", hashjcsPlaybookData[:]))
@@ -213,24 +220,34 @@ fD1JKiHl7MECYEMyBz31PsRCuw==
 	// fmt.Println(b64hashjcsPlaybookData)
 
 	// ---------------------------------------------------------------------
-	// Step 5
-	// ---------------------------------------------------------------------
-	fmt.Println("\n------------------------------------------------------------------------------------------------------------")
-	fmt.Println("Step 5: Create a signature object and set the hash property to the string value of the hash of the playbook from step 4")
-	fmt.Println("------------------------------------------------------------------------------------------------------------")
-	// Signature was created up above
-	s.Hash = hashjcsPlaybookData
-	jsonSigData, _ := s.Encode()
-	fmt.Println(string(jsonSigData))
-
-	// ---------------------------------------------------------------------
 	// Step 6
 	// ---------------------------------------------------------------------
 	fmt.Println("\n------------------------------------------------------------------------------------------------------------")
-	fmt.Println("Step 6: Create a JCS canonical version of signature object from step 5")
+	fmt.Println("Step 6: Sign the hash from step 5 using the algorithm defined in the signature object and base64URL.encode it (RS256)")
 	fmt.Println("------------------------------------------------------------------------------------------------------------")
-	jcsSigData, _ := jcs.Transform(jsonSigData)
-	fmt.Println(string(jcsSigData))
+
+	method := jwt.SigningMethodRS256
+	sigData, err := method.Sign(string(hashjcsPlaybookData), privateKey)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("Signature: ", sigData)
+
+	// ---------------------------------------------------------------------
+	// Step 7
+	// ---------------------------------------------------------------------
+	fmt.Println("\n------------------------------------------------------------------------------------------------------------")
+	fmt.Println("Step 7: Add the new digital signature from step 6 to the signature value property (with existing signatures, if any)")
+	fmt.Println("------------------------------------------------------------------------------------------------------------")
+	s.Value = sigData
+	// Clear out the signature for a second
+	p.Signatures = nil
+	// Add original signatures back to the playbook
+	p.Signatures = append(p.Signatures, savedSignatures...)
+	// Add the new signature
+	p.Signatures = append(p.Signatures, s)
+	finaldata, _ := json.MarshalIndent(p, "", "  ")
+	fmt.Println(string(finaldata))
 
 	// // ---------------------------------------------------------------------
 	// // Step 2.2
@@ -240,32 +257,5 @@ fD1JKiHl7MECYEMyBz31PsRCuw==
 	// fmt.Println("------------------------------------------------------------------------------------------------------------")
 	// b64jcsSigData := base64.RawURLEncoding.EncodeToString([]byte(jcsSigData))
 	// fmt.Println(b64jcsSigData)
-
-	// ---------------------------------------------------------------------
-	// Step 7
-	// ---------------------------------------------------------------------
-	fmt.Println("\n------------------------------------------------------------------------------------------------------------")
-	fmt.Println("Step 7: Sign the data from step 6 using the algorithm (RS256) defined in the signature object and base64URL.encode it")
-	fmt.Println("------------------------------------------------------------------------------------------------------------")
-	method := jwt.SigningMethodRS256
-	sigData, err := method.Sign(string(jcsSigData), privateKey)
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println("Signature: ", sigData)
-
-	// ---------------------------------------------------------------------
-	// Step 8
-	// ---------------------------------------------------------------------
-	fmt.Println("\n------------------------------------------------------------------------------------------------------------")
-	fmt.Println("Step 8: Append the new b64 digital signature from step 7 to the signatures property (with existing signatures, if any) of the playbook")
-	fmt.Println("------------------------------------------------------------------------------------------------------------")
-	s.Value = sigData
-	// Add original signatures back to the playbook
-	p.Signatures = append(p.Signatures, savedSignatures...)
-	// Add the new signature
-	p.Signatures = append(p.Signatures, s)
-	pbfinaldata, _ := p.Encode()
-	fmt.Println(string(pbfinaldata))
 
 }

@@ -66,7 +66,7 @@ func main() {
 	rawPlaybookData := []byte(`
 {
   "type": "playbook",
-  "spec_version": "1.1",
+  "spec_version": "2.0",
   "id": "playbook--a0777575-5c4c-4710-9f01-15776103837f",
   "name": "Playbook 1",
   "created_by": "identity--5abe695c-7bd5-4c31-8824-2528696cdbf1",
@@ -74,8 +74,8 @@ func main() {
   "modified": "2022-05-18T11:31:31.319Z",
   "signatures": [
     {
-      "type": "signature",
-      "id": "signature--af892292-c4b4-47eb-9be6-4897ff4b9388",
+      "type": "jss",
+      "id": "jss--af892292-c4b4-47eb-9be6-4897ff4b9388",
       "created_by": "identity--5abe695c-7bd5-4c31-8824-2528696cdbf1",
       "created": "2023-01-10T17:39:31.319Z",
       "modified": "2023-01-10T17:39:31.319Z",
@@ -85,12 +85,9 @@ func main() {
       "related_to": "playbook--a0777575-5c4c-4710-9f01-15776103837f",
       "related_version": "2022-05-18T11:31:31.319Z",
       "hash_algorithm": "sha-256",
-      "hash": "87d08c8aae2e292c174dbe7daf5814e77d930de57a2cb2e66fb36a8a45617c18",
       "algorithm": "RS256",
-      "public_keys": [
-        "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAptKZyFPStvmOlb0WihOBhlHUr6wFDHC+tW7hJAudfTQ5mHZQpB8PoMz07udZA+dG8dhUIPkmXlp1TgREeYTHdhxhuf0y/GhbpZv5JPYHx3watO+HWO2qYkjRMEcrWhPMdaVkS/Xe/liaMcow4jYoWaFm8VobeYsyVD2bWWdyl4joTEETm1Z47RnnfR15kVhVudVrDzEFmM4nXV/6dmIg184RJE4httwBFxR8qZCQCwTiJmsoyJxfUR0Gs4ePKc5sB0NTkmFZc5klQSitd67RJn2ldhbqE7EpDl4XlIt+UyLJm1guCBltia8Agke7dXuhpB7hQ6LJwY4EjzthkJ8IPwIDAQAB"
-      ],
-      "value": "UoUzOLnrIiBNzti1VyKGS1vpmEGlUrJJghxfh7T8FnlOn2wzm7hySVAn46X5ifRuMXOxKX8cwsMyPirv-nU_rRc_u39NXKDWdPV4SrYcwLaZevTw16IaBqBZUtw5rNXIyxe-9AvSJHoNPkxlprGpQ0Qk3lyoZ9AIgW-_rb9bTrJxDXpiIl-WFH6yUK-9HTN4yHOZPf8UpzMkd8TcZAHg9umKNK6wypxr9p201jLPPu-jDBC1Zs5d0oBeP4pnGUBd5UVDwCfqZUKiUuigcR8PV54nfjE_UvXNmiIC1VWA9sds9_D9JP4pkHexCvFBwPQSTtVz0S3suOEBy0_HvJDDhw"
+      "public_key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAptKZyFPStvmOlb0WihOBhlHUr6wFDHC+tW7hJAudfTQ5mHZQpB8PoMz07udZA+dG8dhUIPkmXlp1TgREeYTHdhxhuf0y/GhbpZv5JPYHx3watO+HWO2qYkjRMEcrWhPMdaVkS/Xe/liaMcow4jYoWaFm8VobeYsyVD2bWWdyl4joTEETm1Z47RnnfR15kVhVudVrDzEFmM4nXV/6dmIg184RJE4httwBFxR8qZCQCwTiJmsoyJxfUR0Gs4ePKc5sB0NTkmFZc5klQSitd67RJn2ldhbqE7EpDl4XlIt+UyLJm1guCBltia8Agke7dXuhpB7hQ6LJwY4EjzthkJ8IPwIDAQAB",
+      "value": "hhezAh4ncNfLYZj4t85pR_cWBIGv3JoFSLY0a5kxzC53e5QLfBG1EQHC3CELnuL8zJLz9NGd9I_3XebpLrcehYbUPwv9wzvx0IwHXlZIPVTEmTvPJ6635rOuPMF6M42bRK2V7P8vEU3CWXme_u2rBKEEGAwSTx8u4yxZTpU5mQbBMZemuic6dzpGXoynhuFP8Y-fZXVIafWGBO0-9FWfjq8qJY0CjVuoUz-3Vnm1p9k_GiVCiBa0oPMXOEXCvlyyfPlGXpGFEXnkkSb_LfmbPEEdeSUlu9ak_aPF69l8hg-M7ceQJXOLNapmX6t6u5kQCdYFO4KWE14zodL45z6IEg"
     }
   ]
 }
@@ -100,7 +97,7 @@ func main() {
 	// Step 1
 	// ---------------------------------------------------------------------
 	fmt.Println("\n------------------------------------------------------------------------------------------------------------")
-	fmt.Println("Step 1: Receive a JSON playbook object to verify")
+	fmt.Println("Step 1: Receive and parse the JSON playbook object to verify")
 	fmt.Println("------------------------------------------------------------------------------------------------------------")
 	p, _ := playbook.Decode(rawPlaybookData)
 	fmt.Println(string(rawPlaybookData))
@@ -109,21 +106,23 @@ func main() {
 	// Step 2
 	// ---------------------------------------------------------------------
 	fmt.Println("\n------------------------------------------------------------------------------------------------------------")
-	fmt.Println("Step 2: Capture the signature object from step 1")
+	fmt.Println("Step 2: Capture and remove the digital signature from step 1")
 	fmt.Println("------------------------------------------------------------------------------------------------------------")
-	s := p.Signatures[0]
+	ds := p.Signatures[0].Value
+	fmt.Println("DS: ", ds)
+	p.Signatures[0].Value = ""
 	// Since it was Decoded/Unmarshalled in Step 1 we need to encode/remarshal it here to print it out
-	jsonSigDataWithSig, _ := s.Encode()
-	fmt.Println(string(jsonSigDataWithSig))
+	jsonSigDataWithoutSig, _ := p.Encode()
+	fmt.Println(string(jsonSigDataWithoutSig))
 
 	// ---------------------------------------------------------------------
 	// Step 3
 	// ---------------------------------------------------------------------
 	fmt.Println("\n------------------------------------------------------------------------------------------------------------")
-	fmt.Println("Step 3: Parse the public key from step 2")
+	fmt.Println("Step 3: Parse or fetch the public key from step 2")
 	fmt.Println("------------------------------------------------------------------------------------------------------------")
 	// Parse the public key
-	publicKeyDer, err := base64.RawStdEncoding.DecodeString(s.PublicKeys[0])
+	publicKeyDer, err := base64.RawStdEncoding.DecodeString(p.Signatures[0].PublicKey)
 	if err != nil {
 		panic("failed to decode public key: " + err.Error())
 	}
@@ -156,24 +155,21 @@ func main() {
 	// Step 4
 	// ---------------------------------------------------------------------
 	fmt.Println("\n------------------------------------------------------------------------------------------------------------")
-	fmt.Println("Step 4: Remove the digital signature from the signature object from step 2")
+	fmt.Println("Step 4: Create canonical version of signature object from step 2")
 	fmt.Println("------------------------------------------------------------------------------------------------------------")
-	sigReceived := s.Value
-	// Zero out the signature value so we can recompute the signature for verification
-	s.Value = ""
-	// Now that the value has been removed remarshal it so we can print it out
-	jsonSigData, _ := s.Encode()
-	fmt.Println(string(jsonSigData))
-	fmt.Println("\nFull Signature: ", sigReceived)
+	jcsData, _ := jcs.Transform(jsonSigDataWithoutSig)
+	fmt.Println(string(jcsData))
 
 	// ---------------------------------------------------------------------
 	// Step 5
 	// ---------------------------------------------------------------------
 	fmt.Println("\n------------------------------------------------------------------------------------------------------------")
-	fmt.Println("Step 5: Create canonical version of signature object from step 5")
+	fmt.Println("Step 5: Create a hash (SHA256 in hex) of the canonical version of playbook from step 4")
 	fmt.Println("------------------------------------------------------------------------------------------------------------")
-	jcsSigData, _ := jcs.Transform(jsonSigData)
-	fmt.Println(string(jcsSigData))
+	temp1 := sha256.Sum256(jcsData)
+	// fmt.Println(fmt.Sprintf("%x", hashjcsPlaybookData[:]))
+	hashjcsPlaybookData := hex.EncodeToString(temp1[:])
+	fmt.Println(hashjcsPlaybookData)
 
 	// // ---------------------------------------------------------------------
 	// // Step 1.5
@@ -191,66 +187,11 @@ func main() {
 	fmt.Println("Step 6: Verify the signature received using the public key and algorithm (RS256) from the signature object")
 	fmt.Println("------------------------------------------------------------------------------------------------------------")
 	method := jwt.SigningMethodRS256
-	err = method.Verify(string(jcsSigData), sigReceived, publicKey)
+	err = method.Verify(hashjcsPlaybookData, ds, publicKey)
 	if err != nil {
 		panic(err)
 	} else {
 		fmt.Println("Signature is valid")
-	}
-
-	// ---------------------------------------------------------------------
-	// Step 7
-	// ---------------------------------------------------------------------
-	fmt.Println("\n------------------------------------------------------------------------------------------------------------")
-	fmt.Println("Step 7: Remove existing signatures before computing hash")
-	fmt.Println("------------------------------------------------------------------------------------------------------------")
-	p.Signatures = nil
-	// Now that the value has been removed remarshal it so we can print it out and use it as input to JCS that needs a []byte
-	jsonPlaybookData, _ := p.Encode()
-	fmt.Println(string(jsonPlaybookData))
-
-	// ---------------------------------------------------------------------
-	// Step 8
-	// ---------------------------------------------------------------------
-	fmt.Println("\n------------------------------------------------------------------------------------------------------------")
-	fmt.Println("Step 8: Create a JCS canonical version of the playbook from step 7")
-	fmt.Println("------------------------------------------------------------------------------------------------------------")
-	jcsPlayBookData, _ := jcs.Transform(jsonPlaybookData)
-	fmt.Println(string(jcsPlayBookData))
-
-	// ---------------------------------------------------------------------
-	// Step 9
-	// ---------------------------------------------------------------------
-	fmt.Println("\n------------------------------------------------------------------------------------------------------------")
-	fmt.Println("Step 9: Create a hash (SHA256 in hex) of the canonical version of the playbook from step 8")
-	fmt.Println("------------------------------------------------------------------------------------------------------------")
-	hashhexjcsPlaybookData := sha256.Sum256(jcsPlayBookData)
-	//fmt.Println(fmt.Sprintf("%x", hashjcsPlaybookData[:]))
-	hashjcsPlaybookData := hex.EncodeToString(hashhexjcsPlaybookData[:])
-	fmt.Println(hashjcsPlaybookData)
-
-	// // ---------------------------------------------------------------------
-	// // Step 3.4
-	// // ---------------------------------------------------------------------
-	// fmt.Println("\n------------------------------------------------------------------------------------------------------------")
-	// fmt.Println("Step 3.4: Create base64URL.encoded version of the SHA256 hash from step 1.3 and remove any padding")
-	// fmt.Println("------------------------------------------------------------------------------------------------------------")
-	// // Remove base64 padding characters "=" per RFC 7515 section 2 - Base64url Encoding
-	// b64hashjcsPlaybookData := base64.RawURLEncoding.EncodeToString(hashjcsPlaybookData[:])
-	// fmt.Println(b64hashjcsPlaybookData)
-
-	// ---------------------------------------------------------------------
-	// Step 10
-	// ---------------------------------------------------------------------
-	fmt.Println("\n------------------------------------------------------------------------------------------------------------")
-	fmt.Println("Step 10: Compare computed hash with the hash found in the signed signature")
-	fmt.Println("------------------------------------------------------------------------------------------------------------")
-	fmt.Println("Computed Hash: ", hashjcsPlaybookData)
-	fmt.Println("Signed Hash:   ", s.Hash)
-	if hashjcsPlaybookData == s.Hash {
-		fmt.Println("Hashes match and content is valid")
-	} else {
-		fmt.Println("Hashes do not match and content is not valid")
 	}
 
 }
