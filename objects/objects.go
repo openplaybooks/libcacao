@@ -1,4 +1,4 @@
-// Copyright 2021 Bret Jordan, All rights reserved.
+// Copyright 2023 Bret Jordan, All rights reserved.
 //
 // Use of this source code is governed by an Apache 2.0 license that can be
 // found in the LICENSE file in the root of the source tree.
@@ -108,7 +108,7 @@ func IsTimestampValid(t string) bool {
 }
 
 // AddValuesToList - This function will add a single value, a comma separated
-// list of values, or a slice of values to an slice.
+// list of values, or a slice of values to a slice.
 func AddValuesToList(list *[]string, values interface{}) error {
 
 	switch values.(type) {

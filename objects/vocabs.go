@@ -1,4 +1,4 @@
-// Copyright 2021 Bret Jordan, All rights reserved.
+// Copyright 2023 Bret Jordan, All rights reserved.
 //
 // Use of this source code is governed by an Apache 2.0 license that can be
 // found in the LICENSE file in the root of the source tree.
@@ -29,6 +29,63 @@ func IsPlaybookTypeValid(s string) bool {
 	playbookTypes := GetPlaybookTypesVocab()
 
 	if _, found := playbookTypes[s]; found == true {
+		return true
+	}
+	return false
+}
+
+// GetWorkflowStepTypesVocab - This function will return a map of the workflow step types
+func GetWorkflowStepTypesVocab() map[string]bool {
+	workflowStepTypesVocab := map[string]bool{
+		"start":            true,
+		"end":              true,
+		"action":           true,
+		"playbook-action":  true,
+		"parallel":         true,
+		"if-condition":     true,
+		"while-condition":  true,
+		"switch-condition": true,
+	}
+	return workflowStepTypesVocab
+}
+
+// IsWorkflowStepTypeValid - This function will take in a string representing a
+// workflow step and return true or false if it is an officially supported
+// step.
+func IsWorkflowStepTypeValid(s string) bool {
+	workflowStepTypes := GetWorkflowStepTypesVocab()
+
+	if _, found := workflowStepTypes[s]; found == true {
+		return true
+	}
+	return false
+}
+
+// GetCommandDataTypesVocab - This funtion will return a list of command data types
+func GetCommandDataTypesVocab() map[string]bool {
+	commandDataTypesVocab := map[string]bool{
+		"manual":      true,
+		"bash":        true,
+		"http-api":    true,
+		"ssh":         true,
+		"caldera-cmd": true,
+		"elastic":     true,
+		"jupyter":     true,
+		"kestrel":     true,
+		"openc2-json": true,
+		"sigma":       true,
+		"yara":        true,
+	}
+	return commandDataTypesVocab
+}
+
+// IsCommandDataTypeValid - This function will take in a string representing a
+// command type and return true or false if it is an officially supported
+// command.
+func IsCommandDataTypeValid(s string) bool {
+	workflowStepTypes := GetCommandDataTypesVocab()
+
+	if _, found := workflowStepTypes[s]; found == true {
 		return true
 	}
 	return false
