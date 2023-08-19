@@ -2,12 +2,12 @@
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/openplaybooks/libcacao)](https://goreportcard.com/report/github.com/openplaybooks/libcacao) [![GoDoc](https://godoc.org/github.com/openplaybooks/libcacao?status.png)](https://godoc.org/github.com/openplaybooks/libcacao)
 
-libcacao is an API for generating JSON based cyber security playbooks
+libcacao is an library for generating JSON based cyber security playbooks
 (CACAO playbooks) with the Go (Golang) programming language. Please see the
-examples directory. This API is built to support CACAO 1.0. 
+examples directory. This library is built to support CACAO 2.0. 
 
 ## Version 
-0.1.0
+0.2.0
 
 ## Installation
 
@@ -26,4 +26,4 @@ a summary.
 
 ## Copyright
 
-Copyright 2021 Bret Jordan, All rights reserved.
+Copyright 2023 Bret Jordan, All rights reserved.
