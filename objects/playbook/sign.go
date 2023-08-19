@@ -22,7 +22,7 @@ import (
 func (p *Playbook) Sign(method string, key interface{}, sig *signature.Signature) error {
 	var err error
 
-	if !objects.IsVocabValueValid(method, objects.GetSigningMethodsVocab()) {
+	if !objects.IsVocabValueValid(method, signature.GetSigningMethodsVocab()) {
 		return fmt.Errorf("the signing method %s is not valid", method)
 	}
 

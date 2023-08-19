@@ -66,7 +66,7 @@ fD1JKiHl7MECYEMyBz31PsRCuw==
 	// ---------------------------------------------------------------------
 	// 	playbookData := `{
 	//   "type": "playbook",
-	//   "spec_version": "2.0",
+	//   "spec_version": "cacao-2.0",
 	//   "id": "playbook--a0777575-5c4c-4710-9f01-15776103837f",
 	//   "name": "Playbook 1",
 	//   "created_by": "identity--5abe695c-7bd5-4c31-8824-2528696cdbf1",
@@ -115,7 +115,7 @@ fD1JKiHl7MECYEMyBz31PsRCuw==
 	// ---------------------------------------------------------------------
 	p := playbook.New()
 	// Manually overwrite the values so I get consistent results each time
-	p.SpecVersion = "2.0"
+	p.SpecVersion = "cacao-2.0"
 	p.ID = "playbook--a0777575-5c4c-4710-9f01-15776103837f"
 	p.CreatedBy = "identity--5abe695c-7bd5-4c31-8824-2528696cdbf1"
 	p.Created = "2022-05-18T11:31:31.319Z"
