@@ -66,7 +66,7 @@ func main() {
 	rawPlaybookData := []byte(`
 {
   "type": "playbook",
-  "spec_version": "2.0",
+  "spec_version": "cacao-2.0",
   "id": "playbook--a0777575-5c4c-4710-9f01-15776103837f",
   "name": "Playbook 1",
   "created_by": "identity--5abe695c-7bd5-4c31-8824-2528696cdbf1",
@@ -87,7 +87,7 @@ func main() {
       "hash_algorithm": "sha-256",
       "algorithm": "RS256",
       "public_key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAptKZyFPStvmOlb0WihOBhlHUr6wFDHC+tW7hJAudfTQ5mHZQpB8PoMz07udZA+dG8dhUIPkmXlp1TgREeYTHdhxhuf0y/GhbpZv5JPYHx3watO+HWO2qYkjRMEcrWhPMdaVkS/Xe/liaMcow4jYoWaFm8VobeYsyVD2bWWdyl4joTEETm1Z47RnnfR15kVhVudVrDzEFmM4nXV/6dmIg184RJE4httwBFxR8qZCQCwTiJmsoyJxfUR0Gs4ePKc5sB0NTkmFZc5klQSitd67RJn2ldhbqE7EpDl4XlIt+UyLJm1guCBltia8Agke7dXuhpB7hQ6LJwY4EjzthkJ8IPwIDAQAB",
-      "value": "hhezAh4ncNfLYZj4t85pR_cWBIGv3JoFSLY0a5kxzC53e5QLfBG1EQHC3CELnuL8zJLz9NGd9I_3XebpLrcehYbUPwv9wzvx0IwHXlZIPVTEmTvPJ6635rOuPMF6M42bRK2V7P8vEU3CWXme_u2rBKEEGAwSTx8u4yxZTpU5mQbBMZemuic6dzpGXoynhuFP8Y-fZXVIafWGBO0-9FWfjq8qJY0CjVuoUz-3Vnm1p9k_GiVCiBa0oPMXOEXCvlyyfPlGXpGFEXnkkSb_LfmbPEEdeSUlu9ak_aPF69l8hg-M7ceQJXOLNapmX6t6u5kQCdYFO4KWE14zodL45z6IEg"
+      "value": "gXyPW--uUKvGXRh_oDC7IYlx13hGmkiQw6XX3YX_V_i4Y39OPilf0q0qf46aO3IrvG-5_fgeQ3dIunmizYneaVJKjsXo-gkJczvGDehlTjS7MBUIGyD9DRd41DnaxWWwzU-T4sZCur664_3J0C-WRCDgZxiB_ItFpeSnPJ8rR8GRFO6M9YS-ejEGJl-sd_hfZUqjZOE_S_UWp_Fd9QYlP2cWDvGH8vFhx2ek9KovEob5Bh2LX_Gaf7t237B34wKeN4B8aqapyTh3Q8v_Z61bDTNLyi6ZA8zcrUOgCVLVMx_EFizx31WIDZrePsSpX4bfRurcvRyvNNVdWLaS96JYog"
     }
   ]
 }
