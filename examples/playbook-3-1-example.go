@@ -17,12 +17,15 @@ import (
 func main() {
 	p := playbook.New()
 
+	p.ID = "playbook--61a6c41e-6efc-4516-a242-dfbc5c89d562"
 	p.Name = "Find Malware FuzzyPanda"
 	p.Description = "This playbook will look for FuzzyPanda on the network and in a SIEM"
 	p.AddPlaybookTypes("investigation")
 	p.AddPlaybookActivities("analyze-collected-data,identify-indicators")
 	p.CreatedBy = "identity--5abe695c-7bd5-4c31-8824-2528696cdbf1"
-	p.ValidFrom = p.GetCurrentTime("milli")
+	p.Created = "2023-02-19T08:00:24.918Z"
+	p.Modified = "2023-02-19T08:00:24.918Z"
+	p.ValidFrom = "2023-02-19T08:00:24.918Z"
 	p.ValidUntil = "2023-12-31T23:59:59.999Z"
 	p.AddDerivedFrom("playbook--00ee41a2-c2ca-41da-8ea9-681344eb3926")
 	p.Priority = 3
@@ -43,8 +46,10 @@ func main() {
 	// Create a statement marking and TLP marking for this playbook
 	//
 	m1 := markings.NewStatementMarking()
+	m1.ID = "marking-statement--6424867b-0440-4885-bd0b-604d51786d06"
 	m1.Statement = "Copyright 2023 ACME Security Company"
 	m1.CreatedBy = "identity--5abe695c-7bd5-4c31-8824-2528696cdbf1"
+	m1.Created = "2023-02-19T08:00:24.918Z"
 	m2 := markings.NewTLPGreenMarking()
 	p.AddMarkings([]string{m1.GetID(), m2.GetID()})
 	p.AddMarkingDefinition(m1)
@@ -63,11 +68,14 @@ func main() {
 	// Create workflow steps for this playbook
 	//
 	start, _ := workflow.NewStartStep()
+	start.ID = "start--07bea005-4a36-4a77-bd1f-79a6e4682a13"
 	start.Name = "Start Playbook Example 1"
 	end, _ := workflow.NewEndStep()
+	end.ID = "end--6b23c237-ade8-4d00-9aa1-75999738d557"
 	end.Name = "End Playbook Example 1"
 
 	step1, _ := workflow.NewActionStep()
+	step1.ID = "action--7f40f9d7-de39-4027-ab97-15035beff2ff"
 	step1.Name = "IP Lookup"
 	step1.Description = "Lookup the IP address in the SIEM"
 	cmd1, _ := step1.NewCommand()
@@ -77,6 +85,7 @@ func main() {
 
 	// Link all of the steps together
 	p.WorkflowStart = start.GetID()
+	p.WorkflowException = " ... "
 	start.OnCompletion = step1.GetID()
 	step1.OnCompletion = end.GetID()
 

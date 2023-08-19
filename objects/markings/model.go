@@ -86,7 +86,7 @@ func NewTLPClearMarking() *MarkingTLP {
 	m.ID = "marking-tlp--94868c89-83c2-464b-929b-a1a8aa3c8487"
 	m.CreatedBy = "identity--5abe695c-7bd5-4c31-8824-2528696cdbf1"
 	m.Created = "2022-10-01T00:00:00.000Z"
-	m.TLPv2Level = "TLP-CLEAR"
+	m.TLPv2Level = "TLP:CLEAR"
 	return &m
 }
 
@@ -98,7 +98,7 @@ func NewTLPGreenMarking() *MarkingTLP {
 	m.ID = "marking-tlp--bab4a63c-aed9-4cf5-a766-dfca5abac2bb"
 	m.CreatedBy = "identity--5abe695c-7bd5-4c31-8824-2528696cdbf1"
 	m.Created = "2022-10-01T00:00:00.000Z"
-	m.TLPv2Level = "TLP-GREEN"
+	m.TLPv2Level = "TLP:GREEN"
 	return &m
 }
 
@@ -110,7 +110,7 @@ func NewTLPAmberMarking() *MarkingTLP {
 	m.ID = "marking-tlp--55d920b0-5e8b-4f79-9ee9-91f868d9b421"
 	m.CreatedBy = "identity--5abe695c-7bd5-4c31-8824-2528696cdbf1"
 	m.Created = "2022-10-01T00:00:00.000Z"
-	m.TLPv2Level = "TLP-AMBER"
+	m.TLPv2Level = "TLP:AMBER"
 	return &m
 }
 
@@ -122,7 +122,7 @@ func NewTLPAmberStrictMarking() *MarkingTLP {
 	m.ID = "marking-tlp--939a9414-2ddd-4d32-a0cd-375ea402b003"
 	m.CreatedBy = "identity--5abe695c-7bd5-4c31-8824-2528696cdbf1"
 	m.Created = "2022-10-01T00:00:00.000Z"
-	m.TLPv2Level = "TLP-AMBER+STRICT"
+	m.TLPv2Level = "TLP:AMBER+STRICT"
 	return &m
 }
 
@@ -134,7 +134,7 @@ func NewTLPRedMarking() *MarkingTLP {
 	m.ID = "marking-tlp--e828b379-4e03-4974-9ac4-e53a884c97c1"
 	m.CreatedBy = "identity--5abe695c-7bd5-4c31-8824-2528696cdbf1"
 	m.Created = "2022-10-01T00:00:00.000Z"
-	m.TLPv2Level = "TLP-RED"
+	m.TLPv2Level = "TLP:RED"
 	return &m
 }
 
