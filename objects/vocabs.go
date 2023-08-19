@@ -92,6 +92,8 @@ func GetVariableTypesVocab() []string {
 		"ipv6-addr",
 		"long",
 		"mac-addr",
+		"hash",
+		"md5-hash",
 		"sha256-hash",
 		"string",
 		"uri",

@@ -12,18 +12,6 @@ import (
 )
 
 // ----------------------------------------------------------------------
-// Define Object Model
-// ----------------------------------------------------------------------
-
-// StepObject - This interface defines a workflow step object. I needed to add
-// the ClearID() function to the interface to make sure I could call it on
-// an object that is defined as fullfilling this interface.
-type StepObject interface {
-	GetCommon() CommonProperties
-	ClearID()
-}
-
-// ----------------------------------------------------------------------
 // Define Functions and Methods
 // ----------------------------------------------------------------------
 

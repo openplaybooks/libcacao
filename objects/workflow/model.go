@@ -11,6 +11,14 @@ import "github.com/openplaybooks/libcacao/objects"
 // Define Object Model
 // ----------------------------------------------------------------------
 
+// StepObject - This interface defines a workflow step object. I needed to add
+// the ClearID() function to the interface to make sure I could call it on
+// an object that is defined as fullfilling this interface.
+type StepObject interface {
+	GetCommon() CommonProperties
+	ClearID()
+}
+
 // CommonProperties - Each workflow step contains some base properties that are
 // common across all steps. These common properties are defined in the following
 // table. The ID property here is just to help make processing easier, it will

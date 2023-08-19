@@ -9,12 +9,9 @@ import (
 	"fmt"
 
 	"github.com/openplaybooks/libcacao/objects"
-	"github.com/openplaybooks/libcacao/objects/markings/statement"
-	"github.com/openplaybooks/libcacao/objects/markings/tlp"
+	"github.com/openplaybooks/libcacao/objects/markings"
 	"github.com/openplaybooks/libcacao/objects/playbook"
-	"github.com/openplaybooks/libcacao/objects/workflow/action"
-	"github.com/openplaybooks/libcacao/objects/workflow/end"
-	"github.com/openplaybooks/libcacao/objects/workflow/start"
+	"github.com/openplaybooks/libcacao/objects/workflow"
 )
 
 func main() {
@@ -45,11 +42,10 @@ func main() {
 	//
 	// Create a statement marking and TLP marking for this playbook
 	//
-	m1 := statement.New()
+	m1 := markings.NewStatementMarking()
 	m1.Statement = "Copyright 2023 ACME Security Company"
 	m1.CreatedBy = "identity--5abe695c-7bd5-4c31-8824-2528696cdbf1"
-	m2 := tlp.New()
-	m2.SetGreen()
+	m2 := markings.NewTLPGreenMarking()
 	p.AddMarkings([]string{m1.GetID(), m2.GetID()})
 	p.AddMarkingDefinition(m1)
 	p.AddMarkingDefinition(m2)
@@ -66,12 +62,12 @@ func main() {
 	//
 	// Create workflow steps for this playbook
 	//
-	start := start.New()
+	start, _ := workflow.NewStartStep()
 	start.Name = "Start Playbook Example 1"
-	end := end.New()
+	end, _ := workflow.NewEndStep()
 	end.Name = "End Playbook Example 1"
 
-	step1 := action.New()
+	step1, _ := workflow.NewActionStep()
 	step1.Name = "IP Lookup"
 	step1.Description = "Lookup the IP address in the SIEM"
 	cmd1, _ := step1.NewCommand()
