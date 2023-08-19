@@ -11,9 +11,9 @@ import (
 	"github.com/openplaybooks/libcacao/objects/markings/statement"
 	"github.com/openplaybooks/libcacao/objects/markings/tlp"
 	"github.com/openplaybooks/libcacao/objects/playbook"
+	"github.com/openplaybooks/libcacao/objects/workflow/action"
 	"github.com/openplaybooks/libcacao/objects/workflow/end"
 	"github.com/openplaybooks/libcacao/objects/workflow/parallel"
-	"github.com/openplaybooks/libcacao/objects/workflow/single"
 	"github.com/openplaybooks/libcacao/objects/workflow/start"
 )
 
@@ -55,11 +55,10 @@ func main() {
 	// Create workflow steps for this playbook
 	//
 	start := start.New()
-	step1 := start.Next("single")
 
 	end := end.New()
 
-	step1 := single.New()
+	step1 := action.New()
 	step1.Name = "Receive IOC"
 	step1.Description = "Get FuzzyPanda Data Exfil Site IP Address of 1.2.3.4"
 	cmd1, _ := step1.NewCommand()
@@ -70,28 +69,28 @@ func main() {
 	step2.Name = "Update Protection Tools"
 	step2.Description = "This step will update the firewall and client EDR in parallel"
 
-	step3 := single.New()
+	step3 := action.New()
 	step3.Name = "Add IP to Firewall Blocklist"
 	step3.Description = "This step will add the IP address of the FuzzyPanda data exfil site to the firewall"
 	cmd3, _ := step3.NewCommand()
 	cmd3.SetManual()
 	cmd3.Command = "Open firewall console and add 1.2.3.4 to the firewall blocking policy"
 
-	step4 := single.New()
+	step4 := action.New()
 	step4.Name = "Add IP to Client EDR Blocklist"
 	step4.Description = "This step will add the IP address of the FuzzyPanda data exfil site to the client EDR solution"
 	cmd4, _ := step4.NewCommand()
 	cmd4.SetManual()
 	cmd4.Command = "Open EDR console and add 1.2.3.4 to the blocking policy"
 
-	step5 := single.New()
+	step5 := action.New()
 	step5.Name = "Create Ticket"
 	step5.Description = "This step will create a ticket for this issue"
 	cmd5, _ := step5.NewCommand()
 	cmd5.SetManual()
 	cmd5.Command = "Open case management tool and create a ticket with the details of what was done"
 
-	step6 := single.New()
+	step6 := action.New()
 	step6.Name = "Update SIEM"
 	step6.Description = "This step will update the SIEM to look for traffic attempts to the FuzzyPanda data exfil site"
 	cmd6, _ := step6.NewCommand()

@@ -9,6 +9,7 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"errors"
+	"fmt"
 
 	"github.com/golang-jwt/jwt"
 	"github.com/gowebpki/jcs"
@@ -21,8 +22,8 @@ import (
 func (p *Playbook) Sign(method string, key interface{}, sig *signature.Signature) error {
 	var err error
 
-	if !objects.IsSigningMethodValid(method) {
-		return errors.New("incorrect signing method passed in to the sign method")
+	if !objects.IsVocabValueValid(method, objects.GetSigningMethodsVocab()) {
+		return fmt.Errorf("the signing method %s is not valid", method)
 	}
 
 	// Step 2: Save any existing signatures and then zero out the property for signing

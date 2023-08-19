@@ -7,9 +7,11 @@ package playbook
 
 import (
 	"errors"
+	"fmt"
 	"time"
 
 	"github.com/openplaybooks/libcacao/objects"
+	"github.com/openplaybooks/libcacao/objects/agents"
 	"github.com/openplaybooks/libcacao/objects/markings"
 	"github.com/openplaybooks/libcacao/objects/workflow"
 )
@@ -23,7 +25,7 @@ import (
 // property for the object.
 func (p *Playbook) SetNewID(objType string) error {
 
-	if valid := isObjectTypeValid(objType); valid == false {
+	if objType != "playbook" {
 		return errors.New("the object type is not valid for a CACAO playbook id")
 	}
 
@@ -117,11 +119,11 @@ func (p *Playbook) AddLabels(values interface{}) error {
 func (p *Playbook) AddMarkings(values interface{}) error {
 	// Since we are applying a data marking to this playbook, we need to capture
 	// that in the features property
-	if p.PlaybookComplexity == nil {
-		var c Complexity
-		p.PlaybookComplexity = &c
+	if p.PlaybookProcessingSummary == nil {
+		var ps ProcessingSummary
+		p.PlaybookProcessingSummary = &ps
 	}
-	p.PlaybookComplexity.DataMarkings = true
+	p.PlaybookProcessingSummary.DataMarkings = true
 
 	return objects.AddValuesToList(&p.Markings, values)
 }
@@ -151,8 +153,8 @@ func (p *Playbook) NewExternalReference(r ...objects.ExternalReference) (*object
 // AddVariable - This method takes in a Variable object and adds it to the
 // playbook object as a global playbook variable.
 func (p *Playbook) AddVariable(v objects.Variables) error {
-	if valid := objects.IsVariableTypeValid(v.ObjectType); valid == false {
-		return errors.New("the variable type is not valid")
+	if !objects.IsVocabValueValid(v.ObjectType, objects.GetVariableTypesVocab()) {
+		return fmt.Errorf("the variable type %s is not valid", v.ObjectType)
 	}
 
 	if p.PlaybookVariables == nil {
@@ -192,20 +194,20 @@ func (p *Playbook) AddWorkflowStep(v workflow.StepObject) error {
 	v.ClearID()
 
 	// Make sure we call you the logic features as needed
-	if p.PlaybookComplexity == nil {
-		var c Complexity
-		p.PlaybookComplexity = &c
+	if p.PlaybookProcessingSummary == nil {
+		var ps ProcessingSummary
+		p.PlaybookProcessingSummary = &ps
 	}
 
 	switch v.GetCommon().ObjectType {
 	case "parallel":
-		p.PlaybookComplexity.ParallelProcessing = true
+		p.PlaybookProcessingSummary.ParallelProcessing = true
 	case "if-condition":
-		p.PlaybookComplexity.IfLogic = true
+		p.PlaybookProcessingSummary.IfLogic = true
 	case "while-condition":
-		p.PlaybookComplexity.WhileLogic = true
+		p.PlaybookProcessingSummary.WhileLogic = true
 	case "switch-condition":
-		p.PlaybookComplexity.SwitchLogic = true
+		p.PlaybookProcessingSummary.SwitchLogic = true
 
 	}
 
@@ -219,5 +221,37 @@ func (p *Playbook) ClearWorkflowStepIDs() error {
 	for id := range p.Workflow {
 		p.Workflow[id].ClearID()
 	}
+	return nil
+}
+
+// AddAgent - This method takes in an interface represening an agent
+// object that satisfies the agent.AgentObject interface and adds it to
+// the map.
+func (p *Playbook) AddAgent(v agents.AgentObject) error {
+	k := v.GetCommon().ID
+	if p.AgentDefinitions == nil {
+		m := make(map[string]agents.AgentObject, 0)
+		p.AgentDefinitions = m
+	}
+	p.AgentDefinitions[k] = v
+	// After we add it to the playbook lets clear out the embedded ID
+	v.ClearID()
+
+	return nil
+}
+
+// AddTarget - This method takes in an interface represening a target
+// object that satisfies the agent.AgentObject interface and adds it to
+// the map.
+func (p *Playbook) AddTarget(v agents.AgentObject) error {
+	k := v.GetCommon().ID
+	if p.TargetDefinitions == nil {
+		m := make(map[string]agents.AgentObject, 0)
+		p.TargetDefinitions = m
+	}
+	p.TargetDefinitions[k] = v
+	// After we add it to the playbook lets clear out the embedded ID
+	v.ClearID()
+
 	return nil
 }

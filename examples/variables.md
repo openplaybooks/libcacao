@@ -10,7 +10,7 @@ for CACAO Playbooks.
 p := playbook.New()
 v1 := &objects.Variables{
 	ObjectType:  "string",
-	Name:        "$$test$$"
+	Name:        "__test__.Value"
 	Description: "FunStuff",
 	Value:       "foo",
 }
@@ -21,7 +21,7 @@ p.AddVariable(*v1)
 p := playbook.New()
 v1 := &objects.Variables{
 	"string",
-	"$$test$$",
+	"__test__",
 	"Fun Stuff Description",
 	"foo",
 	false,
@@ -34,7 +34,7 @@ p.AddVariable(*v1)
 p := playbook.New()
 v1 := objects.NewVariable()
 v1.ObjectType = "string"
-v1.Name = "$$test$$"
+v1.Name = "__test__.Value"
 v1.Description = "Fun Stuff"
 v1.Value = "foo"
 p.AddVariable(*v1)

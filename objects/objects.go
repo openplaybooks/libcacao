@@ -16,22 +16,6 @@ import (
 	"github.com/openplaybooks/libcacao/defs"
 )
 
-// IsTypeValid - This function will take in a string representing an object type
-// and return true or false if it is an officially supported object.
-// func IsTypeValid(s string) bool {
-// 	objectTypes := map[string]bool{
-// 		"step":                 true,
-// 		"target":               true,
-// 		"extension-definition": true,
-// 		"marking-definition":   true,
-// 	}
-
-// 	if _, found := objectTypes[s]; found == true {
-// 		return true
-// 	}
-// 	return false
-// }
-
 // IsUUIDValid - This function will take in a string and return true if the
 // string represents an actual UUID v4 or v5 value.
 func IsUUIDValid(uuid string) bool {
@@ -42,7 +26,6 @@ func IsUUIDValid(uuid string) bool {
 // CreateID - This method takes in a string value representing an object type
 // and creates and returns a new UUIDv4 ID based on the specification format.
 func CreateID(s string) (string, error) {
-	// TODO add check to validate that s is a valid type
 	id := s + "--" + uuid.New().String()
 	return id, nil
 }
@@ -104,6 +87,18 @@ func IsTimestampValid(t string) bool {
 	//} else if re3.MatchString(t) {
 	//	return true
 	//}
+	return false
+}
+
+// IsVocabValueValid - This function will take in a string representing an
+// vocab entry and a vocab of valid options and return true or false if it is an
+// officially supported object and thus found in the vocabulary.
+func IsVocabValueValid(t string, vocab []string) bool {
+	for _, v := range vocab {
+		if v == t {
+			return true
+		}
+	}
 	return false
 }
 

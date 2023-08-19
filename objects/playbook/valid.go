@@ -99,21 +99,6 @@ func logValid(r *results, msg string) {
 // Private Functions
 // ----------------------------------------------------------------------
 
-// isObjectTypeValid - This function will take in a string representing an
-// object type and return true or false if it is an officially supported
-// object.
-func isObjectTypeValid(s string) bool {
-	objectTypes := map[string]bool{
-		"playbook":          true,
-		"playbook-template": true,
-	}
-
-	if _, found := objectTypes[s]; found == true {
-		return true
-	}
-	return false
-}
-
 // isIDValid - This function will take in an CACAO ID and check to see if it is
 // a valid identifier per the specification for a playbook object.
 func isIDValid(id string) bool {
@@ -124,7 +109,7 @@ func isIDValid(id string) bool {
 	}
 
 	// First check to see if the object type is valid, if not return false.
-	if valid := isObjectTypeValid(idparts[0]); valid == false {
+	if idparts[0] != "playbook" {
 		// Short circuit if the object type part is wrong
 		return false
 	}
@@ -169,54 +154,54 @@ func isCreatedByIDValid(id string) bool {
 func (p *Playbook) checkObjectType(r *results) {
 	if p.ObjectType == "" {
 		requiredButMissing(r, "type")
-	} else {
-		requiredAndFound(r, "type")
+		return
+	}
 
-		if valid := isObjectTypeValid(p.ObjectType); valid == false {
-			logProblem(r, "-- the type property does not contain a value of playbook or playbook-template")
-		} else {
-			str := fmt.Sprintf("++ the type property contains a valid type value of \"%s\"", p.ObjectType)
-			logValid(r, str)
-		}
+	requiredAndFound(r, "type")
+	if p.ObjectType != "playbook" {
+		logProblem(r, "-- the type property does not contain a value of playbook")
+	} else {
+		str := fmt.Sprintf("++ the type property contains a valid type value of \"%s\"", p.ObjectType)
+		logValid(r, str)
 	}
 }
 
 func (p *Playbook) checkSpecVersion(r *results) {
 	if p.SpecVersion == "" {
 		requiredButMissing(r, "spec_version")
-	} else {
-		requiredAndFound(r, "spec_version")
+		return
+	}
 
-		if p.SpecVersion != "1.1" {
-			logProblem(r, "-- the spec_version property does not contain a value of 1.1")
-		} else {
-			str := fmt.Sprintf("++ the spec_version property contains a valid spec_version value of \"%s\"", p.SpecVersion)
-			logValid(r, str)
-		}
+	requiredAndFound(r, "spec_version")
+	if p.SpecVersion != "2.0" {
+		logProblem(r, "-- the spec_version property does not contain a value of 2.0")
+	} else {
+		str := fmt.Sprintf("++ the spec_version property contains a valid spec_version value of \"%s\"", p.SpecVersion)
+		logValid(r, str)
 	}
 }
 
 func (p *Playbook) checkID(r *results) {
 	if p.ID == "" {
 		requiredButMissing(r, "id")
-	} else {
-		requiredAndFound(r, "id")
+		return
+	}
 
-		if valid := isIDValid(p.ID); valid == false {
-			logProblem(r, "-- the id property does not contain a valid identifier")
-		} else {
-			str := fmt.Sprintf("++ the id property contains a valid identifier value of \"%s\"", p.ID)
-			logValid(r, str)
-		}
+	requiredAndFound(r, "id")
+	if valid := isIDValid(p.ID); valid == false {
+		logProblem(r, "-- the id property does not contain a valid identifier")
+	} else {
+		str := fmt.Sprintf("++ the id property contains a valid identifier value of \"%s\"", p.ID)
+		logValid(r, str)
 	}
 }
 
 func (p *Playbook) checkName(r *results) {
 	if p.Name == "" {
 		requiredButMissing(r, "name")
-	} else {
-		requiredAndFound(r, "name")
+		return
 	}
+	requiredAndFound(r, "name")
 }
 
 // Nothing to do for Description
@@ -229,7 +214,7 @@ func (p *Playbook) checkPlaybookTypes(r *results) {
 
 		for i := 0; i < len(p.PlaybookTypes); i++ {
 			value := p.PlaybookTypes[i]
-			if objects.IsPlaybookTypeValid(value) {
+			if objects.IsVocabValueValid(value, GetPlaybookTypesVocab()) {
 				str := fmt.Sprintf("++ the playbook_types property contains a valid playbook_types value of \"%s\"", value)
 				logValid(r, str)
 			} else {
@@ -380,7 +365,7 @@ func (p *Playbook) checkIndustrySectors(r *results) {
 	if len(p.IndustrySectors) > 0 {
 		for i := 0; i < len(p.IndustrySectors); i++ {
 			value := p.IndustrySectors[i]
-			if objects.IsIndustrySectorValid(value) {
+			if objects.IsVocabValueValid(value, objects.GetIndustrySectorsVocab()) {
 				str := fmt.Sprintf("++ the industry_sectors property contains a valid industry_sectors value of \"%s\"", value)
 				logValid(r, str)
 			} else {
