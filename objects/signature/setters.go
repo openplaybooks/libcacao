@@ -1,4 +1,4 @@
-// Copyright 2021 Bret Jordan, All rights reserved.
+// Copyright 2023 Bret Jordan, All rights reserved.
 //
 // Use of this source code is governed by an Apache 2.0 license that can be
 // found in the LICENSE file in the root of the source tree.
@@ -13,23 +13,6 @@ import (
 )
 
 // ----------------------------------------------------------------------
-// Private Signature Type Functions
-// ----------------------------------------------------------------------
-
-// isObjectTypeValid - This function will take in a string representing an object
-// type and return true or false if it is an officially supported object.
-func isObjectTypeValid(s string) bool {
-	objectTypes := map[string]bool{
-		"signature": true,
-	}
-
-	if _, found := objectTypes[s]; found == true {
-		return true
-	}
-	return false
-}
-
-// ----------------------------------------------------------------------
 // Public Signature Type Methods
 // ----------------------------------------------------------------------
 
@@ -38,7 +21,7 @@ func isObjectTypeValid(s string) bool {
 // property for the object.
 func (s *Signature) SetNewID(objType string) error {
 
-	if valid := isObjectTypeValid(objType); valid == false {
+	if objType != "jss" {
 		return errors.New("the object type is not valid for a CACAO signature id")
 	}
 

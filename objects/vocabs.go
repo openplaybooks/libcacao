@@ -66,19 +66,6 @@ func GetIndustrySectorsVocab() []string {
 	}
 }
 
-// GetSigningMethodsVocab - This will return a slice of officially supported
-// signing methods
-func GetSigningMethodsVocab() []string {
-	return []string{
-		"RS256",
-		"RS384",
-		"RS512",
-		"ES256",
-		"ES384",
-		"ES512",
-	}
-}
-
 // GetVariableTypesVocab - This will return a slice of officially supported
 // variable types.
 func GetVariableTypesVocab() []string {
