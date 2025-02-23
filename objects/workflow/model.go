@@ -1,11 +1,13 @@
-// Copyright 2023 Bret Jordan, All rights reserved.
+// Copyright 2025 Bret Jordan, All rights reserved.
 //
 // Use of this source code is governed by an Apache 2.0 license that can be
 // found in the LICENSE file in the root of the source tree.
 
 package workflow
 
-import "github.com/openplaybooks/libcacao/objects"
+import (
+	"github.com/openplaybooks/libcacao/objects"
+)
 
 // ----------------------------------------------------------------------
 // Define Object Model
@@ -24,46 +26,61 @@ type StepObject interface {
 // table. The ID property here is just to help make processing easier, it will
 // be removed when it is added to the playbook.
 type CommonProperties struct {
-	ObjectType         string                       `json:"type,omitempty"`
-	ID                 string                       `json:"id,omitempty"`
-	Name               string                       `json:"name,omitempty"`
-	Description        string                       `json:"description,omitempty"`
-	ExternalReferences []objects.ExternalReference  `json:"external_references,omitempty"`
-	Delay              int                          `json:"delay,omitempty"`
-	Timeout            int                          `json:"timeout,omitempty"`
-	StepVariables      map[string]objects.Variables `json:"playbook_variables,omitempty"`
-	Owner              string                       `json:"owner,omitempty"`
-	OnCompletion       string                       `json:"on_completion,omitempty"`
-	OnSuccess          string                       `json:"on_success,omitempty"`
-	OnFailure          string                       `json:"on_failure,omitempty"`
-	//StepExtensions
+	ObjectType    string                       `json:"type,omitempty"`
+	ID            string                       `json:"id,omitempty"`
+	Name          string                       `json:"name,omitempty"`
+	Description   string                       `json:"description,omitempty"`
+	Owner         string                       `json:"owner,omitempty"`
+	Delay         int                          `json:"delay,omitempty"`
+	StepVariables map[string]objects.Variables `json:"playbook_variables,omitempty"`
+	// Coordinates
+	// StepExtensions
 }
 
-// StartStep - This type implmenets the CACAO 2.0 workflow start step and
-// defines all of the properties associated with the start step.
+// StartStep - This type implmenets the CACAO 3.0 start step and defines all of
+// its properties.
 //
-// The Start Step workflow step is the starting point of a playbook and
-// represents an explicit entry in the workflow to signify the start of a
-// playbook. This workflow step MUST NOT use the on_success or on_failure
-// properties.
+// The start step object is used to define an explicit starting point of a
+// playbook.
 type StartStep struct {
+	CommonProperties
+	OnSuccess string `json:"on_success,omitempty"`
+}
+
+// GetCommon - Implement the StepObject interface and return common properties
+func (s *StartStep) GetCommon() CommonProperties {
+	return s.CommonProperties
+}
+
+// ReturnStep - This type implmenets the CACAO 3.0 return step and defines all
+// of its properties.
+//
+// The return step object is used to define when processing MUST return to the
+// step that started the branch.
+type ReturnStep struct {
 	CommonProperties
 }
 
-// EndStep - This type implmenets the CACAO 2.0 workflow end step and defines
-// all of the properties associated with the end step.
+// GetCommon - Implement the StepObject interface and return common properties
+func (s *ReturnStep) GetCommon() CommonProperties {
+	return s.CommonProperties
+}
+
+// EndStep - This type implmenets the CACAO 3.0 end step and defines all of its
+// properties.
 //
-// The End Step workflow step is the ending point of a playbook or branch of
-// step (e.g., a list of steps that are part of a parallel processing branch)
-// and represents an explicit point in the workflow to signify the end of a
-// playbook or branch of steps. When a playbook or branch of a playbook
-// terminates it MUST call an End Step. This workflow step MUST NOT use the
-// on_completion, on_success, or on_failure properties.
+// The end step object is used to define an explicit ending point of a playbook.
+// When a playbook terminates it MUST call an end step.
 type EndStep struct {
 	CommonProperties
 }
 
-// CommandData - This type implement the CACAO 2.0 command data type.
+// GetCommon - Implement the StepObject interface and return common properties
+func (s *EndStep) GetCommon() CommonProperties {
+	return s.CommonProperties
+}
+
+// CommandData - This type implement the CACAO 3.0 command data type.
 //
 // The CACAO command object (command-data) contains detailed information about
 // the commands that are to be executed or processed automatically or manually
@@ -80,15 +97,17 @@ type EndStep struct {
 // possible will be mapped to the JSON structure of this specification. When
 // that is not possible, they will be base64 encoded.
 type CommandData struct {
-	ObjectType       string `json:"type,omitempty"`
-	Description      string `json:"description,omitempty"`
-	Command          string `json:"command,omitempty"`
-	CommandB64       string `json:"command_b64,omitempty"`
-	Version          string `json:"version,omitempty"`
-	PlaybookActivity string `json:"playbook_activity,omitempty"`
+	ObjectType       string   `json:"type,omitempty"`
+	Description      string   `json:"description,omitempty"`
+	Command          string   `json:"command,omitempty"`
+	CommandB64       string   `json:"command_b64,omitempty"`
+	Version          string   `json:"version,omitempty"`
+	PlaybookActivity string   `json:"playbook_activity,omitempty"`
+	InArgs           []string `json:"in_args,omitempty"`
+	OutArgs          []string `json:"out_args,omitempty"`
 }
 
-// ActionStep - This type implmenets the CACAO 2.0 workflow action step and
+// ActionStep - This type implmenets the CACAO 3.0 workflow action step and
 // defines all of the properties associated with the action step.
 //
 // The Action Step workflow step contains the actual commands to be executed on
@@ -96,14 +115,22 @@ type CommandData struct {
 // sequentially.
 type ActionStep struct {
 	CommonProperties
-	Commands []CommandData `json:"commands,omitempty"`
-	Agent    string        `json:"agent,omitempty"`
-	Targets  []string      `json:"targets,omitempty"`
-	InArgs   []string      `json:"in_args,omitempty"`
-	OutArgs  []string      `json:"out_args,omitempty"`
+	Commands           []CommandData               `json:"commands,omitempty"`
+	Timeout            int                         `json:"timeout,omitempty"`
+	OnTimeout          string                      `json:"on_timeout,omitempty"`
+	OnSuccess          string                      `json:"on_success,omitempty"`
+	OnFailure          string                      `json:"on_failure,omitempty"`
+	Agent              string                      `json:"agent,omitempty"`
+	Targets            []string                    `json:"targets,omitempty"`
+	ExternalReferences []objects.ExternalReference `json:"external_references,omitempty"`
 }
 
-// PlaybookActionStep - This type implmenets the CACAO 2.0 workflow playbook
+// GetCommon - Implement the StepObject interface and return common properties
+func (s *ActionStep) GetCommon() CommonProperties {
+	return s.CommonProperties
+}
+
+// PlaybookActionStep - This type implmenets the CACAO 3.0 workflow playbook
 // action step and defines all of the properties associated with the playbook
 // action step.
 //
@@ -118,129 +145,98 @@ type PlaybookActionStep struct {
 	OutArgs         []string `json:"out_args,omitempty"`
 }
 
-// ParallelStep - This type implmenets the CACAO 2.0 workflow parallel
-// step and defines all of the properties associated with the parallel step.
+// GetCommon - Implement the StepObject interface and return common properties
+func (s *PlaybookActionStep) GetCommon() CommonProperties {
+	return s.CommonProperties
+}
+
+// ParallelStep - This type implmenets the CACAO 3.0 parallel step and defines
+// all of its properties.
 //
-// The Parallel Step workflow step defines how to create steps that are
-// processed in parallel. This workflow step allows playbook authors to define
-// two or more steps that can be executed at the same time. For example, a
-// playbook that responds to an incident may require both the network team and
-// the desktop team to investigate and respond to a threat at the same time.
-// Another example is a response to a cyber attack on an operational
-// technology (OT) environment that requires releasing air / steam / water
-// pressure simultaneously. In addition to the inherited properties, this
-// section defines one additional specific property that is valid for this
-// type. Implementations MUST wait for all steps referenced in the next_steps
-// property to complete before moving on.
-//
-// The steps referenced from this object are intended to be processed in
-// parallel, however, if an implementation cannot support executing steps in
-// parallel, then the steps MAY be executed in sequential order if the desired
-// outcome is the same.
+// The parallel step object can be used to enable two or more steps to be
+// processed at the same time, or in other words processed in parallel, see
+// Fig. 7-2. The definition of parallel execution and how many parallel steps
+// can be processed at once is implementation dependent and is not part of this
+// specification.
 type ParallelStep struct {
 	CommonProperties
 	NextSteps []string `json:"next_steps,omitempty"`
+	OnSuccess string   `json:"on_success,omitempty"`
 }
 
-// IfStep - This type implmenets the CACAO 2.0 workflow if condition
-// step and defines all of the properties associated with the if condition step.
-type IfStep struct {
+// GetCommon - Implement the StepObject interface and return common properties
+func (s *ParallelStep) GetCommon() CommonProperties {
+	return s.CommonProperties
+}
+
+// ForeachStep - This type implmenets the CACAO 3.0 foreach step and defines all
+// of its properties.
+//
+// The foreach step object can be used to perform one or more operations on each
+// element in a list data.
+type ForeachStep struct {
 	CommonProperties
-	Condition string   `json:"condition,omitempty"`
-	OnTrue    []string `json:"on_true,omitempty"`
-	OnFalse   []string `json:"on_false,omitempty"`
+	Collection string `json:"collection,omitempty"`
+	Element    string `json:"element,omitempty"`
+	Do         string `json:"do,omitempty"`
+	OnSuccess  string `json:"on_success,omitempty"`
 }
 
-// WhileStep - This type implmenets the CACAO 2.0 workflow while condition step
-// and defines all of the properties associated with the if condition step.
+// GetCommon - Implement the StepObject interface and return common properties
+func (s *ForeachStep) GetCommon() CommonProperties {
+	return s.CommonProperties
+}
+
+// WhileStep - This type implmenets the CACAO 3.0 while step and defines all of
+// its properties.
+//
+// The while step object can be used to enable a 'while' loop within the
+// workflow of a playbook.
 type WhileStep struct {
 	CommonProperties
-	Condition string   `json:"condition,omitempty"`
-	OnTrue    []string `json:"on_true,omitempty"`
+	Condition string `json:"condition,omitempty"`
+	OnTrue    string `json:"on_true,omitempty"`
+	OnFalse   string `json:"on_false,omitempty"`
 }
 
-// SwitchStep - This type implmenets the CACAO 2.0 workflow switch condition
-// step and defines all of the properties associated with the switch condition
-// step. Some properties are inherited from the workflow.CommonProperties
-// type.
+// GetCommon - Implement the StepObject interface and return common properties
+func (s *WhileStep) GetCommon() CommonProperties {
+	return s.CommonProperties
+}
+
+// IfThenStep - This type implmenets the CACAO 3.0 if then step and defines all
+// of its properties.
+//
+// The if-then step object can be used to enable 'if-then' logic within the
+// workflow of a playbook. This object is processed in-line with the general
+// workflow of the playbook and therefore does NOT have the on_success or the
+// on_failure properties.
+type IfThenStep struct {
+	CommonProperties
+	Condition string `json:"condition,omitempty"`
+	OnTrue    string `json:"on_true,omitempty"`
+	OnFalse   string `json:"on_false,omitempty"`
+}
+
+// GetCommon - Implement the StepObject interface and return common properties
+func (s *IfThenStep) GetCommon() CommonProperties {
+	return s.CommonProperties
+}
+
+// SwitchStep - This type implmenets the CACAO 3.0 switch step and defines all
+// of its properties.
+//
+// The switch step object can be used to enable the 'switch' logic within the
+// workflow of a playbook. This object is processed in-line with the general
+// workflow of the playbook and therefore does NOT have the on_success or the
+// on_failure properties.
 type SwitchStep struct {
 	CommonProperties
-	Switch string              `json:"switch,omitempty"`
-	Cases  map[string][]string `json:"cases,omitempty"`
+	Switch string            `json:"switch,omitempty"`
+	Cases  map[string]string `json:"cases,omitempty"`
 }
 
-// ----------------------------------------------------------------------
-// Initialization Functions
-// ----------------------------------------------------------------------
-
-// NewStartStep - This will create and initialize a new workflow start step object
-// and return it as a pointer.
-func NewStartStep() (*StartStep, error) {
-	var w StartStep
-	w.ObjectType = "start"
-	err := w.SetNewID(w.ObjectType)
-	return &w, err
-}
-
-// NewEndStep - This will create and initialize a new workflow end step object
-// and return it as a pointer.
-func NewEndStep() (*EndStep, error) {
-	var w EndStep
-	w.ObjectType = "end"
-	err := w.SetNewID(w.ObjectType)
-	return &w, err
-}
-
-// NewActionStep - This will create and initialize a new workflow action step
-// object and return it as a pointer.
-func NewActionStep() (*ActionStep, error) {
-	var w ActionStep
-	w.ObjectType = "action"
-	err := w.SetNewID(w.ObjectType)
-	return &w, err
-}
-
-// NewPlaybookActionStep - This will create and initialize a new workflow
-// playbook action step object and return it as a pointer.
-func NewPlaybookActionStep() (*PlaybookActionStep, error) {
-	var w PlaybookActionStep
-	w.ObjectType = "playbook-action"
-	err := w.SetNewID(w.ObjectType)
-	return &w, err
-}
-
-// NewParallelStep - This will create and initialize a new workflow parallel
-// step object and return it as a pointer.
-func NewParallelStep() (*ParallelStep, error) {
-	var w ParallelStep
-	w.ObjectType = "parallel"
-	err := w.SetNewID(w.ObjectType)
-	return &w, err
-}
-
-// NewIfStep - This will create and initialize a new workflow if condition step
-// object and return it as a pointer.
-func NewIfStep() (*IfStep, error) {
-	var w IfStep
-	w.ObjectType = "if-condition"
-	err := w.SetNewID(w.ObjectType)
-	return &w, err
-}
-
-// NewWhileStep - This will create and initialize a new workflow if condition
-// step object and return it as a pointer.
-func NewWhileStep() (*WhileStep, error) {
-	var w WhileStep
-	w.ObjectType = "while-condition"
-	err := w.SetNewID(w.ObjectType)
-	return &w, err
-}
-
-// NewSwitchStep - This will create and initialize a new workflow switch condition
-// step object and return it as a pointer.
-func NewSwitchStep() (*SwitchStep, error) {
-	var w SwitchStep
-	w.ObjectType = "switch-condition"
-	err := w.SetNewID(w.ObjectType)
-	return &w, err
+// GetCommon - Implement the StepObject interface and return common properties
+func (s *SwitchStep) GetCommon() CommonProperties {
+	return s.CommonProperties
 }

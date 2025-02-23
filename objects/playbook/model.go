@@ -67,15 +67,18 @@ type Playbook struct {
 
 // ProcessingSummary - This type defines a list of playbook processing features
 type ProcessingSummary struct {
-	ManualPlaybook     bool `json:"manual_playbook,omitempty"`
-	ExternalPlaybooks  bool `json:"external_playbooks,omitempty"`
-	ParallelProcessing bool `json:"parallel_processing,omitempty"`
-	IfLogic            bool `json:"if_logic,omitempty"`
-	WhileLogic         bool `json:"while_logic,omitempty"`
-	SwitchLogic        bool `json:"switch_logic,omitempty"`
-	TemporalLogic      bool `json:"temporal_logic,omitempty"`
-	DataMarkings       bool `json:"data_markings,omitempty"`
-	Extensions         bool `json:"extensions,omitempty"`
+	ManualPlaybook          bool `json:"manual_playbook,omitempty"`
+	ExternalPlaybooks       bool `json:"external_playbooks,omitempty"`
+	ParallelProcessing      bool `json:"parallel_processing,omitempty"`
+	ForeachLogic            bool `json:"foreach_logic,omitempty"`
+	WhileLogic              bool `json:"while_logic,omitempty"`
+	IfLogic                 bool `json:"if_logic,omitempty"`
+	SwitchLogic             bool `json:"switch_logic,omitempty"`
+	TemporalLogic           bool `json:"temporal_logic,omitempty"`
+	DataMarkings            bool `json:"data_markings,omitempty"`
+	DigitalSignatures       bool `json:"digital_signatures,omitempty"`
+	CountersignedSignatures bool `json:"countersigned_signatures,omitempty"`
+	Extensions              bool `json:"extensions,omitempty"`
 }
 
 // This type is used to capture results from the Valid() and Compare() functions

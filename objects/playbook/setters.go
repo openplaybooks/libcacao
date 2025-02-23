@@ -191,7 +191,7 @@ func (p *Playbook) AddWorkflowStep(v workflow.StepObject) error {
 	}
 	p.Workflow[k] = v
 	// After we add it to the playbook lets clear out the embedded ID
-	v.ClearID()
+	//v.ClearID()
 
 	// Make sure we call you the logic features as needed
 	if p.PlaybookProcessingSummary == nil {
@@ -200,13 +200,17 @@ func (p *Playbook) AddWorkflowStep(v workflow.StepObject) error {
 	}
 
 	switch v.GetCommon().ObjectType {
+	case "playbook-action":
+		p.PlaybookProcessingSummary.ExternalPlaybooks = true
 	case "parallel":
 		p.PlaybookProcessingSummary.ParallelProcessing = true
-	case "if-condition":
-		p.PlaybookProcessingSummary.IfLogic = true
-	case "while-condition":
+	case "foreach":
+		p.PlaybookProcessingSummary.ForeachLogic = true
+	case "while":
 		p.PlaybookProcessingSummary.WhileLogic = true
-	case "switch-condition":
+	case "if-then":
+		p.PlaybookProcessingSummary.IfLogic = true
+	case "switch":
 		p.PlaybookProcessingSummary.SwitchLogic = true
 
 	}
