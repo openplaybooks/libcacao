@@ -13,10 +13,10 @@ import (
 // Define Action Step Functions and Methods
 // ----------------------------------------------------------------------
 
-// NewCommand - This method creates a new empty external reference and
-// returns a reference to it so it can be populated. However, if one or more
-// external references are passed in they are all added and the reference that
-// is returned is for the last entry added.
+// NewCommand - This method creates a new empty command and returns a reference
+// to it so it can be populated. However, if one or more commands are passed in
+// they are all added and the reference that is returned is for the last entry
+// added.
 func (s *ActionStep) NewCommand(r ...CommandData) (*CommandData, error) {
 	positionThatAppendWillUse := len(s.Commands)
 
@@ -33,6 +33,28 @@ func (s *ActionStep) NewCommand(r ...CommandData) (*CommandData, error) {
 	var c CommandData
 	s.Commands = append(s.Commands, c)
 	return &s.Commands[positionThatAppendWillUse], nil
+}
+
+// NewExternalReference - This method creates a new empty external reference and
+// returns a reference to it so it can be populated. However, if one or more
+// external references are passed in they are all added and the reference that
+// is returned is for the last entry added.
+func (s *ActionStep) NewExternalReference(r ...objects.ExternalReference) (*objects.ExternalReference, error) {
+	positionThatAppendWillUse := len(s.ExternalReferences)
+
+	if len(r) > 0 {
+		for i := range r {
+			// Update the value so we grab the last one entered
+			positionThatAppendWillUse = len(s.ExternalReferences)
+			s.ExternalReferences = append(s.ExternalReferences, r[i])
+		}
+		return &s.ExternalReferences[positionThatAppendWillUse], nil
+	}
+
+	// If one was not passed in, lets create one
+	var er objects.ExternalReference
+	s.ExternalReferences = append(s.ExternalReferences, er)
+	return &s.ExternalReferences[positionThatAppendWillUse], nil
 }
 
 // ----------------------------------------------------------------------
