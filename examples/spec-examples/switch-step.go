@@ -17,9 +17,17 @@ func main() {
 	p.Modified = ""
 
 	// Create workflow steps for this playbook
-	end, _ := p.NewEndStep()
-	end.Name = "Playbook End"
-	end.Description = "Example of an end step."
+	sw1, _ := p.NewSwitchStep()
+	sw1.Name = "Switch Step 1"
+	sw1.Description = "Example of a switch step."
+	sw1.Switch = "__variable__:value"
+	case1, _ := p.NewActionStep()
+	case1.Name = "Action Step 1"
+	case2, _ := p.NewActionStep()
+	case2.Name = "Action Step 2"
+
+	sw1.AddCase("192.168.0.11", case1.GetID())
+	sw1.AddCase("192.168.0.12", case2.GetID())
 
 	// Encode
 	data, err := p.EncodeToString()

@@ -51,19 +51,16 @@ func (s *ParallelStep) AddNextSteps(values interface{}) error {
 // ----------------------------------------------------------------------
 
 // AddCase - This method takes in two values, the first is a string value
-// representing the case of the switch statement.  The second is a string value,
-// a comma separated list of string values, or a slice of string values, each
-// representing one or more identifiers to be processed by the case condition.
-// func (s *SwitchStep) AddCase(k string, v interface{}) error {
-// 	if s.Cases == nil {
-// 		m := make(map[string]string, 0)
-// 		s.Cases = m
-// 	}
-// 	//temp := make([]string, 0)
-// 	//objects.AddValuesToList(&temp, v)
-// 	//s.Cases[k] = temp
-// 	return nil
-// }
+// representing the case of the switch statement. The second is a string value
+// representing the identifier to be processed by the case condition.
+func (s *SwitchStep) AddCase(k string, id string) error {
+	if s.Cases == nil {
+		m := make(map[string]string, 0)
+		s.Cases = m
+	}
+	s.Cases[k] = id
+	return nil
+}
 
 // ----------------------------------------------------------------------
 // Define Functions and Methods - CommandData

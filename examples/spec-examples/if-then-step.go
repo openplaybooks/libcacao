@@ -17,9 +17,16 @@ func main() {
 	p.Modified = ""
 
 	// Create workflow steps for this playbook
-	end, _ := p.NewEndStep()
-	end.Name = "Playbook End"
-	end.Description = "Example of an end step."
+	ifthen, _ := p.NewIfThenStep()
+	ifthen.Name = "If Then Step 1"
+	ifthen.Description = "Example of an if then step."
+	ifthen.Condition = "__variable__:value = '10.0.0.0/8'"
+	ontrue1, _ := p.NewActionStep()
+	ontrue1.Name = "Action Step 1"
+	onfalse1, _ := p.NewActionStep()
+	onfalse1.Name = "Action Step 2"
+	ifthen.OnTrue = ontrue1.GetID()
+	ifthen.OnFalse = onfalse1.GetID()
 
 	// Encode
 	data, err := p.EncodeToString()

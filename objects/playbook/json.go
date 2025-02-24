@@ -39,6 +39,11 @@ func Decode(data []byte) (*Playbook, error) {
 
 // Encode - This method is a simple wrapper for encoding an object into JSON
 func (p *Playbook) Encode() ([]byte, error) {
+
+	// After everything is done, then do this
+	// Remove all of the IDs from the workflow steps since the specification only has them at the map level
+	p.ClearWorkflowStepIDs()
+
 	data, err := json.MarshalIndent(p, "", "  ")
 	if err != nil {
 		return nil, err
@@ -51,6 +56,11 @@ func (p *Playbook) Encode() ([]byte, error) {
 // EncodeToString - This method is a simple wrapper for encoding an object into
 // JSON
 func (p *Playbook) EncodeToString() (string, error) {
+
+	// After everything is done, then do this
+	// Remove all of the IDs from the workflow steps since the specification only has them at the map level
+	p.ClearWorkflowStepIDs()
+
 	data, err := p.Encode()
 	if err != nil {
 		return "", err

@@ -40,10 +40,6 @@ func main() {
 	ret2.Description = "Example of a return step from branch 2."
 	step2.OnSuccess = ret2.GetID()
 
-	// After everything is done, then do this
-	// Remove all of the IDs from the workflow steps since the specification only has them at the map level
-	p.ClearWorkflowStepIDs()
-
 	// Encode
 	data, err := p.EncodeToString()
 	if err != nil {

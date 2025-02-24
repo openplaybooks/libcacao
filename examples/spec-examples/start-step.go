@@ -24,10 +24,6 @@ func main() {
 	step0.Name = "Action Step 0"
 	start.OnSuccess = step0.GetID()
 
-	// After everything is done, then do this
-	// Remove all of the IDs from the workflow steps since the specification only has them at the map level
-	p.ClearWorkflowStepIDs()
-
 	// Encode
 	data, err := p.EncodeToString()
 	if err != nil {

@@ -21,10 +21,6 @@ func main() {
 	ret.Name = "Return To Parallel Step 1"
 	ret.Description = "Example of a return step."
 
-	// After everything is done, then do this
-	// Remove all of the IDs from the workflow steps since the specification only has them at the map level
-	p.ClearWorkflowStepIDs()
-
 	// Encode
 	data, err := p.EncodeToString()
 	if err != nil {
