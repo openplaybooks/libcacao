@@ -3,7 +3,7 @@
 // Use of this source code is governed by an Apache 2.0 license that can be
 // found in the LICENSE file in the root of the source tree.
 
-// Package workflow implements the CACAO 3.0 workflow step objects.
+// Package steps implements the CACAO 3.0 workflow step objects.
 //
 // Workflows contain a series of steps that are stored in a dictionary (see the
 // workflow property in section 6.1), where the key is the step ID and the value
@@ -21,4 +21,4 @@
 //
 // This section defines the various workflow steps and how they may be used to
 // define a playbook.
-package workflow
+package steps

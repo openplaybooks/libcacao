@@ -18,7 +18,6 @@ import (
 // an object that is defined as fullfilling this interface.
 type CommandObject interface {
 	GetCommon() CommonProperties
-	ClearID()
 }
 
 // CommonProperties - Each command contains some base properties that are common
@@ -43,7 +42,7 @@ type CommonProperties struct {
 //
 // * Either the command property or the command_b64 property MUST be populated.
 type Manual struct {
-	CommandDataCommonProperties
+	CommonProperties
 	Command      string            `json:"command,omitempty"`
 	CommandB64   string            `json:"command_b64,omitempty"`
 	ReturnedData map[string]string `json:"returned_data,omitempty"`
@@ -51,7 +50,7 @@ type Manual struct {
 
 // GetCommon - Implement the CommandObject interface and return common properties
 func (c *Manual) GetCommon() CommonProperties {
-	return objects.CommonProperties
+	return c.CommonProperties
 }
 
 // Bash - This type implmenets the CACAO 3.0 bash command and defines all of
@@ -61,7 +60,7 @@ func (c *Manual) GetCommon() CommonProperties {
 //
 // * One of the following properties MUST be populated, command or command_b64.
 type Bash struct {
-	CommandDataCommonProperties
+	CommonProperties
 	Command      string            `json:"command,omitempty"`
 	CommandB64   string            `json:"command_b64,omitempty"`
 	ReturnedData map[string]string `json:"returned_data,omitempty"`
@@ -69,5 +68,5 @@ type Bash struct {
 
 // GetCommon - Implement the CommandObject interface and return common properties
 func (c *Bash) GetCommon() CommonProperties {
-	return objects.CommonProperties
+	return c.CommonProperties
 }

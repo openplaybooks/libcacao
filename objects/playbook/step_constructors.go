@@ -6,7 +6,7 @@
 package playbook
 
 import (
-	"github.com/openplaybooks/libcacao/objects/workflow"
+	"github.com/openplaybooks/libcacao/objects/steps"
 )
 
 // ----------------------------------------------------------------------
@@ -15,8 +15,8 @@ import (
 
 // NewStartStep - Create and initialize a new start step object and return it as
 // a pointer.
-func (p *Playbook) NewStartStep() (*workflow.StartStep, error) {
-	var s workflow.StartStep
+func (p *Playbook) NewStartStep() (*steps.StartStep, error) {
+	var s steps.StartStep
 	s.ObjectType = "start"
 	err := s.SetNewID(s.ObjectType)
 	p.AddStep(&s)
@@ -25,8 +25,8 @@ func (p *Playbook) NewStartStep() (*workflow.StartStep, error) {
 
 // NewReturnStep - Create and initialize a new return step object and return it
 // as a pointer.
-func (p *Playbook) NewReturnStep() (*workflow.ReturnStep, error) {
-	var s workflow.ReturnStep
+func (p *Playbook) NewReturnStep() (*steps.ReturnStep, error) {
+	var s steps.ReturnStep
 	s.ObjectType = "return"
 	err := s.SetNewID(s.ObjectType)
 	p.AddStep(&s)
@@ -35,8 +35,8 @@ func (p *Playbook) NewReturnStep() (*workflow.ReturnStep, error) {
 
 // NewEndStep - Create and initialize a new end step object and return it as a
 // pointer.
-func (p *Playbook) NewEndStep() (*workflow.EndStep, error) {
-	var s workflow.EndStep
+func (p *Playbook) NewEndStep() (*steps.EndStep, error) {
+	var s steps.EndStep
 	s.ObjectType = "end"
 	err := s.SetNewID(s.ObjectType)
 	p.AddStep(&s)
@@ -45,8 +45,8 @@ func (p *Playbook) NewEndStep() (*workflow.EndStep, error) {
 
 // NewActionStep - Create and initialize a new action step object and return it
 // as a pointer.
-func (p *Playbook) NewActionStep() (*workflow.ActionStep, error) {
-	var s workflow.ActionStep
+func (p *Playbook) NewActionStep() (*steps.ActionStep, error) {
+	var s steps.ActionStep
 	s.ObjectType = "action"
 	err := s.SetNewID(s.ObjectType)
 	p.AddStep(&s)
@@ -55,8 +55,8 @@ func (p *Playbook) NewActionStep() (*workflow.ActionStep, error) {
 
 // NewPlaybookActionStep - Create and initialize a new playbook action step
 // object and return it as a pointer.
-func (p *Playbook) NewPlaybookActionStep() (*workflow.PlaybookActionStep, error) {
-	var s workflow.PlaybookActionStep
+func (p *Playbook) NewPlaybookActionStep() (*steps.PlaybookActionStep, error) {
+	var s steps.PlaybookActionStep
 	s.ObjectType = "playbook-action"
 	err := s.SetNewID(s.ObjectType)
 	p.AddStep(&s)
@@ -65,8 +65,8 @@ func (p *Playbook) NewPlaybookActionStep() (*workflow.PlaybookActionStep, error)
 
 // NewParallelStep - Create and initialize a new parallel step object and return
 // it as a pointer.
-func (p *Playbook) NewParallelStep() (*workflow.ParallelStep, error) {
-	var s workflow.ParallelStep
+func (p *Playbook) NewParallelStep() (*steps.ParallelStep, error) {
+	var s steps.ParallelStep
 	s.ObjectType = "parallel"
 	err := s.SetNewID(s.ObjectType)
 	p.AddStep(&s)
@@ -75,8 +75,8 @@ func (p *Playbook) NewParallelStep() (*workflow.ParallelStep, error) {
 
 // NewForeachStep - Create and initialize a new foreach step object and return
 // it as a pointer.
-func (p *Playbook) NewForeachStep() (*workflow.ForeachStep, error) {
-	var s workflow.ForeachStep
+func (p *Playbook) NewForeachStep() (*steps.ForeachStep, error) {
+	var s steps.ForeachStep
 	s.ObjectType = "foreach"
 	err := s.SetNewID(s.ObjectType)
 	p.AddStep(&s)
@@ -85,8 +85,8 @@ func (p *Playbook) NewForeachStep() (*workflow.ForeachStep, error) {
 
 // NewWhileStep - Create and initialize a new while step object and return it as
 // a pointer.
-func (p *Playbook) NewWhileStep() (*workflow.WhileStep, error) {
-	var s workflow.WhileStep
+func (p *Playbook) NewWhileStep() (*steps.WhileStep, error) {
+	var s steps.WhileStep
 	s.ObjectType = "while"
 	err := s.SetNewID(s.ObjectType)
 	p.AddStep(&s)
@@ -95,8 +95,8 @@ func (p *Playbook) NewWhileStep() (*workflow.WhileStep, error) {
 
 // NewIfThenStep - Create and initialize a new if then step object and return it
 // as a pointer.
-func (p *Playbook) NewIfThenStep() (*workflow.IfThenStep, error) {
-	var s workflow.IfThenStep
+func (p *Playbook) NewIfThenStep() (*steps.IfThenStep, error) {
+	var s steps.IfThenStep
 	s.ObjectType = "if-then"
 	err := s.SetNewID(s.ObjectType)
 	p.AddStep(&s)
@@ -105,8 +105,8 @@ func (p *Playbook) NewIfThenStep() (*workflow.IfThenStep, error) {
 
 // NewSwitchStep - Create and initialize a new switch step object and return it
 // as a pointer.
-func (p *Playbook) NewSwitchStep() (*workflow.SwitchStep, error) {
-	var s workflow.SwitchStep
+func (p *Playbook) NewSwitchStep() (*steps.SwitchStep, error) {
+	var s steps.SwitchStep
 	s.ObjectType = "switch"
 	err := s.SetNewID(s.ObjectType)
 	p.AddStep(&s)

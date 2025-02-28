@@ -12,5 +12,4 @@
 // MUST be processed or executed by all of the agents defined in that step.
 //
 // Commands can make use of variables just like other parts of the playbook.
-
 package commands

@@ -13,7 +13,7 @@ import (
 	"github.com/openplaybooks/libcacao/objects"
 	"github.com/openplaybooks/libcacao/objects/agents"
 	"github.com/openplaybooks/libcacao/objects/markings"
-	"github.com/openplaybooks/libcacao/objects/workflow"
+	"github.com/openplaybooks/libcacao/objects/steps"
 )
 
 // ----------------------------------------------------------------------
@@ -183,13 +183,13 @@ func (p *Playbook) AddMarkingDefinition(v markings.DataMarkingObject) error {
 // AddStep - This method takes in an interface represening a workflow step
 // object that satisfies the workflow.StepObject interface and adds it to the
 // map.
-func (p *Playbook) AddStep(v workflow.StepObject) error {
-	k := v.GetCommon().ID
+func (p *Playbook) AddStep(s steps.StepObject) error {
+	k := s.GetCommon().ID
 	if p.Workflow == nil {
-		m := make(map[string]workflow.StepObject, 0)
+		m := make(map[string]steps.StepObject, 0)
 		p.Workflow = m
 	}
-	p.Workflow[k] = v
+	p.Workflow[k] = s
 	// After we add it to the playbook lets clear out the embedded ID
 	//v.ClearID()
 
@@ -199,7 +199,7 @@ func (p *Playbook) AddStep(v workflow.StepObject) error {
 		p.PlaybookProcessingSummary = &ps
 	}
 
-	switch v.GetCommon().ObjectType {
+	switch s.GetCommon().ObjectType {
 	case "playbook-action":
 		p.PlaybookProcessingSummary.ExternalPlaybooks = true
 	case "parallel":

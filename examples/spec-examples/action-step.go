@@ -28,8 +28,7 @@ func main() {
 
 	step1.OnSuccess = end.GetID()
 	step1.Agent = "individual--328a89ab-3b8f-40c4-a491-24a40bcd3cd4"
-	cmd1, _ := step1.NewCommand()
-	cmd1.ObjectType = "manual"
+	cmd1, _ := step1.NewManualCommand()
 	cmd1.Command = "Disconnect the infected machines from the network"
 
 	// Encode
