@@ -17,23 +17,23 @@ import (
 // to it so it can be populated. However, if one or more commands are passed in
 // they are all added and the reference that is returned is for the last entry
 // added.
-func (s *ActionStep) NewCommand(r ...CommandData) (*CommandData, error) {
-	positionThatAppendWillUse := len(s.Commands)
+// func (s *ActionStep) NewCommand(r ...CommandData) (*CommandData, error) {
+// 	positionThatAppendWillUse := len(s.Commands)
 
-	if len(r) > 0 {
-		for i := range r {
-			// Update the value so we grab the last one entered
-			positionThatAppendWillUse = len(s.Commands)
-			s.Commands = append(s.Commands, r[i])
-		}
-		return &s.Commands[positionThatAppendWillUse], nil
-	}
+// 	if len(r) > 0 {
+// 		for i := range r {
+// 			// Update the value so we grab the last one entered
+// 			positionThatAppendWillUse = len(s.Commands)
+// 			s.Commands = append(s.Commands, r[i])
+// 		}
+// 		return &s.Commands[positionThatAppendWillUse], nil
+// 	}
 
-	// If one was not passed in, lets create one
-	var c CommandData
-	s.Commands = append(s.Commands, c)
-	return &s.Commands[positionThatAppendWillUse], nil
-}
+// 	// If one was not passed in, lets create one
+// 	var c CommandData
+// 	s.Commands = append(s.Commands, c)
+// 	return &s.Commands[positionThatAppendWillUse], nil
+// }
 
 // NewExternalReference - This method creates a new empty external reference and
 // returns a reference to it so it can be populated. However, if one or more
@@ -82,63 +82,4 @@ func (s *SwitchStep) AddCase(k string, id string) error {
 	}
 	s.Cases[k] = id
 	return nil
-}
-
-// ----------------------------------------------------------------------
-// Define Functions and Methods - CommandData
-// ----------------------------------------------------------------------
-
-// SetManual - This method will set the object type of the command to manual
-func (c *CommandData) SetManual() {
-	c.ObjectType = "manual"
-}
-
-// SetBash - This method will set the object type of the command to bash
-func (c *CommandData) SetBash() {
-	c.ObjectType = "bash"
-}
-
-// SetHTTPAPI - This method will set the object type of the command to http-api
-func (c *CommandData) SetHTTPAPI() {
-	c.ObjectType = "http-api"
-}
-
-// SetSSH - This method will set the object type of the command to ssh
-func (c *CommandData) SetSSH() {
-	c.ObjectType = "ssh"
-}
-
-// SetCalderaCMD - This method will set the object type of the command to caldera-cmd
-func (c *CommandData) SetCalderaCMD() {
-	c.ObjectType = "caldera-cmd"
-}
-
-// SetElastic - This method will set the object type of the command to elastic
-func (c *CommandData) SetElastic() {
-	c.ObjectType = "elastic"
-}
-
-// SetJupyter - This method will set the object type of the command to jupyter
-func (c *CommandData) SetJupyter() {
-	c.ObjectType = "jupyter"
-}
-
-// SetKestrel - This method will set the object type of the command to kestrel
-func (c *CommandData) SetKestrel() {
-	c.ObjectType = "kestrel"
-}
-
-// SetOpenC2JSON - This method will set the object type of the command to openc2-json
-func (c *CommandData) SetOpenC2JSON() {
-	c.ObjectType = "openc2-json"
-}
-
-// SetSigma - This method will set the object type of the command to sigma
-func (c *CommandData) SetSigma() {
-	c.ObjectType = "sigma"
-}
-
-// SetYara - This method will set the object type of the command to yara
-func (c *CommandData) SetYara() {
-	c.ObjectType = "yara"
 }

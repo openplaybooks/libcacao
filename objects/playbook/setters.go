@@ -180,10 +180,10 @@ func (p *Playbook) AddMarkingDefinition(v markings.DataMarkingObject) error {
 	return nil
 }
 
-// AddWorkflowStep - This method takes in an interface represening a workflow
-// step object that satisfies the workflow.StepObject interface and adds it to
-// the map.
-func (p *Playbook) AddWorkflowStep(v workflow.StepObject) error {
+// AddStep - This method takes in an interface represening a workflow step
+// object that satisfies the workflow.StepObject interface and adds it to the
+// map.
+func (p *Playbook) AddStep(v workflow.StepObject) error {
 	k := v.GetCommon().ID
 	if p.Workflow == nil {
 		m := make(map[string]workflow.StepObject, 0)

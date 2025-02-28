@@ -7,6 +7,7 @@ package workflow
 
 import (
 	"github.com/openplaybooks/libcacao/objects"
+	"github.com/openplaybooks/libcacao/objects/commands"
 )
 
 // ----------------------------------------------------------------------
@@ -80,33 +81,6 @@ func (s *EndStep) GetCommon() CommonProperties {
 	return s.CommonProperties
 }
 
-// CommandData - This type implement the CACAO 3.0 command data type.
-//
-// The CACAO command object (command-data) contains detailed information about
-// the commands that are to be executed or processed automatically or manually
-// as part of an action step (see section 4.5). Each command listed in an
-// action step may be of a different command type, however, all commands listed
-// in a single step MUST be processed or executed by all of the agents defined
-// in that step.
-//
-// Commands can use and refer to variables just like other parts of the
-// playbook. For each command either the command property or the command_b64
-// property MUST be present.
-//
-// The individual commands MAY be defined in other specifications, and when
-// possible will be mapped to the JSON structure of this specification. When
-// that is not possible, they will be base64 encoded.
-type CommandData struct {
-	ObjectType       string   `json:"type,omitempty"`
-	Description      string   `json:"description,omitempty"`
-	Command          string   `json:"command,omitempty"`
-	CommandB64       string   `json:"command_b64,omitempty"`
-	Version          string   `json:"version,omitempty"`
-	PlaybookActivity string   `json:"playbook_activity,omitempty"`
-	InArgs           []string `json:"in_args,omitempty"`
-	OutArgs          []string `json:"out_args,omitempty"`
-}
-
 // ActionStep - This type implmenets the CACAO 3.0 workflow action step and
 // defines all of the properties associated with the action step.
 //
@@ -115,7 +89,7 @@ type CommandData struct {
 // sequentially.
 type ActionStep struct {
 	CommonProperties
-	Commands           []CommandData               `json:"commands,omitempty"`
+	Commands           []commands.CommandObject    `json:"commands,omitempty"`
 	Timeout            int                         `json:"timeout,omitempty"`
 	OnTimeout          string                      `json:"on_timeout,omitempty"`
 	OnSuccess          string                      `json:"on_success,omitempty"`

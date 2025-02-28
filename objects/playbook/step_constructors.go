@@ -19,7 +19,7 @@ func (p *Playbook) NewStartStep() (*workflow.StartStep, error) {
 	var s workflow.StartStep
 	s.ObjectType = "start"
 	err := s.SetNewID(s.ObjectType)
-	p.AddWorkflowStep(&s)
+	p.AddStep(&s)
 	return &s, err
 }
 
@@ -29,7 +29,7 @@ func (p *Playbook) NewReturnStep() (*workflow.ReturnStep, error) {
 	var s workflow.ReturnStep
 	s.ObjectType = "return"
 	err := s.SetNewID(s.ObjectType)
-	p.AddWorkflowStep(&s)
+	p.AddStep(&s)
 	return &s, err
 }
 
@@ -39,7 +39,7 @@ func (p *Playbook) NewEndStep() (*workflow.EndStep, error) {
 	var s workflow.EndStep
 	s.ObjectType = "end"
 	err := s.SetNewID(s.ObjectType)
-	p.AddWorkflowStep(&s)
+	p.AddStep(&s)
 	return &s, err
 }
 
@@ -49,7 +49,7 @@ func (p *Playbook) NewActionStep() (*workflow.ActionStep, error) {
 	var s workflow.ActionStep
 	s.ObjectType = "action"
 	err := s.SetNewID(s.ObjectType)
-	p.AddWorkflowStep(&s)
+	p.AddStep(&s)
 	return &s, err
 }
 
@@ -59,7 +59,7 @@ func (p *Playbook) NewPlaybookActionStep() (*workflow.PlaybookActionStep, error)
 	var s workflow.PlaybookActionStep
 	s.ObjectType = "playbook-action"
 	err := s.SetNewID(s.ObjectType)
-	p.AddWorkflowStep(&s)
+	p.AddStep(&s)
 	return &s, err
 }
 
@@ -69,7 +69,7 @@ func (p *Playbook) NewParallelStep() (*workflow.ParallelStep, error) {
 	var s workflow.ParallelStep
 	s.ObjectType = "parallel"
 	err := s.SetNewID(s.ObjectType)
-	p.AddWorkflowStep(&s)
+	p.AddStep(&s)
 	return &s, err
 }
 
@@ -79,7 +79,7 @@ func (p *Playbook) NewForeachStep() (*workflow.ForeachStep, error) {
 	var s workflow.ForeachStep
 	s.ObjectType = "foreach"
 	err := s.SetNewID(s.ObjectType)
-	p.AddWorkflowStep(&s)
+	p.AddStep(&s)
 	return &s, err
 }
 
@@ -89,7 +89,7 @@ func (p *Playbook) NewWhileStep() (*workflow.WhileStep, error) {
 	var s workflow.WhileStep
 	s.ObjectType = "while"
 	err := s.SetNewID(s.ObjectType)
-	p.AddWorkflowStep(&s)
+	p.AddStep(&s)
 	return &s, err
 }
 
@@ -99,7 +99,7 @@ func (p *Playbook) NewIfThenStep() (*workflow.IfThenStep, error) {
 	var s workflow.IfThenStep
 	s.ObjectType = "if-then"
 	err := s.SetNewID(s.ObjectType)
-	p.AddWorkflowStep(&s)
+	p.AddStep(&s)
 	return &s, err
 }
 
@@ -109,6 +109,6 @@ func (p *Playbook) NewSwitchStep() (*workflow.SwitchStep, error) {
 	var s workflow.SwitchStep
 	s.ObjectType = "switch"
 	err := s.SetNewID(s.ObjectType)
-	p.AddWorkflowStep(&s)
+	p.AddStep(&s)
 	return &s, err
 }

@@ -21,21 +21,3 @@ func GetWorkflowStepTypesVocab() []string {
 		"switch",
 	}
 }
-
-// GetCommandDataTypesVocab - This will return a list of officially supported
-// command data types
-func GetCommandDataTypesVocab() []string {
-	return []string{
-		"manual",
-		"bash",
-		"http-api",
-		"ssh",
-		"caldera-cmd",
-		"elastic",
-		"jupyter",
-		"kestrel",
-		"openc2-json",
-		"sigma",
-		"yara",
-	}
-}
