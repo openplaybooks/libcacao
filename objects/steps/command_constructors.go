@@ -18,6 +18,15 @@ import (
 func (s *ActionStep) NewManualCommand() (*commands.Manual, error) {
 	var c commands.Manual
 	c.ObjectType = "manual"
-	s.AddCommand(&c)
+	s.Commands = append(s.Commands, &c)
+	return &c, nil
+}
+
+// NewBashCommand - Create and initialize a new manual command object and return it as
+// a pointer.
+func (s *ActionStep) NewBashCommand() (*commands.Manual, error) {
+	var c commands.Manual
+	c.ObjectType = "bash"
+	s.Commands = append(s.Commands, &c)
 	return &c, nil
 }

@@ -9,7 +9,6 @@ import (
 	"fmt"
 
 	"github.com/openplaybooks/libcacao/objects"
-	"github.com/openplaybooks/libcacao/objects/commands"
 )
 
 // ----------------------------------------------------------------------
@@ -59,26 +58,6 @@ func (s *CommonProperties) AddVariable(v objects.Variables) error {
 // ----------------------------------------------------------------------
 // Define Action Step Functions and Methods
 // ----------------------------------------------------------------------
-
-// AddCommand - This method takes in an interface represening a command object
-// that satisfies the command.CommandObject interface and adds it to the map.
-func (s *ActionStep) AddCommand(v ...commands.CommandObject) (*commands.CommandObject, error) {
-	positionThatAppendWillUse := len(s.Commands)
-
-	if len(v) > 0 {
-		for i := range v {
-			// Update the value so we grab the last one entered
-			positionThatAppendWillUse = len(s.Commands)
-			s.Commands = append(s.Commands, v[i])
-		}
-		return &s.Commands[positionThatAppendWillUse], nil
-	}
-
-	// If one was not passed in, lets create one
-	var c commands.CommandObject
-	s.Commands = append(s.Commands, c)
-	return &s.Commands[positionThatAppendWillUse], nil
-}
 
 // NewExternalReference - This method creates a new empty external reference and
 // returns a reference to it so it can be populated. However, if one or more

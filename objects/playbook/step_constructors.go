@@ -13,6 +13,42 @@ import (
 // Workflow Step Constructors
 // ----------------------------------------------------------------------
 
+// AddStep - This method takes in an interface represening a workflow step
+// object that satisfies the workflow.StepObject interface and adds it to the
+// map.
+func (p *Playbook) AddStep(s steps.StepObject) error {
+	k := s.GetCommon().ID
+	if p.Workflow == nil {
+		m := make(map[string]steps.StepObject, 0)
+		p.Workflow = m
+	}
+	p.Workflow[k] = s
+	// After we add it to the playbook lets clear out the embedded ID
+	//v.ClearID()
+
+	// Make sure we call you the logic features as needed
+	if p.PlaybookProcessingSummary == nil {
+		var ps ProcessingSummary
+		p.PlaybookProcessingSummary = &ps
+	}
+
+	switch s.GetCommon().ObjectType {
+	case "playbook-action":
+		p.PlaybookProcessingSummary.ExternalPlaybooks = true
+	case "parallel":
+		p.PlaybookProcessingSummary.ParallelProcessing = true
+	case "foreach":
+		p.PlaybookProcessingSummary.ForeachLogic = true
+	case "while":
+		p.PlaybookProcessingSummary.WhileLogic = true
+	case "if-then":
+		p.PlaybookProcessingSummary.IfLogic = true
+	case "switch":
+		p.PlaybookProcessingSummary.SwitchLogic = true
+	}
+	return nil
+}
+
 // NewStartStep - Create and initialize a new start step object and return it as
 // a pointer.
 func (p *Playbook) NewStartStep() (*steps.StartStep, error) {
