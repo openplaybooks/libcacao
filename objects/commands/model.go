@@ -56,7 +56,10 @@ func (c *Manual) GetCommon() CommonProperties {
 // Bash - This type implmenets the CACAO 3.0 bash command and defines all of
 // its properties.
 //
-// The bash command represents a command that is intended to be processed via a shell without a login/remote connection. In addition to the inherited properties, this section defines the following additional properties that are valid for this type.
+// The bash command represents a command that is intended to be processed via a
+// shell without a login/remote connection. In addition to the inherited
+// properties, this section defines the following additional properties that
+// are valid for this type.
 //
 // * One of the following properties MUST be populated, command or command_b64.
 type Bash struct {
@@ -68,5 +71,25 @@ type Bash struct {
 
 // GetCommon - Implement the CommandObject interface and return common properties
 func (c *Bash) GetCommon() CommonProperties {
+	return c.CommonProperties
+}
+
+// HTTPAPI - This type implmenets the CACAO 3.0 http-api command and defines all
+// of its properties.
+//
+// The HTTP API command represents a command that is intended to be processed
+// via an HTTP API. In addition to the inherited properties, this section
+// defines the following additional properties that are valid for this type.
+type HTTPAPI struct {
+	CommonProperties
+	Command      string              `json:"command,omitempty"`
+	Headers      map[string][]string `json:"headers,omitempty"`
+	Content      string              `json:"content,omitempty"`
+	ContentB64   string              `json:"content_b64,omitempty"`
+	ReturnedData map[string]string   `json:"returned_data,omitempty"`
+}
+
+// GetCommon - Implement the CommandObject interface and return common properties
+func (c *HTTPAPI) GetCommon() CommonProperties {
 	return c.CommonProperties
 }

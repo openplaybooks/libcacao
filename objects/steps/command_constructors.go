@@ -30,3 +30,17 @@ func (s *ActionStep) NewBashCommand() (*commands.Bash, error) {
 	s.Commands = append(s.Commands, &c)
 	return &c, nil
 }
+
+// NewHTTPAPICommand - Create and initialize a new http-api command object and
+// return it as a pointer.
+func (s *ActionStep) NewHTTPAPICommand() (*commands.HTTPAPI, error) {
+	var c commands.HTTPAPI
+	c.ObjectType = "http-api"
+
+	if c.ReturnedData == nil {
+		m := make(map[string]string, 0)
+		c.ReturnedData = m
+	}
+	s.Commands = append(s.Commands, &c)
+	return &c, nil
+}
