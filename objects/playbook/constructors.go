@@ -1,4 +1,4 @@
-// Copyright 2025 Bret Jordan, All rights reserved.
+// Copyright 2019-2025 Bret Jordan, All rights reserved.
 //
 // Use of this source code is governed by an Apache 2.0 license that can be
 // found in the LICENSE file in the root of the source tree.
@@ -6,8 +6,43 @@
 package playbook
 
 import (
+	"fmt"
+
+	"github.com/openplaybooks/libcacao/objects"
 	"github.com/openplaybooks/libcacao/objects/steps"
+	"github.com/openplaybooks/libcacao/objects/variables"
 )
+
+// ----------------------------------------------------------------------
+// Variable Constructor
+// ----------------------------------------------------------------------
+
+// AddVariable - This method takes in an interface represening a variable object
+// that satisfies the variables.VariableObject interface and adds it to the
+// map.
+func (p *Playbook) AddVariable(v variables.VariableObject) error {
+	if !objects.IsVocabValueValid(v.GetCommon().ObjectType, variables.GetVariableTypesVocab()) {
+		return fmt.Errorf("the variable type %s is not valid", v.GetCommon().ObjectType)
+	}
+
+	if p.PlaybookVariables == nil {
+		m := make(map[string]variables.VariableObject, 0)
+		p.PlaybookVariables = m
+	}
+	k := v.GetCommon().Name
+	p.PlaybookVariables[k] = v
+	return nil
+}
+
+// NewStringVariable - Create and initialize a new string variable with a name
+// (n) and a type (t) and return it as a pointer.
+func (p *Playbook) NewStringVariable(n string, t string) (*variables.StringVariable, error) {
+	var v variables.StringVariable
+	v.ObjectType = t
+	v.Name = n
+	err := p.AddVariable(&v)
+	return &v, err
+}
 
 // ----------------------------------------------------------------------
 // Workflow Step Constructors
@@ -17,14 +52,12 @@ import (
 // object that satisfies the workflow.StepObject interface and adds it to the
 // map.
 func (p *Playbook) AddStep(s steps.StepObject) error {
-	k := s.GetCommon().ID
 	if p.Workflow == nil {
 		m := make(map[string]steps.StepObject, 0)
 		p.Workflow = m
 	}
+	k := s.GetCommon().ID
 	p.Workflow[k] = s
-	// After we add it to the playbook lets clear out the embedded ID
-	//v.ClearID()
 
 	// Make sure we call you the logic features as needed
 	if p.PlaybookProcessingSummary == nil {

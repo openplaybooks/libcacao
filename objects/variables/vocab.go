@@ -3,23 +3,31 @@
 // Use of this source code is governed by an Apache 2.0 license that can be
 // found in the LICENSE file in the root of the source tree.
 
-package playbook
+package variables
 
 // ----------------------------------------------------------------------
 // Vocabulary Functions
 // ----------------------------------------------------------------------
 
-// GetPlaybookTypesVocab - This will return a slice of officially supported
-// playbook types
-func GetPlaybookTypesVocab() []string {
+// GetVariableTypesVocab - This will return a slice of officially supported
+// variable types.
+func GetVariableTypesVocab() []string {
 	return []string{
-		"attack",
-		"detection",
-		"engagement",
-		"investigation",
-		"mitigation",
-		"notification",
-		"prevention",
-		"remediation",
+		"bool",
+		"dictionary",
+		"float",
+		"hexstring",
+		"integer",
+		"ipv4-addr",
+		"ipv6-addr",
+		"list",
+		"long",
+		"mac-addr",
+		"hash",
+		"md5-hash",
+		"sha256-hash",
+		"string",
+		"uri",
+		"uuid",
 	}
 }

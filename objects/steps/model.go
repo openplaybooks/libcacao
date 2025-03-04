@@ -1,4 +1,4 @@
-// Copyright 2025 Bret Jordan, All rights reserved.
+// Copyright 2019-2025 Bret Jordan, All rights reserved.
 //
 // Use of this source code is governed by an Apache 2.0 license that can be
 // found in the LICENSE file in the root of the source tree.
@@ -8,6 +8,7 @@ package steps
 import (
 	"github.com/openplaybooks/libcacao/objects"
 	"github.com/openplaybooks/libcacao/objects/commands"
+	"github.com/openplaybooks/libcacao/objects/variables"
 )
 
 // ----------------------------------------------------------------------
@@ -27,13 +28,13 @@ type StepObject interface {
 // table. The ID property here is just to help make processing easier, it will
 // be removed when it is added to the playbook.
 type CommonProperties struct {
-	ObjectType    string                       `json:"type,omitempty"`
-	ID            string                       `json:"id,omitempty"`
-	Name          string                       `json:"name,omitempty"`
-	Description   string                       `json:"description,omitempty"`
-	Owner         string                       `json:"owner,omitempty"`
-	Delay         int                          `json:"delay,omitempty"`
-	StepVariables map[string]objects.Variables `json:"playbook_variables,omitempty"`
+	ObjectType    string                              `json:"type,omitempty"`
+	ID            string                              `json:"id,omitempty"`
+	Name          string                              `json:"name,omitempty"`
+	Description   string                              `json:"description,omitempty"`
+	Owner         string                              `json:"owner,omitempty"`
+	Delay         int                                 `json:"delay,omitempty"`
+	StepVariables map[string]variables.VariableObject `json:"playbook_variables,omitempty"`
 	// Coordinates
 	// StepExtensions
 }

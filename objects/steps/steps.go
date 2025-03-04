@@ -1,4 +1,4 @@
-// Copyright 2025 Bret Jordan, All rights reserved.
+// Copyright 2019-2025 Bret Jordan, All rights reserved.
 //
 // Use of this source code is governed by an Apache 2.0 license that can be
 // found in the LICENSE file in the root of the source tree.
@@ -9,6 +9,7 @@ import (
 	"fmt"
 
 	"github.com/openplaybooks/libcacao/objects"
+	"github.com/openplaybooks/libcacao/objects/variables"
 )
 
 // ----------------------------------------------------------------------
@@ -38,21 +39,31 @@ func (s *CommonProperties) ClearID() {
 	s.ID = ""
 }
 
-// AddVariable - This method takes in a Variable object and adds it to the
-// workflow step object as a local step variable.
-func (s *CommonProperties) AddVariable(v objects.Variables) error {
-	if !objects.IsVocabValueValid(v.ObjectType, objects.GetVariableTypesVocab()) {
-		return fmt.Errorf("the variable type %s is not valid", v.ObjectType)
+// AddVariable - This method takes in an interface represening a variable object
+// that satisfies the variables.VariableObject interface and adds it to the
+// map.
+func (s *CommonProperties) AddVariable(v variables.VariableObject) error {
+	if !objects.IsVocabValueValid(v.GetCommon().ObjectType, variables.GetVariableTypesVocab()) {
+		return fmt.Errorf("the variable type %s is not valid", v.GetCommon().ObjectType)
 	}
 
 	if s.StepVariables == nil {
-		m := make(map[string]objects.Variables, 0)
+		m := make(map[string]variables.VariableObject, 0)
 		s.StepVariables = m
 	}
-	name := v.Name
-	v.Name = ""
-	s.StepVariables[name] = v
+	k := v.GetCommon().Name
+	s.StepVariables[k] = v
 	return nil
+}
+
+// NewStringVariable - Create and initialize a new string variable with a name
+// (n) and a type (t) and return it as a pointer.
+func (s *CommonProperties) NewStringVariable(n string, t string) (*variables.StringVariable, error) {
+	var v variables.StringVariable
+	v.ObjectType = t
+	v.Name = n
+	err := s.AddVariable(&v)
+	return &v, err
 }
 
 // ----------------------------------------------------------------------

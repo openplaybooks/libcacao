@@ -1,4 +1,4 @@
-// Copyright 2023 Bret Jordan, All rights reserved.
+// Copyright 2019-2025 Bret Jordan, All rights reserved.
 //
 // Use of this source code is governed by an Apache 2.0 license that can be
 // found in the LICENSE file in the root of the source tree.
@@ -7,7 +7,6 @@ package playbook
 
 import (
 	"errors"
-	"fmt"
 	"time"
 
 	"github.com/openplaybooks/libcacao/objects"
@@ -149,23 +148,6 @@ func (p *Playbook) NewExternalReference(r ...objects.ExternalReference) (*object
 	return &p.ExternalReferences[positionThatAppendWillUse], nil
 }
 
-// AddVariable - This method takes in a Variable object and adds it to the
-// playbook object as a global playbook variable.
-func (p *Playbook) AddVariable(v objects.Variables) error {
-	if !objects.IsVocabValueValid(v.ObjectType, objects.GetVariableTypesVocab()) {
-		return fmt.Errorf("the variable type %s is not valid", v.ObjectType)
-	}
-
-	if p.PlaybookVariables == nil {
-		m := make(map[string]objects.Variables, 0)
-		p.PlaybookVariables = m
-	}
-	name := v.Name
-	v.Name = ""
-	p.PlaybookVariables[name] = v
-	return nil
-}
-
 // AddMarkingDefinition - This method takes in an interface represening a
 // marking definition object that satisfies the markings.DataMarkingObject
 // interface and adds it to the map.
@@ -185,6 +167,16 @@ func (p *Playbook) AddMarkingDefinition(v markings.DataMarkingObject) error {
 func (p *Playbook) ClearWorkflowStepIDs() error {
 	for id := range p.Workflow {
 		p.Workflow[id].ClearID()
+	}
+	return nil
+}
+
+// ClearVariableNames - This method will zero out all of the names that are in
+// the variable objects since the specification only has the names at the
+// dictionary level.
+func (p *Playbook) ClearVariableNames() error {
+	for name := range p.PlaybookVariables {
+		p.PlaybookVariables[name].ClearName()
 	}
 	return nil
 }

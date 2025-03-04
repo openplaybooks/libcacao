@@ -1,4 +1,4 @@
-// Copyright 2023 Bret Jordan, All rights reserved.
+// Copyright 2019-2025 Bret Jordan, All rights reserved.
 //
 // Use of this source code is governed by an Apache 2.0 license that can be
 // found in the LICENSE file in the root of the source tree.
@@ -43,6 +43,7 @@ func (p *Playbook) Encode() ([]byte, error) {
 	// After everything is done, then do this
 	// Remove all of the IDs from the workflow steps since the specification only has them at the map level
 	p.ClearWorkflowStepIDs()
+	p.ClearVariableNames()
 
 	data, err := json.MarshalIndent(p, "", "  ")
 	if err != nil {
