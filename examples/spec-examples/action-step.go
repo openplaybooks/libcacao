@@ -47,7 +47,7 @@ func main() {
 	step3.Name = "Action Step 3"
 	step3.Description = "Block IP address."
 	cmd2, _ := step2.NewHTTPAPICommand()
-	cmd2.Command = "https://my.firewall.com/block.php?ip=__bad_ip_address__"
+	cmd2.Command = "https://my.firewall.com/block.php?ip=__bad_ip_address__:value"
 	cmd2.ReturnedData["status_code"] = "__block_status__"
 
 	ret, _ := p.NewReturnStep()
