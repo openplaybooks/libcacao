@@ -26,8 +26,9 @@ type CommandObject interface {
 // be removed when it is added to the playbook.
 type CommonProperties struct {
 	ObjectType         string                      `json:"type,omitempty"`
-	Description        string                      `json:"description,omitempty"`
+	ID                 string                      `json:"id,omitempty"`
 	Version            string                      `json:"version,omitempty"`
+	Description        string                      `json:"description,omitempty"`
 	PlaybookActivity   string                      `json:"playbook_activity,omitempty"`
 	ExternalReferences []objects.ExternalReference `json:"external_references,omitempty"`
 }
@@ -43,9 +44,18 @@ type CommonProperties struct {
 // * Either the command property or the command_b64 property MUST be populated.
 type Manual struct {
 	CommonProperties
-	Command      string            `json:"command,omitempty"`
-	CommandB64   string            `json:"command_b64,omitempty"`
-	ReturnedData map[string]string `json:"returned_data,omitempty"`
+	Command    string         `json:"command,omitempty"`
+	CommandB64 string         `json:"command_b64,omitempty"`
+	Questions  []QuestionData `json:"questions,omitempty"`
+}
+
+// QuestionData - This type defines all of the properties associated with
+// the response data type.
+type QuestionData struct {
+	ObjectType string `json:"type,omitempty"`
+	ID         string `json:"id,omitempty"`
+	Question   string `json:"question,omitempty"`
+	DataType   string `json:"data_type,omitempty"`
 }
 
 // GetCommon - Implement the CommandObject interface and return common properties

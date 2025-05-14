@@ -18,6 +18,7 @@ import (
 func (s *ActionStep) NewManualCommand() (*commands.Manual, error) {
 	var c commands.Manual
 	c.ObjectType = "manual"
+	c.SetNewID(c.ObjectType)
 	s.Commands = append(s.Commands, &c)
 	return &c, nil
 }
@@ -27,6 +28,7 @@ func (s *ActionStep) NewManualCommand() (*commands.Manual, error) {
 func (s *ActionStep) NewBashCommand() (*commands.Bash, error) {
 	var c commands.Bash
 	c.ObjectType = "bash"
+	c.SetNewID(c.ObjectType)
 	s.Commands = append(s.Commands, &c)
 	return &c, nil
 }
@@ -36,11 +38,7 @@ func (s *ActionStep) NewBashCommand() (*commands.Bash, error) {
 func (s *ActionStep) NewHTTPAPICommand() (*commands.HTTPAPI, error) {
 	var c commands.HTTPAPI
 	c.ObjectType = "http-api"
-
-	if c.ReturnedData == nil {
-		m := make(map[string]string, 0)
-		c.ReturnedData = m
-	}
+	c.SetNewID(c.ObjectType)
 	s.Commands = append(s.Commands, &c)
 	return &c, nil
 }
