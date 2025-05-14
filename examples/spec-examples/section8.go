@@ -38,8 +38,8 @@ func manualcommand(p *playbook.Playbook) {
 	cmd2.Command = "Disconnect the machine from the network."
 	cmd2.AddQuestion("Was the computer removed from the network?", "bool")
 
-	fmt.Printf("\n%s.%s.%s:value\n\n", step1.ID, cmd1.ID, r1.ID)
-	fmt.Printf("%s:value\n\n", r1.ID)
+	fmt.Printf("\n%s.%s.%s.response:value\n\n", step1.ID, cmd1.ID, r1.ID)
+	fmt.Printf("%s.response:value\n\n", r1.ID)
 	encode(p)
 }
 
@@ -53,6 +53,7 @@ func bashcommand(p *playbook.Playbook) {
 	cmd1.Command = "cat /var/log/auth.log | grep -i 'failed password'"
 
 	fmt.Printf("\n%s.%s.stdout:value\n\n", step1.ID, cmd1.ID)
+	fmt.Printf("%s.stdout:value\n\n", cmd1.ID)
 	encode(p)
 }
 
