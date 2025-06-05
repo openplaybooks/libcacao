@@ -23,11 +23,18 @@ func IsUUIDValid(uuid string) bool {
 	return r.MatchString(uuid)
 }
 
-// CreateID - This method takes in a string value representing an object type
+// CreateID - This function takes in a string value representing an object type
 // and creates and returns a new UUIDv4 ID based on the specification format.
 func CreateID(s string) (string, error) {
 	id := s + "--" + uuid.New().String()
 	return id, nil
+}
+
+// SplitID - This function takes in a string value representing a CACAO ID and
+// returns the object type and UUID as separate values
+func SplitID(s string) (string, string, error) {
+	values := strings.Split(s, "--")
+	return values[0], values[1], nil
 }
 
 // GetCurrentSpecVersion - This function returns the current specification version

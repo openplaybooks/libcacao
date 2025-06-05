@@ -13,6 +13,16 @@ import (
 // Command Constructors
 // ----------------------------------------------------------------------
 
+// NewAssignmentCommand - Create and initialize a new assignment command object
+// and return it as a pointer.
+func (s *ActionStep) NewAssignmentCommand() (*commands.Assignment, error) {
+	var c commands.Assignment
+	c.ObjectType = "assignment"
+	c.SetNewID(c.ObjectType)
+	s.Commands = append(s.Commands, &c)
+	return &c, nil
+}
+
 // NewManualCommand - Create and initialize a new manual command object and return it as
 // a pointer.
 func (s *ActionStep) NewManualCommand() (*commands.Manual, error) {
@@ -33,11 +43,21 @@ func (s *ActionStep) NewBashCommand() (*commands.Bash, error) {
 	return &c, nil
 }
 
-// NewHTTPAPICommand - Create and initialize a new http-api command object and
+// NewSSHCommand - Create and initialize a new manual command object and return it as
+// a pointer.
+func (s *ActionStep) NewSSHCommand() (*commands.SSH, error) {
+	var c commands.SSH
+	c.ObjectType = "ssh"
+	c.SetNewID(c.ObjectType)
+	s.Commands = append(s.Commands, &c)
+	return &c, nil
+}
+
+// NewHTTPCommand - Create and initialize a new http-api command object and
 // return it as a pointer.
-func (s *ActionStep) NewHTTPAPICommand() (*commands.HTTPAPI, error) {
-	var c commands.HTTPAPI
-	c.ObjectType = "http-api"
+func (s *ActionStep) NewHTTPCommand() (*commands.HTTP, error) {
+	var c commands.HTTP
+	c.ObjectType = "http"
 	c.SetNewID(c.ObjectType)
 	s.Commands = append(s.Commands, &c)
 	return &c, nil

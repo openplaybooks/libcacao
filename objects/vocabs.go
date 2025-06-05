@@ -9,6 +9,32 @@ package objects
 // Vocabulary Functions
 // ----------------------------------------------------------------------
 
+// GetOperatorsVocab - This will return a slice of officially supported operator
+// types
+func GetOperatorsVocab() []string {
+	return []string{
+		"to_int",
+		"to_float",
+		"to_str",
+		"to_bool",
+		"to_list",
+	}
+}
+
+// GetDelimitersVocab - This will return a slice of officially supported
+// delimiters
+func GetDelimitersVocab() []string {
+	return []string{
+		":",
+		",",
+		"space",
+		"tab",
+		"lf",
+		"cr",
+		"eol",
+	}
+}
+
 // GetIndustrySectorsVocab - This will return a slice of officially supported
 // industry sectors
 func GetIndustrySectorsVocab() []string {

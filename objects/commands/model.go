@@ -27,10 +27,34 @@ type CommandObject interface {
 type CommonProperties struct {
 	ObjectType         string                      `json:"type,omitempty"`
 	ID                 string                      `json:"id,omitempty"`
-	Version            string                      `json:"version,omitempty"`
 	Description        string                      `json:"description,omitempty"`
+	Version            string                      `json:"version,omitempty"`
 	PlaybookActivity   string                      `json:"playbook_activity,omitempty"`
 	ExternalReferences []objects.ExternalReference `json:"external_references,omitempty"`
+}
+
+// Assignment - This type implmenets the CACAO 3.0 assignement command and
+// defines all of its properties.
+//
+// The assignment command enables variables to be assigned or mapped to a
+// different variable.
+type Assignment struct {
+	CommonProperties
+	VariableAssignments []VariableAssignment `json:"variable_assignments,omitempty"`
+}
+
+// VariableAssignment - This type defines all of the properties associated with
+// the variable assignment data type.
+type VariableAssignment struct {
+	Variable         string `json:"variable,omitempty"`
+	OriginalVariable string `json:"original_variable,omitempty"`
+	Operator         string `json:"operator,omitempty"`
+	Delimiter        string `json:"delimiter,omitempty"`
+}
+
+// GetCommon - Implement the CommandObject interface and returns common properties
+func (c *Assignment) GetCommon() CommonProperties {
+	return c.CommonProperties
 }
 
 // Manual - This type implmenets the CACAO 3.0 manual command and defines all of
@@ -44,21 +68,21 @@ type CommonProperties struct {
 // * Either the command property or the command_b64 property MUST be populated.
 type Manual struct {
 	CommonProperties
-	Command    string         `json:"command,omitempty"`
-	CommandB64 string         `json:"command_b64,omitempty"`
-	Questions  []QuestionData `json:"questions,omitempty"`
+	Command    string     `json:"command,omitempty"`
+	CommandB64 string     `json:"command_b64,omitempty"`
+	Questions  []Question `json:"questions,omitempty"`
 }
 
-// QuestionData - This type defines all of the properties associated with
+// Question - This type defines all of the properties associated with
 // the response data type.
-type QuestionData struct {
+type Question struct {
 	ObjectType string `json:"type,omitempty"`
 	ID         string `json:"id,omitempty"`
-	Question   string `json:"question,omitempty"`
+	Prompt     string `json:"prompt,omitempty"`
 	DataType   string `json:"data_type,omitempty"`
 }
 
-// GetCommon - Implement the CommandObject interface and return common properties
+// GetCommon - Implement the CommandObject interface and returns common properties
 func (c *Manual) GetCommon() CommonProperties {
 	return c.CommonProperties
 }
@@ -66,40 +90,60 @@ func (c *Manual) GetCommon() CommonProperties {
 // Bash - This type implmenets the CACAO 3.0 bash command and defines all of
 // its properties.
 //
-// The bash command represents a command that is intended to be processed via a
-// shell without a login/remote connection. In addition to the inherited
-// properties, this section defines the following additional properties that
-// are valid for this type.
+// The bash command represents a command that is executed via a shell without a
+// login/remote connection. In addition to the inherited properties, this
+// section defines the following additional properties that are valid for this
+// type. Output from these commands can be referenced via the stdout and stderr
+// names, see examples below.
 //
 // * One of the following properties MUST be populated, command or command_b64.
 type Bash struct {
 	CommonProperties
-	Command      string            `json:"command,omitempty"`
-	CommandB64   string            `json:"command_b64,omitempty"`
-	ReturnedData map[string]string `json:"returned_data,omitempty"`
+	Command    string `json:"command,omitempty"`
+	CommandB64 string `json:"command_b64,omitempty"`
 }
 
-// GetCommon - Implement the CommandObject interface and return common properties
+// GetCommon - Implement the CommandObject interface and returns common properties
 func (c *Bash) GetCommon() CommonProperties {
 	return c.CommonProperties
 }
 
-// HTTPAPI - This type implmenets the CACAO 3.0 http-api command and defines all
+// SSH - This type implmenets the CACAO 3.0 ssh command and defines all of
+// its properties.
+//
+// The ssh command represents a command that is intended to be processed via an
+// SSH connection. In addition to the inherited properties, this section
+// defines the following additional properties that are valid for this type.
+// Output from these commands can be referenced via the stdout and stderr
+// names, see examples below.
+//
+// * One of the following properties MUST be populated, command or command_b64.
+type SSH struct {
+	CommonProperties
+	Command    string `json:"command,omitempty"`
+	CommandB64 string `json:"command_b64,omitempty"`
+}
+
+// GetCommon - Implement the CommandObject interface and returns common properties
+func (c *SSH) GetCommon() CommonProperties {
+	return c.CommonProperties
+}
+
+// HTTP - This type implmenets the CACAO 3.0 http-api command and defines all
 // of its properties.
 //
 // The HTTP API command represents a command that is intended to be processed
 // via an HTTP API. In addition to the inherited properties, this section
 // defines the following additional properties that are valid for this type.
-type HTTPAPI struct {
+type HTTP struct {
 	CommonProperties
-	Command      string              `json:"command,omitempty"`
-	Headers      map[string][]string `json:"headers,omitempty"`
-	Content      string              `json:"content,omitempty"`
-	ContentB64   string              `json:"content_b64,omitempty"`
-	ReturnedData map[string]string   `json:"returned_data,omitempty"`
+	Command    string              `json:"command,omitempty"`
+	Headers    map[string][]string `json:"headers,omitempty"`
+	Content    string              `json:"content,omitempty"`
+	ContentB64 string              `json:"content_b64,omitempty"`
 }
 
-// GetCommon - Implement the CommandObject interface and return common properties
-func (c *HTTPAPI) GetCommon() CommonProperties {
+// GetCommon - Implement the CommandObject interface and returns common properties
+func (c *HTTP) GetCommon() CommonProperties {
 	return c.CommonProperties
 }

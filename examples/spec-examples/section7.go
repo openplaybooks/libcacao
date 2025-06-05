@@ -37,6 +37,8 @@ func startstep(p *playbook.Playbook) {
 	step0, _ := p.NewActionStep()
 	step0.Name = "Action Step 0"
 	start.OnSuccess = step0.GetID()
+
+	header("start step")
 	encode(p)
 }
 
@@ -45,6 +47,8 @@ func returnstep(p *playbook.Playbook) {
 	ret, _ := p.NewReturnStep()
 	ret.Name = "Return To Parallel Step 1"
 	ret.Description = "Example of a return step."
+
+	header("return step")
 	encode(p)
 }
 
@@ -53,6 +57,8 @@ func endstep(p *playbook.Playbook) {
 	end, _ := p.NewEndStep()
 	end.Name = "Playbook End"
 	end.Description = "Example of an end step."
+
+	header("end step")
 	encode(p)
 }
 
@@ -80,6 +86,8 @@ func parallelstep(p *playbook.Playbook) {
 	ret2.Name = "Return To Parallel Step 1"
 	ret2.Description = "Example of a return step from branch 2."
 	step2.OnSuccess = ret2.GetID()
+
+	header("parallel step")
 	encode(p)
 }
 
@@ -103,6 +111,8 @@ func foreachstep(p *playbook.Playbook) {
 
 	foreach.Do = step1.GetID()
 	foreach.OnSuccess = step2.GetID()
+
+	header("foreach step")
 	encode(p)
 }
 
@@ -123,6 +133,8 @@ func whilestep(p *playbook.Playbook) {
 	ret1.Name = "Return To While Step 1"
 	ret1.Description = "Example of a return step from branch 1."
 	ontrue1.OnSuccess = ret1.GetID()
+
+	header("while step")
 	encode(p)
 }
 
@@ -138,6 +150,8 @@ func ifthemstep(p *playbook.Playbook) {
 	onfalse1.Name = "Action Step 2"
 	ifthen.OnTrue = ontrue1.GetID()
 	ifthen.OnFalse = onfalse1.GetID()
+
+	header("if-then step")
 	encode(p)
 }
 
@@ -154,6 +168,8 @@ func switchstep(p *playbook.Playbook) {
 
 	sw1.AddCase("192.168.0.11", case1.GetID())
 	sw1.AddCase("192.168.0.12", case2.GetID())
+
+	header("switch step")
 	encode(p)
 }
 
@@ -172,6 +188,8 @@ func actionstep1(p *playbook.Playbook) {
 	step1.Agent = "individual--328a89ab-3b8f-40c4-a491-24a40bcd3cd4"
 	cmd1, _ := step1.NewManualCommand()
 	cmd1.Command = "Disconnect the infected machines from the network"
+
+	header("action step 1")
 	encode(p)
 }
 
@@ -190,7 +208,15 @@ func actionstep2(p *playbook.Playbook) {
 	step1.Agent = "individual--328a89ab-3b8f-40c4-a491-24a40bcd3cd4"
 	cmd1, _ := step1.NewHTTPAPICommand()
 	cmd1.Command = "/v1/blockSystem?id=192.168.0.100"
+
+	header("action step 2")
 	encode(p)
+}
+
+func header(t string) {
+	fmt.Println("\n// ----------------------------------------")
+	fmt.Printf("// %s command example", t)
+	fmt.Println("\n// ----------------------------------------")
 }
 
 func encode(p *playbook.Playbook) {

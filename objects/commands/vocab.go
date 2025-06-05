@@ -15,7 +15,7 @@ func GetCommandTypesVocab() []string {
 	return []string{
 		"manual",
 		"bash",
-		"http-api",
+		"http",
 		"ssh",
 		"caldera-cmd",
 		"elastic",

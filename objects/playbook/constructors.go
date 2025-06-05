@@ -116,8 +116,9 @@ func (p *Playbook) NewEndStep() (*steps.EndStep, error) {
 // as a pointer.
 func (p *Playbook) NewActionStep() (*steps.ActionStep, error) {
 	var s steps.ActionStep
+	var err error
 	s.ObjectType = "action"
-	err := s.SetNewID(s.ObjectType)
+	err = s.SetNewID(s.ObjectType)
 	p.AddStep(&s)
 	return &s, err
 }
