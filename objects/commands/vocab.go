@@ -13,10 +13,12 @@ package commands
 // command data types
 func GetCommandTypesVocab() []string {
 	return []string{
+		"assignment",
 		"manual",
 		"bash",
-		"http",
 		"ssh",
+		"http",
+		"powershell",
 		"caldera-cmd",
 		"elastic",
 		"jupyter",

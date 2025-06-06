@@ -94,3 +94,25 @@ func (c *CommonProperties) GetID() string {
 func (c *CommonProperties) ClearID() {
 	c.ID = ""
 }
+
+// NewExternalReference - This method creates a new empty external reference and
+// returns a reference to it so it can be populated. However, if one or more
+// external references are passed in they are all added and the reference that
+// is returned is for the last entry added.
+func (c *CommonProperties) NewExternalReference(r ...objects.ExternalReference) (*objects.ExternalReference, error) {
+	positionThatAppendWillUse := len(c.ExternalReferences)
+
+	if len(r) > 0 {
+		for i := range r {
+			// Update the value so we grab the last one entered
+			positionThatAppendWillUse = len(c.ExternalReferences)
+			c.ExternalReferences = append(c.ExternalReferences, r[i])
+		}
+		return &c.ExternalReferences[positionThatAppendWillUse], nil
+	}
+
+	// If one was not passed in, lets create one
+	var er objects.ExternalReference
+	c.ExternalReferences = append(c.ExternalReferences, er)
+	return &c.ExternalReferences[positionThatAppendWillUse], nil
+}

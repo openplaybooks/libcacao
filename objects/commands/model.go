@@ -147,3 +147,78 @@ type HTTP struct {
 func (c *HTTP) GetCommon() CommonProperties {
 	return c.CommonProperties
 }
+
+// PowerShell - This type implmenets the CACAO 3.0 powershell command and
+// defines all of its properties.
+//
+// The powershell command represents a command that is intended to be processed
+// via a PowerShell processor. In addition to the inherited properties, this
+// section defines the following additional properties that are valid for this
+// type. Output from these commands can be referenced via the stdout and stderr
+// names, see examples below.
+//
+// * One of the following properties MUST be populated, command or command_b64.
+type PowerShell struct {
+	CommonProperties
+	Command    string `json:"command,omitempty"`
+	CommandB64 string `json:"command_b64,omitempty"`
+}
+
+// GetCommon - Implement the CommandObject interface and returns common properties
+func (c *PowerShell) GetCommon() CommonProperties {
+	return c.CommonProperties
+}
+
+// Sigma - This type implmenets the CACAO 3.0 sigma command and defines all of
+// its properties.
+//
+// The sigma command represents a command that is intended to be processed
+// via a Sigma processor. In addition to the inherited properties, this
+// section defines the following additional properties that are valid for this
+// type. Output from these commands can be referenced via the stdout and stderr
+// names, see examples below.
+type Sigma struct {
+	CommonProperties
+	CommandB64 string `json:"command_b64,omitempty"`
+}
+
+// GetCommon - Implement the CommandObject interface and returns common properties
+func (c *Sigma) GetCommon() CommonProperties {
+	return c.CommonProperties
+}
+
+// Yara - This type implmenets the CACAO 3.0 yara command and defines all of its
+// properties.
+//
+// The yara command represents a command that is intended to be processed via a
+// Yara processor. In addition to the inherited properties, this section
+// defines the following additional properties that are valid for this type.
+// Output from these commands can be referenced via the stdout and stderr
+// names, see examples below.
+type Yara struct {
+	CommonProperties
+	CommandB64 string `json:"command_b64,omitempty"`
+}
+
+// GetCommon - Implement the CommandObject interface and returns common properties
+func (c *Yara) GetCommon() CommonProperties {
+	return c.CommonProperties
+}
+
+// Kestrel - This type implmenets the CACAO 3.0 kestrel command and defines all
+// of its properties.
+//
+// The kestrel command represents a command that is intended to be processed via
+// a Kestrel processor. In addition to the inherited properties, this section
+// defines the following additional properties that are valid for this type.
+// Output from these commands can be referenced via the stdout and stderr
+// names, see examples below.
+type Kestrel struct {
+	CommonProperties
+	CommandB64 string `json:"command_b64,omitempty"`
+}
+
+// GetCommon - Implement the CommandObject interface and returns common properties
+func (c *Kestrel) GetCommon() CommonProperties {
+	return c.CommonProperties
+}

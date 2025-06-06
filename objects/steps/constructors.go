@@ -62,3 +62,43 @@ func (s *ActionStep) NewHTTPCommand() (*commands.HTTP, error) {
 	s.Commands = append(s.Commands, &c)
 	return &c, nil
 }
+
+// NewPowerShellCommand - Create and initialize a new manual command object and return it as
+// a pointer.
+func (s *ActionStep) NewPowerShellCommand() (*commands.PowerShell, error) {
+	var c commands.PowerShell
+	c.ObjectType = "powershell"
+	c.SetNewID(c.ObjectType)
+	s.Commands = append(s.Commands, &c)
+	return &c, nil
+}
+
+// NewSigmaCommand - Create and initialize a new manual command object and return it as
+// a pointer.
+func (s *ActionStep) NewSigmaCommand() (*commands.Sigma, error) {
+	var c commands.Sigma
+	c.ObjectType = "sigma"
+	c.SetNewID(c.ObjectType)
+	s.Commands = append(s.Commands, &c)
+	return &c, nil
+}
+
+// NewYaraCommand - Create and initialize a new manual command object and return it as
+// a pointer.
+func (s *ActionStep) NewYaraCommand() (*commands.Yara, error) {
+	var c commands.Yara
+	c.ObjectType = "yara"
+	c.SetNewID(c.ObjectType)
+	s.Commands = append(s.Commands, &c)
+	return &c, nil
+}
+
+// NewKestrelCommand - Create and initialize a new manual command object and return it as
+// a pointer.
+func (s *ActionStep) NewKestrelCommand() (*commands.Kestrel, error) {
+	var c commands.Kestrel
+	c.ObjectType = "kestrel"
+	c.SetNewID(c.ObjectType)
+	s.Commands = append(s.Commands, &c)
+	return &c, nil
+}
