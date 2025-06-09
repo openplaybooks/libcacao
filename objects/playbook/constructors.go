@@ -37,12 +37,22 @@ func (p *Playbook) AddVariable(v variables.VariableObject) error {
 	return nil
 }
 
-// NewStringVariable - Create and initialize a new string variable with a name
-// (n) and a type (t) and return it as a pointer.
-func (p *Playbook) NewStringVariable(n string, t string) (*variables.StringVariable, error) {
+// NewVariable - Create and initialize a new string variable with a name
+// (n), type (t), and an optional string value (s) and return it as a pointer.
+func (p *Playbook) NewVariable(n string, t string, s ...string) (*variables.StringVariable, error) {
+
+	// TODO add checks to make sure variable name (n) and value (s) are valid
+
+	if t == "list" || t == "dictionary" {
+		return nil, errors.New("this method does not support this type")
+	}
+
 	var v variables.StringVariable
 	v.ObjectType = t
 	v.Name = n
+	if s != nil {
+		v.Value = s[0]
+	}
 	err := p.AddVariable(&v)
 	return &v, err
 }
@@ -62,25 +72,28 @@ func (p *Playbook) AddStep(s steps.StepObject) error {
 	k := s.GetCommon().ID
 	p.Workflow[k] = s
 
-	// Identify any logic features that are in use and flag them
-	if p.PlaybookProcessingSummary == nil {
-		var ps ProcessingSummary
-		p.PlaybookProcessingSummary = &ps
-	}
-
+	// Add to the playbook summary that we are the various logic steps
 	switch s.GetCommon().ObjectType {
+	case "manual":
+		p.PlaybookProcessingSummary.ManualPlaybook = true
 	case "playbook-action":
 		p.PlaybookProcessingSummary.ExternalPlaybooks = true
+		p.PlaybookProcessingSummary.ManualPlaybook = false
 	case "parallel":
 		p.PlaybookProcessingSummary.ParallelProcessing = true
+		p.PlaybookProcessingSummary.ManualPlaybook = false
 	case "foreach":
 		p.PlaybookProcessingSummary.ForeachLogic = true
+		p.PlaybookProcessingSummary.ManualPlaybook = false
 	case "while":
 		p.PlaybookProcessingSummary.WhileLogic = true
+		p.PlaybookProcessingSummary.ManualPlaybook = false
 	case "if-then":
 		p.PlaybookProcessingSummary.IfLogic = true
+		p.PlaybookProcessingSummary.ManualPlaybook = false
 	case "switch":
 		p.PlaybookProcessingSummary.SwitchLogic = true
+		p.PlaybookProcessingSummary.ManualPlaybook = false
 	}
 	return nil
 }
@@ -244,12 +257,7 @@ func (p *Playbook) AddMarkingDefinition(m markings.DataMarkingObject) error {
 // string values, or a slice of string values (s) that all representing a
 // data marking and adds it to the markings property.
 func (p *Playbook) AddMarkings(s interface{}) error {
-	// Since we are applying a data marking to this playbook, we need to capture
-	// that in the features property
-	if p.PlaybookProcessingSummary == nil {
-		var ps ProcessingSummary
-		p.PlaybookProcessingSummary = &ps
-	}
+	// Add to the playbook summary that we are using data markings
 	p.PlaybookProcessingSummary.DataMarkings = true
 
 	return objects.AddValuesToList(&p.Markings, s)

@@ -34,9 +34,30 @@ type CommonProperties struct {
 	Description   string                              `json:"description,omitempty"`
 	Owner         string                              `json:"owner,omitempty"`
 	Delay         int                                 `json:"delay,omitempty"`
-	StepVariables map[string]variables.VariableObject `json:"playbook_variables,omitempty"`
-	// Coordinates
+	StepVariables map[string]variables.VariableObject `json:"step_variables,omitempty"`
+	//Coordinates   CanvasLayout                        `json:"coordinates,omitempty"`
 	// StepExtensions
+}
+
+// ClearID - This method will clear the ID from the object
+func (s *CommonProperties) ClearID() {
+	s.ID = ""
+}
+
+// CanvasLayout - captures the relative position (in pixels) of a visualized
+// CACAO object from its midpoint to the upper left corner (origin) of a
+// canvas. In addition, it also captures any connections (paths) from it to
+// other objects.
+type CanvasLayout struct {
+	X                   int          `json:"x,omitempty"`
+	Y                   int          `json:"y,omitempty"`
+	OutgoingConnections []Connection `json:"connections,omitempty"`
+}
+
+type Connection struct {
+	ConnectionType string `json:"connection_type,omitempty"`
+	X              []int  `json:"x,omitempty"`
+	Y              []int  `json:"y,omitempty"`
 }
 
 // StartStep - This type implmenets the CACAO 3.0 start step and defines all of

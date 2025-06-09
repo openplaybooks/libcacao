@@ -24,7 +24,7 @@ type CommonProperties struct {
 	External    bool   `json:"external,omitempty"`
 }
 
-// ClearName - This method will clear the ID from the object
+// ClearName - This method will clear the name from the object
 func (v *CommonProperties) ClearName() {
 	v.Name = ""
 }

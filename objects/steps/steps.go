@@ -34,11 +34,6 @@ func (s *CommonProperties) GetID() string {
 	return s.ID
 }
 
-// ClearID - This method will clear the ID from the object
-func (s *CommonProperties) ClearID() {
-	s.ID = ""
-}
-
 // AddVariable - This method takes in an interface represening a variable object
 // that satisfies the variables.VariableObject interface and adds it to the
 // map.
