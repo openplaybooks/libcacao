@@ -23,6 +23,7 @@ func main() {
 	sigma(prep(playbook.New()))
 	yara(prep(playbook.New()))
 	kestrel(prep(playbook.New()))
+	elastic(prep(playbook.New()))
 }
 
 func prep(p *playbook.Playbook) *playbook.Playbook {
@@ -251,6 +252,28 @@ func kestrel(p *playbook.Playbook) {
 	cmdid := cmd1.ID
 
 	header("kestrel")
+	encode(p)
+	fmt.Printf("__%s.stdout__:value\n\n", cmdid)
+}
+
+func elastic(p *playbook.Playbook) {
+	// Create workflow steps for this playbook
+	step1, _ := p.NewActionStep()
+	step1.Name = "Action Step 8.11.1"
+	step1.Description = "Example of an action step with a elastic command."
+	cmd1, _ := step1.NewElasticCommand()
+	cmd1.Description = "Investigating remote system discovery commands"
+	cmd1.CommandB64 = "cHJvY2VzcyB3aGVyZSBob3N0Lm9zLnR5cGUgPT0gIndpbmRvd3MiIGFuZCBldmVudC50eXBlID09ICJzdGFydCIgYW5kCiAgKChwcm9jZXNzLm5hbWUgOiAibmJ0c3RhdC5leGUiIGFuZCBwcm9jZXNzLmFyZ3MgOiAoIi1uIiwgIi1zIikpIG9yCiAgKHByb2Nlc3MubmFtZSA6ICJhcnAuZXhlIiBhbmQgcHJvY2Vzcy5hcmdzIDogIi1hIikgb3IKICAocHJvY2Vzcy5uYW1lIDogIm5sdGVzdC5leGUiIGFuZCBwcm9jZXNzLmFyZ3MgOiAoIi9kY2xpc3QiLCAiL2RzZ2V0ZGMiKSkgb3IKICAocHJvY2Vzcy5uYW1lIDogIm5zbG9va3VwLmV4ZSIgYW5kIHByb2Nlc3MuYXJncyA6ICIqX2xkYXAuX3RjcC5kYy4qIikgb3IKICAocHJvY2Vzcy5uYW1lOiAoImRzcXVlcnkuZXhlIiwgImRzZ2V0LmV4ZSIpIGFuZCBwcm9jZXNzLmFyZ3M6ICJzdWJuZXQiKSBvcgogICgoKChwcm9jZXNzLm5hbWUgOiAibmV0LmV4ZSIgb3IgcHJvY2Vzcy5wZS5vcmlnaW5hbF9maWxlX25hbWUgPT0gIm5ldC5leGUiKSBvcgogICAgKChwcm9jZXNzLm5hbWUgOiAibmV0MS5leGUiIG9yIHByb2Nlc3MucGUub3JpZ2luYWxfZmlsZV9uYW1lID09ICJuZXQxLmV4ZSIpIGFuZCBub3QKICAgICAgIHByb2Nlc3MucGFyZW50Lm5hbWUgOiAibmV0LmV4ZSIpKSBhbmQKICAgICAgIHByb2Nlc3MuYXJncyA6ICJncm91cCIgYW5kIHByb2Nlc3MuYXJncyA6ICIvZG9tYWluIiBhbmQgbm90IHByb2Nlc3MuYXJncyA6ICIvYWRkIikpKSBhbmQKICBub3QKICAoCiAgICAoCiAgICAgIHByb2Nlc3MubmFtZSA6ICJhcnAuZXhlIiBhbmQKICAgICAgcHJvY2Vzcy5wYXJlbnQuZXhlY3V0YWJsZSA6ICgKICAgICAgICAiPzpcXFByb2dyYW1EYXRhXFxDZW50cmFTdGFnZVxcQUVNQWdlbnRcXEFFTUFnZW50LmV4ZSIsCiAgICAgICAgIj86XFxQcm9ncmFtIEZpbGVzICh4ODYpXFxDaXRyaXhcXFdvcmtzcGFjZSBFbnZpcm9ubWVudCBNYW5hZ2VtZW50IEFnZW50XFxDaXRyaXguV2VtLkFnZW50LlNlcnZpY2UuZXhlIiwKICAgICAgICAiPzpcXFByb2dyYW0gRmlsZXMgKHg4NilcXExhbnN3ZWVwZXJcXFNlcnZpY2VcXExhbnN3ZWVwZXJTZXJ2aWNlLmV4ZSIKICAgICAgKQogICAgKQogICkK"
+	r, _ := cmd1.NewExternalReference()
+	r.Name = "Elastic"
+	r.Description = "Remote system discovery commands."
+	r.URL = "https://www.elastic.co/docs/reference/security/prebuilt-rules/rules_building_block/discovery_remote_system_discovery_commands_windows#investigating-remote-system-discovery-commands"
+
+	// Make a copy of these IDs for the summary view below since the IDs will
+	// get cleared out by the encode function
+	cmdid := cmd1.ID
+
+	header("elastic")
 	encode(p)
 	fmt.Printf("__%s.stdout__:value\n\n", cmdid)
 }

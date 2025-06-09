@@ -11,7 +11,6 @@ import (
 
 	"github.com/openplaybooks/libcacao/objects"
 	"github.com/openplaybooks/libcacao/objects/agents"
-	"github.com/openplaybooks/libcacao/objects/markings"
 )
 
 // ----------------------------------------------------------------------
@@ -111,21 +110,6 @@ func (p *Playbook) AddLabels(values interface{}) error {
 	return objects.AddValuesToList(&p.Labels, values)
 }
 
-// AddMarkings - This method takes in a string value, a comma separated list of
-// string values, or a slice of string values that all representing a
-// data marking and adds it to the markings property.
-func (p *Playbook) AddMarkings(values interface{}) error {
-	// Since we are applying a data marking to this playbook, we need to capture
-	// that in the features property
-	if p.PlaybookProcessingSummary == nil {
-		var ps ProcessingSummary
-		p.PlaybookProcessingSummary = &ps
-	}
-	p.PlaybookProcessingSummary.DataMarkings = true
-
-	return objects.AddValuesToList(&p.Markings, values)
-}
-
 // NewExternalReference - This method creates a new empty external reference and
 // returns a reference to it so it can be populated. However, if one or more
 // external references are passed in they are all added and the reference that
@@ -146,19 +130,6 @@ func (p *Playbook) NewExternalReference(r ...objects.ExternalReference) (*object
 	var er objects.ExternalReference
 	p.ExternalReferences = append(p.ExternalReferences, er)
 	return &p.ExternalReferences[positionThatAppendWillUse], nil
-}
-
-// AddMarkingDefinition - This method takes in an interface represening a
-// marking definition object that satisfies the markings.DataMarkingObject
-// interface and adds it to the map.
-func (p *Playbook) AddMarkingDefinition(v markings.DataMarkingObject) error {
-	k := v.GetCommon().ID
-	if p.DataMarkingDefinitions == nil {
-		m := make(map[string]markings.DataMarkingObject, 0)
-		p.DataMarkingDefinitions = m
-	}
-	p.DataMarkingDefinitions[k] = v
-	return nil
 }
 
 // ClearWorkflowStepIDs - This method will zero out all of the IDs that are in

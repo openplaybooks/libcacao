@@ -75,6 +75,33 @@ type MarkingIEP struct {
 }
 
 // ----------------------------------------------------------------------
+// Define TLP Functions and Methods
+// ----------------------------------------------------------------------
+
+// GetCommon - This method returns the common data marking properties
+func (m *MarkingTLP) GetCommon() CommonProperties {
+	return m.CommonProperties
+}
+
+// ----------------------------------------------------------------------
+// Define Statement Functions and Methods
+// ----------------------------------------------------------------------
+
+// GetCommon - This method returns the common data marking properties
+func (m *MarkingStatement) GetCommon() CommonProperties {
+	return m.CommonProperties
+}
+
+// ----------------------------------------------------------------------
+// Define IEP Functions and Methods
+// ----------------------------------------------------------------------
+
+// GetCommon - This method returns the common data marking properties
+func (m *MarkingIEP) GetCommon() CommonProperties {
+	return m.CommonProperties
+}
+
+// ----------------------------------------------------------------------
 // Initialization Functions
 // ----------------------------------------------------------------------
 

@@ -102,3 +102,13 @@ func (s *ActionStep) NewKestrelCommand() (*commands.Kestrel, error) {
 	s.Commands = append(s.Commands, &c)
 	return &c, nil
 }
+
+// NewElasticCommand - Create and initialize a new manual command object and return it as
+// a pointer.
+func (s *ActionStep) NewElasticCommand() (*commands.Elastic, error) {
+	var c commands.Elastic
+	c.ObjectType = "elastic"
+	c.SetNewID(c.ObjectType)
+	s.Commands = append(s.Commands, &c)
+	return &c, nil
+}

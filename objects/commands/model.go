@@ -222,3 +222,21 @@ type Kestrel struct {
 func (c *Kestrel) GetCommon() CommonProperties {
 	return c.CommonProperties
 }
+
+// Elastic - This type implmenets the CACAO 3.0 elastic command and defines all
+// of its properties.
+//
+// The elastic command represents a command that is intended to be processed via
+// an elasticsearch query. In addition to the inherited properties, this
+// section defines the following additional properties that are valid for this
+// type. Output from these commands can be referenced via the stdout and stderr
+// names, see examples below.
+type Elastic struct {
+	CommonProperties
+	CommandB64 string `json:"command_b64,omitempty"`
+}
+
+// GetCommon - Implement the CommandObject interface and returns common properties
+func (c *Elastic) GetCommon() CommonProperties {
+	return c.CommonProperties
+}
