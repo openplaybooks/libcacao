@@ -24,6 +24,11 @@ type CommonProperties struct {
 	External    bool   `json:"external,omitempty"`
 }
 
+// ClearName - This method will clear the ID from the object
+func (v *CommonProperties) ClearName() {
+	v.Name = ""
+}
+
 // StringVariable - This type implmenets the CACAO 3.0 string variable and
 // defines all of its properties.
 type StringVariable struct {

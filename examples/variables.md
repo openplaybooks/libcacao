@@ -10,7 +10,7 @@ for CACAO Playbooks.
 p := playbook.New()
 v1 := &objects.Variables{
 	ObjectType:  "string",
-	Name:        "__test__.Value"
+	Name:        "__test__"
 	Description: "FunStuff",
 	Value:       "foo",
 }
@@ -34,7 +34,7 @@ p.AddVariable(*v1)
 p := playbook.New()
 v1 := objects.NewVariable()
 v1.ObjectType = "string"
-v1.Name = "__test__.Value"
+v1.Name = "__test__"
 v1.Description = "Fun Stuff"
 v1.Value = "foo"
 p.AddVariable(*v1)
@@ -49,4 +49,4 @@ a summary.
 
 ## Copyright
 
-Copyright 2021 Bret Jordan, All rights reserved.
+Copyright 2019-2025 Bret Jordan, All rights reserved.
