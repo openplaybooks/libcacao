@@ -39,8 +39,8 @@ func playbook1(p *playbook.Playbook) {
 	p.AddIndustrySectors("aerospace,defense")
 	p.AddLabels("malware,fuzzypanda,apt")
 
-	p.CanvasSize.Width = 1000
-	p.CanvasSize.Height = 500
+	p.CanvasHeight = 500
+	p.CanvasWidth = 1000
 
 	r1, _ := p.NewExternalReference()
 	r1.Name = "ACME Security FuzzyPanda Report"

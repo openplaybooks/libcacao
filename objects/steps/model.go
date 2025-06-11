@@ -28,14 +28,16 @@ type StepObject interface {
 // table. The ID property here is just to help make processing easier, it will
 // be removed when it is added to the playbook.
 type CommonProperties struct {
-	ObjectType    string                              `json:"type,omitempty"`
-	ID            string                              `json:"id,omitempty"`
-	Name          string                              `json:"name,omitempty"`
-	Description   string                              `json:"description,omitempty"`
-	Owner         string                              `json:"owner,omitempty"`
-	Delay         int                                 `json:"delay,omitempty"`
-	StepVariables map[string]variables.VariableObject `json:"step_variables,omitempty"`
-	//Coordinates   CanvasLayout                        `json:"coordinates,omitempty"`
+	ObjectType          string                              `json:"type,omitempty"`
+	ID                  string                              `json:"id,omitempty"`
+	Name                string                              `json:"name,omitempty"`
+	Description         string                              `json:"description,omitempty"`
+	Owner               string                              `json:"owner,omitempty"`
+	Delay               int                                 `json:"delay,omitempty"`
+	StepVariables       map[string]variables.VariableObject `json:"step_variables,omitempty"`
+	XCoordinate         int                                 `json:"x_coordinate,omitempty"`
+	YCoordinate         int                                 `json:"y_coordinate,omitempty"`
+	OutgoingConnections []Connection                        `json:"outgoing_connections,omitempty"`
 	// StepExtensions
 }
 
@@ -44,20 +46,19 @@ func (s *CommonProperties) ClearID() {
 	s.ID = ""
 }
 
-// CanvasLayout - captures the relative position (in pixels) of a visualized
-// CACAO object from its midpoint to the upper left corner (origin) of a
-// canvas. In addition, it also captures any connections (paths) from it to
-// other objects.
-type CanvasLayout struct {
-	X                   int          `json:"x,omitempty"`
-	Y                   int          `json:"y,omitempty"`
-	OutgoingConnections []Connection `json:"connections,omitempty"`
+// Connection - This captures the position of an outgoing relation/path of a
+// visualized CACAO object. It comprises a list of points (in pixels) that
+// altogether represent a line. A CACAO object may have multiple outgoing
+// connections.
+type Connection struct {
+	ConnectionType string             `json:"connection_type,omitempty"`
+	Points         []ConnectionPoints `json:"points,omitempty"`
 }
 
-type Connection struct {
-	ConnectionType string `json:"connection_type,omitempty"`
-	X              []int  `json:"x,omitempty"`
-	Y              []int  `json:"y,omitempty"`
+// ConnectionPoints - This captures a single point of a connection.
+type ConnectionPoints struct {
+	X int `json:"x,omitempty"`
+	Y int `json:"y,omitempty"`
 }
 
 // StartStep - This type implmenets the CACAO 3.0 start step and defines all of

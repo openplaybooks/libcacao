@@ -53,7 +53,8 @@ type Playbook struct {
 	Labels                    []string                            `json:"labels,omitempty"`
 	ExternalReferences        []objects.ExternalReference         `json:"external_references,omitempty"`
 	Markings                  []string                            `json:"markings,omitempty"`
-	CanvasSize                Canvas                              `json:"canvas_size,omitempty"`
+	CanvasHeight              int                                 `json:"canvas_height,omitempty"`
+	CanvasWidth               int                                 `json:"canvas_width,omitempty"`
 	PlaybookVariables         map[string]variables.VariableObject `json:"playbook_variables,omitempty"`
 	WorkflowStart             string                              `json:"workflow_start,omitempty"`
 	WorkflowException         string                              `json:"workflow_exception,omitempty"`
@@ -81,12 +82,6 @@ type ProcessingSummary struct {
 	DigitalSignatures       bool `json:"digital_signatures,omitempty"`
 	CountersignedSignatures bool `json:"countersigned_signatures,omitempty"`
 	Extensions              bool `json:"extensions,omitempty"`
-}
-
-// Canvas - This type defines the heights and width of the canvas
-type Canvas struct {
-	Width  int `json:"width,omitempty"`
-	Height int `json:"height,omitempty"`
 }
 
 // This type is used to capture results from the Valid() and Compare() functions

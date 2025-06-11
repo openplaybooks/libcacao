@@ -61,6 +61,32 @@ func (s *CommonProperties) NewStringVariable(n string, t string) (*variables.Str
 	return &v, err
 }
 
+// NewConnection - This will create a new connection with a type (t) and one or
+// more connection points (p) and return a reference to the connection.
+func (s *CommonProperties) NewConnection(t string, p ...ConnectionPoints) (*Connection, error) {
+	positionThatAppendWillUse1 := len(s.OutgoingConnections)
+
+	var c Connection
+	c.ConnectionType = t
+	s.OutgoingConnections = append(s.OutgoingConnections, c)
+
+	if len(p) > 0 {
+		for i := range p {
+			s.OutgoingConnections[positionThatAppendWillUse1].Points = append(s.OutgoingConnections[positionThatAppendWillUse1].Points, p[i])
+		}
+	}
+	return &s.OutgoingConnections[positionThatAppendWillUse1], nil
+}
+
+// AddPoint - Add a point to a connection
+func (c *Connection) AddPoint(x int, y int) error {
+	var p ConnectionPoints
+	p.X = x
+	p.Y = y
+	c.Points = append(c.Points, p)
+	return nil
+}
+
 // ----------------------------------------------------------------------
 // Define Action Step Functions and Methods
 // ----------------------------------------------------------------------
