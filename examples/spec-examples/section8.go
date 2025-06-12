@@ -14,8 +14,7 @@ import (
 func main() {
 	assignmentcommand(prep(playbook.New()))
 	manualcommand(prep(playbook.New()))
-	bashcommand(prep(playbook.New()))
-	sshcommand(prep(playbook.New()))
+	shellcommand(prep(playbook.New()))
 	powershell1(prep(playbook.New()))
 	powershell2(prep(playbook.New()))
 	httpcommand1(prep(playbook.New()))
@@ -82,12 +81,12 @@ func manualcommand(p *playbook.Playbook) {
 	fmt.Printf("__%s.response__:value\n\n", resid)
 }
 
-func bashcommand(p *playbook.Playbook) {
+func shellcommand(p *playbook.Playbook) {
 	// Create workflow steps for this playbook
 	step1, _ := p.NewActionStep()
 	step1.Name = "Action Step 8.4.1"
-	step1.Description = "Example of an action step with a bash command."
-	cmd1, _ := step1.NewBashCommand()
+	step1.Description = "Example of an action step with a shell command."
+	cmd1, _ := step1.NewShellCommand("bash")
 	cmd1.Description = "View failed login attempts."
 	cmd1.Command = "cat /var/log/auth.log | grep -i 'failed password'"
 
@@ -95,25 +94,7 @@ func bashcommand(p *playbook.Playbook) {
 	// get cleared out by the encode function
 	cmdid := cmd1.ID
 
-	header("bash")
-	encode(p)
-	fmt.Printf("__%s.stdout__:value\n\n", cmdid)
-}
-
-func sshcommand(p *playbook.Playbook) {
-	// Create workflow steps for this playbook
-	step1, _ := p.NewActionStep()
-	step1.Name = "Action Step 8.5.1"
-	step1.Description = "Example of an action step with an ssh command."
-	cmd1, _ := step1.NewSSHCommand()
-	cmd1.Description = "View failed login attempts."
-	cmd1.Command = "cat /var/log/auth.log | grep -i 'failed password'"
-
-	// Make a copy of these IDs for the summary view below since the IDs will
-	// get cleared out by the encode function
-	cmdid := cmd1.ID
-
-	header("ssh")
+	header("shell")
 	encode(p)
 	fmt.Printf("__%s.stdout__:value\n\n", cmdid)
 }
@@ -121,7 +102,7 @@ func sshcommand(p *playbook.Playbook) {
 func powershell1(p *playbook.Playbook) {
 	// Create workflow steps for this playbook
 	step1, _ := p.NewActionStep()
-	step1.Name = "Action Step 8.6.1"
+	step1.Name = "Action Step 8.5.1"
 	step1.Description = "Example of an action step with a powershell command."
 	cmd1, _ := step1.NewPowerShellCommand()
 	cmd1.Description = "Stop process"
@@ -139,7 +120,7 @@ func powershell1(p *playbook.Playbook) {
 func powershell2(p *playbook.Playbook) {
 	// Create workflow steps for this playbook
 	step1, _ := p.NewActionStep()
-	step1.Name = "Action Step 8.6.2"
+	step1.Name = "Action Step 8.5.2"
 	step1.Description = "Example of an action step with a powershell command."
 	cmd1, _ := step1.NewPowerShellCommand()
 	cmd1.Description = "Disable Windows Defender"
@@ -160,7 +141,7 @@ func powershell2(p *playbook.Playbook) {
 func httpcommand1(p *playbook.Playbook) {
 	// Create workflow steps for this playbook
 	step1, _ := p.NewActionStep()
-	step1.Name = "Action Step 8.7.1"
+	step1.Name = "Action Step 8.6.1"
 	step1.Description = "Example of an action step with an http GET command."
 	cmd1, _ := step1.NewHTTPCommand()
 	cmd1.Description = "Get current data for an ID"
@@ -179,7 +160,7 @@ func httpcommand1(p *playbook.Playbook) {
 func httpcommand2(p *playbook.Playbook) {
 	// Create workflow steps for this playbook
 	step1, _ := p.NewActionStep()
-	step1.Name = "Action Step 8.7.2"
+	step1.Name = "Action Step 8.6.2"
 	step1.Description = "Example of an action step with an http POST command."
 	cmd1, _ := step1.NewHTTPCommand()
 	cmd1.Description = "Post data to endpoint"
@@ -199,7 +180,7 @@ func httpcommand2(p *playbook.Playbook) {
 func sigma(p *playbook.Playbook) {
 	// Create workflow steps for this playbook
 	step1, _ := p.NewActionStep()
-	step1.Name = "Action Step 8.8.1"
+	step1.Name = "Action Step 8.7.1"
 	step1.Description = "Example of an action step with a sigma command."
 	cmd1, _ := step1.NewSigmaCommand()
 	cmd1.Description = "Detects a suspicious DLL load"
@@ -220,7 +201,7 @@ func sigma(p *playbook.Playbook) {
 func yara(p *playbook.Playbook) {
 	// Create workflow steps for this playbook
 	step1, _ := p.NewActionStep()
-	step1.Name = "Action Step 8.9.1"
+	step1.Name = "Action Step 8.8.1"
 	step1.Description = "Example of an action step with a yara command."
 	cmd1, _ := step1.NewYaraCommand()
 	cmd1.Description = "Detects files containing Badwinmail"
@@ -241,7 +222,7 @@ func yara(p *playbook.Playbook) {
 func kestrel(p *playbook.Playbook) {
 	// Create workflow steps for this playbook
 	step1, _ := p.NewActionStep()
-	step1.Name = "Action Step 8.10.1"
+	step1.Name = "Action Step 8.9.1"
 	step1.Description = "Example of an action step with a kestrel command."
 	cmd1, _ := step1.NewKestrelCommand()
 	cmd1.Description = "Get network traffic and sort them by their destination port"
@@ -259,7 +240,7 @@ func kestrel(p *playbook.Playbook) {
 func elastic(p *playbook.Playbook) {
 	// Create workflow steps for this playbook
 	step1, _ := p.NewActionStep()
-	step1.Name = "Action Step 8.11.1"
+	step1.Name = "Action Step 8.10.1"
 	step1.Description = "Example of an action step with a elastic command."
 	cmd1, _ := step1.NewElasticCommand()
 	cmd1.Description = "Investigating remote system discovery commands"

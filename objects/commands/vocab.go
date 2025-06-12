@@ -15,8 +15,7 @@ func GetCommandTypesVocab() []string {
 	return []string{
 		"assignment",
 		"manual",
-		"bash",
-		"ssh",
+		"shell",
 		"http",
 		"powershell",
 		"caldera-cmd",

@@ -95,10 +95,6 @@ func logValid(r *results, msg string) {
 	}
 }
 
-// ----------------------------------------------------------------------
-// Private Functions
-// ----------------------------------------------------------------------
-
 // isIDValid - This function will take in an CACAO ID and check to see if it is
 // a valid identifier per the specification for a playbook object.
 func isIDValid(id string) bool {

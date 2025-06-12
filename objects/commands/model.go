@@ -87,45 +87,25 @@ func (c *Manual) GetCommon() CommonProperties {
 	return c.CommonProperties
 }
 
-// Bash - This type implmenets the CACAO 3.0 bash command and defines all of
+// Shell - This type implmenets the CACAO 3.0 shell command and defines all of
 // its properties.
 //
-// The bash command represents a command that is executed via a shell without a
+// The shell command represents a command that is executed via a shell without a
 // login/remote connection. In addition to the inherited properties, this
 // section defines the following additional properties that are valid for this
 // type. Output from these commands can be referenced via the stdout and stderr
 // names, see examples below.
 //
 // * One of the following properties MUST be populated, command or command_b64.
-type Bash struct {
+type Shell struct {
 	CommonProperties
+	ShellType  string `json:"shell_type,omitempty"`
 	Command    string `json:"command,omitempty"`
 	CommandB64 string `json:"command_b64,omitempty"`
 }
 
 // GetCommon - Implement the CommandObject interface and returns common properties
-func (c *Bash) GetCommon() CommonProperties {
-	return c.CommonProperties
-}
-
-// SSH - This type implmenets the CACAO 3.0 ssh command and defines all of
-// its properties.
-//
-// The ssh command represents a command that is intended to be processed via an
-// SSH connection. In addition to the inherited properties, this section
-// defines the following additional properties that are valid for this type.
-// Output from these commands can be referenced via the stdout and stderr
-// names, see examples below.
-//
-// * One of the following properties MUST be populated, command or command_b64.
-type SSH struct {
-	CommonProperties
-	Command    string `json:"command,omitempty"`
-	CommandB64 string `json:"command_b64,omitempty"`
-}
-
-// GetCommon - Implement the CommandObject interface and returns common properties
-func (c *SSH) GetCommon() CommonProperties {
+func (c *Shell) GetCommon() CommonProperties {
 	return c.CommonProperties
 }
 

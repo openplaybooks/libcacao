@@ -33,21 +33,12 @@ func (s *ActionStep) NewManualCommand() (*commands.Manual, error) {
 	return &c, nil
 }
 
-// NewBashCommand - Create and initialize a new manual command object and return it as
+// NewShellCommand - Create and initialize a new manual command object and return it as
 // a pointer.
-func (s *ActionStep) NewBashCommand() (*commands.Bash, error) {
-	var c commands.Bash
-	c.ObjectType = "bash"
-	c.SetNewID(c.ObjectType)
-	s.Commands = append(s.Commands, &c)
-	return &c, nil
-}
-
-// NewSSHCommand - Create and initialize a new manual command object and return it as
-// a pointer.
-func (s *ActionStep) NewSSHCommand() (*commands.SSH, error) {
-	var c commands.SSH
-	c.ObjectType = "ssh"
+func (s *ActionStep) NewShellCommand(t string) (*commands.Shell, error) {
+	var c commands.Shell
+	c.ObjectType = "shell"
+	c.ShellType = t
 	c.SetNewID(c.ObjectType)
 	s.Commands = append(s.Commands, &c)
 	return &c, nil
